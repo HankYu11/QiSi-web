@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import Seal from "../components/Seal.astro";
+import Defs from "../components/Defs.astro";
+import { copy } from "../i18n/copy";
+const zh = copy.zh.notFound;
+const en = copy.en.notFound;
+---
+
+<Base t={copy.zh} lang="zh" title="404｜奇斯科技 QI SI" alternates={false}>
+  <Defs />
+  <main class="nf wrap">
+    <a href="/" class="nf-seal" aria-label={copy.zh.a11y.home}><Seal inked /></a>
+    <p class="mono nf-code">404</p>
+    <h1 class="display nf-title">{zh.title}</h1>
+    <p class="nf-body">{zh.body}</p>
+    <p class="nf-en" lang="en"><span class="nf-en-t">{en.title}</span> {en.body}</p>
+    <div class="nf-links">
+      <a class="btn btn-primary" href="/">{zh.back}</a>
+      <a class="btn btn-ghost" href="/en/" lang="en">{en.back}</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 18px;
+    padding-block: 64px;
+  }
+  .nf-seal :global(svg) {
+    height: 120px;
+    width: auto;
+    transform: rotate(-8deg);
+    margin-bottom: 24px;
+  }
+  .nf-code {
+    color: var(--seal-ink);
+  }
+  .nf-title {
+    font-size: clamp(2.2rem, 1.2rem + 4vw, 4.4rem);
+  }
+  .nf-body {
+    color: var(--ink-2);
+  }
+  .nf-en {
+    color: var(--ink-3);
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    line-height: 1.55;
+  }
+  .nf-en-t {
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+</style>

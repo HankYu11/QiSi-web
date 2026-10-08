@@ -1,0 +1,570 @@
+---
+import Seal from "./Seal.astro";
+import type { Copy, Lang } from "../i18n/copy";
+interface Props {
+  t: Copy;
+  lang: Lang;
+}
+const { t, lang } = Astro.props;
+const w = t.work;
+const [app, backend, admin, site] = w.nodes;
+const primary = lang === "zh" ? w.nameZh : w.nameEn;
+const secondary = lang === "zh" ? w.nameEn : w.nameZh;
+---
+
+<section class="section work on-night" id="work" aria-labelledby="work-title">
+  <div class="wrap">
+    <p class="mono kicker"><span class="num">02</span>{w.kicker}</p>
+
+    <div class="w-head">
+      <h2 id="work-title" class="w-name reveal">
+        <span class="w-primary" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{primary}</span>
+        <span class="w-secondary" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{secondary}</span>
+      </h2>
+      <div class="w-sum reveal" style="--d:120ms">
+        <p class="lede">{w.summary}</p>
+        <dl class="w-meta">
+          {
+            w.meta.map((m) => (
+              <div>
+                <dt class="mono">{m.k}</dt>
+                <dd>{m.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+
+    <div class="map-head">
+      <h3 class="display map-title">{w.mapTitle}</h3>
+    </div>
+
+    <div class="map" data-map>
+      <svg class="wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ln ln-app" d="M0 25 C 30 25, 30 50, 50 50"></path>
+        <path class="ln ln-backend" d="M0 75 C 30 75, 30 50, 50 50"></path>
+        <path class="ln ln-admin" d="M100 25 C 70 25, 70 50, 50 50"></path>
+        <path class="ln ln-site" d="M100 75 C 70 75, 70 50, 50 50"></path>
+        <path class="flow ln-app" pathLength="1" d="M0 25 C 30 25, 30 50, 50 50"></path>
+        <path class="flow ln-backend" pathLength="1" d="M0 75 C 30 75, 30 50, 50 50"></path>
+        <path class="flow ln-admin" pathLength="1" d="M100 25 C 70 25, 70 50, 50 50"></path>
+        <path class="flow ln-site" pathLength="1" d="M100 75 C 70 75, 70 50, 50 50"></path>
+      </svg>
+
+      <div class="hub" aria-hidden="true">
+        <div class="hub-ring">
+          <Seal class="hub-seal" />
+          <span class="mono">{w.hub}</span>
+        </div>
+      </div>
+
+      {
+        [app, backend, admin, site].map((n, i) => (
+          <article class={`node node-${n.id}`} data-node={n.id} style={`--d:${i * 90}ms`}>
+            <div class="art" aria-hidden="true">
+              {n.id === "app" && (
+                <svg viewBox="0 0 240 120">
+                  <rect class="s" x="54" y="10" width="44" height="78" rx="9" />
+                  <rect class="f" x="66" y="15" width="20" height="4" rx="2" />
+                  <rect class="f" x="61" y="28" width="30" height="16" rx="3" />
+                  <rect class="f2" x="61" y="50" width="22" height="4" rx="2" />
+                  <rect class="f2" x="61" y="58" width="16" height="4" rx="2" />
+                  <rect class="acc" x="61" y="72" width="30" height="8" rx="4" />
+                  <rect class="s" x="142" y="10" width="44" height="78" rx="4" />
+                  <circle class="f" cx="164" cy="17" r="2" />
+                  <rect class="f" x="149" y="28" width="30" height="16" rx="2" />
+                  <rect class="f2" x="149" y="50" width="22" height="4" rx="2" />
+                  <rect class="f2" x="149" y="58" width="16" height="4" rx="2" />
+                  <rect class="acc" x="149" y="72" width="30" height="8" rx="2" />
+                  <path class="s dash" d="M76 88 V100 H164 V88" />
+                  <path class="s" d="M120 100 V106" />
+                  <rect class="code" x="88" y="104" width="64" height="14" rx="3" />
+                  <path class="codeln" d="M96 111 h10 M110 111 h18 M132 111 h12" />
+                </svg>
+              )}
+              {n.id === "backend" && (
+                <svg viewBox="0 0 240 120">
+                  <path class="s dash" d="M20 60 H70 M170 60 H220" />
+                  <g>
+                    <rect class="s slab" x="70" y="18" width="100" height="22" rx="4" />
+                    <rect class="s slab" x="70" y="49" width="100" height="22" rx="4" />
+                    <rect class="s slab" x="70" y="80" width="100" height="22" rx="4" />
+                    <rect class="f2" x="82" y="27" width="36" height="4" rx="2" />
+                    <rect class="f2" x="82" y="58" width="28" height="4" rx="2" />
+                    <rect class="f2" x="82" y="89" width="40" height="4" rx="2" />
+                    <circle class="led l1" cx="156" cy="29" r="3" />
+                    <circle class="led l2" cx="156" cy="60" r="3" />
+                    <circle class="led l3" cx="156" cy="91" r="3" />
+                  </g>
+                  <circle class="acc" cx="20" cy="60" r="4" />
+                  <circle class="acc" cx="220" cy="60" r="4" />
+                </svg>
+              )}
+              {n.id === "admin" && (
+                <svg viewBox="0 0 240 120">
+                  <rect class="s" x="30" y="10" width="180" height="100" rx="6" />
+                  <path class="s" d="M66 10 V110" />
+                  <rect class="f" x="38" y="20" width="20" height="4" rx="2" />
+                  <rect class="f2" x="38" y="32" width="18" height="3" rx="1.5" />
+                  <rect class="f2" x="38" y="40" width="14" height="3" rx="1.5" />
+                  <rect class="f2" x="38" y="48" width="18" height="3" rx="1.5" />
+                  <rect class="tile" x="76" y="20" width="38" height="22" rx="3" />
+                  <rect class="tile acc-fill" x="120" y="20" width="38" height="22" rx="3" />
+                  <rect class="tile" x="164" y="20" width="38" height="22" rx="3" />
+                  <g class="bars">
+                    <rect x="80" y="76" width="10" height="24" rx="2" />
+                    <rect x="96" y="66" width="10" height="34" rx="2" />
+                    <rect x="112" y="82" width="10" height="18" rx="2" />
+                    <rect x="128" y="58" width="10" height="42" rx="2" />
+                    <rect x="144" y="70" width="10" height="30" rx="2" />
+                  </g>
+                  <rect class="f2" x="166" y="56" width="36" height="4" rx="2" />
+                  <rect class="f2" x="166" y="66" width="28" height="4" rx="2" />
+                  <rect class="f2" x="166" y="76" width="32" height="4" rx="2" />
+                  <rect class="f2" x="166" y="86" width="22" height="4" rx="2" />
+                </svg>
+              )}
+              {n.id === "site" && (
+                <svg viewBox="0 0 240 120">
+                  <rect class="s" x="30" y="10" width="180" height="100" rx="6" />
+                  <path class="s" d="M30 26 H210" />
+                  <circle class="f2c" cx="40" cy="18" r="2.5" />
+                  <circle class="f2c" cx="49" cy="18" r="2.5" />
+                  <circle class="f2c" cx="58" cy="18" r="2.5" />
+                  <rect class="f" x="44" y="40" width="86" height="9" rx="2" />
+                  <rect class="f" x="44" y="54" width="64" height="9" rx="2" />
+                  <rect class="f2" x="44" y="72" width="70" height="4" rx="2" />
+                  <rect class="f2" x="44" y="80" width="56" height="4" rx="2" />
+                  <rect class="acc" x="44" y="92" width="34" height="9" rx="4.5" />
+                  <circle class="acc-soft" cx="172" cy="66" r="26" />
+                  <circle class="acc" cx="172" cy="66" r="12" />
+                </svg>
+              )}
+            </div>
+            <p class="mono tech">{n.tech}</p>
+            <h4 class="node-name">{n.name}</h4>
+            <p class="node-body">{n.body}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="w-foot">
+      <p class="w-closing reveal">{w.closing}</p>
+      <p class="w-note reveal" style="--d:100ms">
+        <span class="mono" aria-hidden="true">※</span>
+        {w.note}
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const map = document.querySelector<HTMLElement>("[data-map]");
+  if (map) {
+    const nodes = map.querySelectorAll<HTMLElement>("[data-node]");
+    const on = (id?: string) => (id ? (map.dataset.active = id) : delete map.dataset.active);
+    nodes.forEach((n) => {
+      n.addEventListener("mouseenter", () => on(n.dataset.node));
+      n.addEventListener("focus", () => on(n.dataset.node));
+      n.addEventListener("mouseleave", () => on());
+      n.addEventListener("blur", () => on());
+    });
+  }
+</script>
+
+<style>
+  .work {
+    background: var(--night);
+    color: var(--on-night);
+    position: relative;
+  }
+  .w-head {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
+    margin-top: clamp(32px, 4vw, 56px);
+    padding-bottom: clamp(56px, 7vw, 96px);
+    border-bottom: 1px solid var(--night-rule);
+  }
+  .w-name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+    font-weight: 400;
+    margin: 0;
+  }
+  .w-primary {
+    font-family: var(--f-display);
+    font-size: clamp(4rem, 2rem + 8vw, 10.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    font-weight: 380;
+  }
+  .w-primary:lang(zh-Hant-TW) {
+    font-family: "QiSi Serif TC", serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+  }
+  .w-secondary {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
+    color: #ff8a6e;
+    font-weight: 340;
+    letter-spacing: -0.01em;
+  }
+  .w-secondary:lang(zh-Hant-TW) {
+    font-family: "QiSi Serif TC", serif;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+  }
+  .w-sum {
+    display: grid;
+    gap: 32px;
+  }
+  .work .lede {
+    color: var(--on-night);
+  }
+  .w-meta {
+    display: grid;
+    border-top: 1px solid var(--night-rule);
+  }
+  .w-meta div {
+    display: grid;
+    grid-template-columns: 7.5em 1fr;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--night-rule);
+    align-items: baseline;
+  }
+  .w-meta dt {
+    color: var(--on-night-2);
+  }
+  .w-meta dd {
+    font-size: 0.98rem;
+  }
+
+  .map-head {
+    padding-block: clamp(48px, 6vw, 80px) clamp(28px, 3vw, 40px);
+  }
+  .map-title {
+    font-size: clamp(1.6rem, 1rem + 2vw, 2.8rem);
+    max-width: 18em;
+  }
+  :root[data-lang="zh"] .map-title {
+    font-size: clamp(1.45rem, 1rem + 1.6vw, 2.3rem);
+  }
+
+  /* --- system map --- */
+  .map {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(180px, 20vw, 280px) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "app hub admin"
+      "backend hub site";
+    gap: 20px 0;
+  }
+  .wires {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .ln {
+    fill: none;
+    stroke: var(--night-rule);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    transition: stroke 0.3s;
+  }
+  .flow {
+    fill: none;
+    stroke: #ff8a6e;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 0.08 0.92;
+    stroke-linecap: round;
+    animation: flow 3.2s linear infinite;
+    opacity: 0.55;
+  }
+  .flow.ln-backend {
+    animation-delay: -0.8s;
+  }
+  .flow.ln-admin {
+    animation-delay: -1.6s;
+  }
+  .flow.ln-site {
+    animation-delay: -2.4s;
+  }
+  @keyframes flow {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .map[data-active] .flow {
+    opacity: 0.15;
+  }
+  .map[data-active="app"] .ln-app,
+  .map[data-active="backend"] .ln-backend,
+  .map[data-active="admin"] .ln-admin,
+  .map[data-active="site"] .ln-site {
+    stroke: #ff8a6e;
+    opacity: 1;
+  }
+  .hub {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hub-ring {
+    width: clamp(120px, 12vw, 168px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--night);
+    border: 1px solid var(--night-rule);
+    box-shadow:
+      0 0 0 10px var(--night),
+      0 0 0 11px var(--night-rule);
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 10px;
+    color: var(--on-night-2);
+  }
+  .hub-ring :global(.hub-seal) {
+    height: clamp(44px, 4.6vw, 64px);
+    width: auto;
+  }
+  .hub-ring .mono {
+    font-size: 0.66rem;
+  }
+
+  .node {
+    background: var(--night-2);
+    border: 1px solid var(--night-rule);
+    border-radius: 4px;
+    padding: clamp(18px, 2vw, 28px);
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    outline: none;
+    transition:
+      border-color 0.3s,
+      transform 0.4s var(--ease-out),
+      background 0.3s;
+  }
+  .node:hover,
+  .node:focus-visible {
+    border-color: #ff8a6e;
+    background: #221f19;
+  }
+  .node:focus-visible {
+    box-shadow: 0 0 0 2px var(--on-night);
+  }
+  .node-app {
+    grid-area: app;
+  }
+  .node-backend {
+    grid-area: backend;
+  }
+  .node-admin {
+    grid-area: admin;
+  }
+  .node-site {
+    grid-area: site;
+  }
+  .art {
+    background: var(--night);
+    border: 1px solid var(--night-rule);
+    border-radius: 3px;
+    padding: 14px 8px;
+    margin-bottom: 10px;
+  }
+  .art svg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 1;
+  }
+  .art .s {
+    fill: none;
+    stroke: #8f877a;
+    stroke-width: 1.4;
+  }
+  .art .dash {
+    stroke-dasharray: 3 4;
+  }
+  .art .f {
+    fill: #5d574b;
+  }
+  .art .f2 {
+    fill: #3e3a31;
+  }
+  .art .f2c {
+    fill: #4a453b;
+  }
+  .art .acc {
+    fill: #e0563c;
+  }
+  .art .acc-soft {
+    fill: #e0563c33;
+  }
+  .art .code {
+    fill: #2a2720;
+    stroke: #e0563c;
+    stroke-width: 1.2;
+  }
+  .art .codeln {
+    stroke: #ff8a6e;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .art .slab {
+    fill: #1d1b16;
+  }
+  .art .led {
+    fill: #57b37a;
+  }
+  .art .led.l2 {
+    animation: blink 2.4s infinite;
+  }
+  .art .led.l3 {
+    animation: blink 3.1s 0.6s infinite;
+  }
+  @keyframes blink {
+    50% {
+      fill: #2a2720;
+    }
+  }
+  .art .tile {
+    fill: #2a2720;
+    stroke: #4a453b;
+  }
+  .art .acc-fill {
+    fill: #e0563c;
+    stroke: none;
+  }
+  .art .bars rect {
+    fill: #5d574b;
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transition: transform 0.6s var(--ease-out);
+  }
+  .art .bars rect:nth-child(4) {
+    fill: #e0563c;
+  }
+  .node:hover .bars rect:nth-child(odd) {
+    transform: scaleY(1.25);
+  }
+  .node:hover .bars rect:nth-child(even) {
+    transform: scaleY(0.8);
+  }
+  .tech {
+    color: #ff8a6e;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+  .node-name {
+    font-family: var(--f-display);
+    font-weight: 450;
+    font-size: clamp(1.35rem, 1.1rem + 0.7vw, 1.75rem);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  :root[data-lang="zh"] .node-name {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .node-body {
+    color: var(--on-night-2);
+    font-size: 0.97rem;
+  }
+
+  .w-foot {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 5vw, 80px);
+    margin-top: clamp(48px, 6vw, 88px);
+    align-items: start;
+  }
+  .w-closing {
+    font-family: var(--f-display);
+    font-size: clamp(1.35rem, 1rem + 1.2vw, 2.1rem);
+    line-height: 1.3;
+    font-weight: 380;
+    letter-spacing: -0.01em;
+  }
+  :root[data-lang="zh"] .w-closing {
+    font-weight: 500;
+    line-height: 1.7;
+    letter-spacing: 0.03em;
+    font-size: clamp(1.2rem, 1rem + 0.9vw, 1.65rem);
+  }
+  .w-note {
+    display: flex;
+    gap: 12px;
+    color: var(--on-night-2);
+    font-size: 0.95rem;
+    padding-top: 10px;
+    border-top: 1px solid var(--night-rule);
+  }
+  .w-note .mono {
+    color: #ff8a6e;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 1000px) {
+    .w-head,
+    .w-foot {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 760px) {
+    .map {
+      grid-template-columns: 1fr;
+      grid-template-areas: "hub" "app" "backend" "admin" "site";
+      gap: 16px;
+    }
+    .wires {
+      display: none;
+    }
+    .hub {
+      grid-column: 1;
+      grid-row: auto;
+      grid-area: hub;
+      justify-items: start;
+      margin-bottom: 8px;
+    }
+    .hub-ring {
+      width: auto;
+      aspect-ratio: auto;
+      border-radius: 999px;
+      grid-auto-flow: column;
+      padding: 10px 20px 10px 12px;
+      box-shadow: none;
+    }
+    .hub-ring :global(.hub-seal) {
+      height: 36px;
+    }
+    .art {
+      padding: 10px;
+    }
+    .art svg {
+      height: 104px;
+      aspect-ratio: auto;
+    }
+  }
+</style>

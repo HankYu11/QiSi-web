@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import Defs from "./Defs.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import SignOff from "./SignOff.astro";
+import Work from "./Work.astro";
+import Process from "./Process.astro";
+import Build from "./Build.astro";
+import Contact from "./Contact.astro";
+import { copy, type Lang } from "../i18n/copy";
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = copy[lang];
+---
+
+<Base t={t} lang={lang}>
+  <a class="skip" href="#main">{t.a11y.skip}</a>
+  <span id="top"></span>
+  <Defs />
+  <Header t={t} lang={lang} />
+  <main id="main">
+    <Hero t={t} />
+    <SignOff t={t} />
+    <Work t={t} lang={lang} />
+    <Process t={t} />
+    <Build t={t} />
+  </main>
+  <Contact t={t} lang={lang} />
+</Base>
+
+<script>
+  import "../scripts/site";
+</script>
