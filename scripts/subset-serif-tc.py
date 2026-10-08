@@ -71,6 +71,3 @@ for w in WEIGHTS:
     merged.save(dest)
     print(f"{dest.relative_to(ROOT)}: {len(chars)} chars, {dest.stat().st_size // 1024} KB")
 
-(OUT / "noto-serif-tc-qisi.ranges.txt").write_text(
-    ",".join(f"U+{ord(c):X}" for c in chars) + "\n", encoding="utf-8"
-)
