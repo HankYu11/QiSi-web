@@ -1,0 +1,10 @@
+---
+import Grain from "./Grain.astro";
+interface Props {
+  label: string;
+  id?: string;
+}
+const { label, id } = Astro.props;
+---
+
+<p class="chapter" id={id}><Grain /><span>{label}</span></p>

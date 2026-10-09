@@ -1,0 +1,96 @@
+---
+// The brand concept from CIS 02: 奇 = 獨特的可能, 斯 = 此刻此地.
+import Chapter from "./Chapter.astro";
+import type { Copy } from "../i18n/copy";
+interface Props {
+  t: Copy;
+}
+const { t } = Astro.props;
+const n = t.name;
+---
+
+<section class="section name" aria-labelledby="name-title">
+  <div class="wrap">
+    <Chapter label={n.chapter} />
+    <div class="grid">
+      <dl class="chars" lang="zh-Hant-TW">
+        <div class="char">
+          <dt>奇</dt>
+          <dd><span class="roman">QI</span><span class="mean">{n.qi}</span></dd>
+        </div>
+        <div class="char">
+          <dt>斯</dt>
+          <dd><span class="roman">SI</span><span class="mean">{n.si}</span></dd>
+        </div>
+      </dl>
+      <div class="text">
+        <h2 id="name-title" class="t-h2">{n.title}</h2>
+        {n.body.map((p) => <p class="t-lede muted">{p}</p>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .name {
+    background: var(--cream);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  .chars {
+    display: grid;
+    gap: clamp(8px, 1.5vw, 20px);
+  }
+  .char {
+    display: flex;
+    align-items: center;
+    gap: clamp(16px, 2vw, 28px);
+  }
+  .char dt {
+    font-weight: 900;
+    font-size: clamp(6rem, 3rem + 9vw, 12rem);
+    line-height: 1;
+    color: var(--navy);
+  }
+  .char + .char dt {
+    color: var(--navy-2);
+  }
+  .char dd {
+    display: grid;
+    gap: 4px;
+  }
+  .roman {
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    color: var(--slate);
+  }
+  .mean {
+    font-weight: 900;
+    font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem);
+    color: var(--orange-text);
+    letter-spacing: 0.04em;
+  }
+  .text {
+    display: grid;
+    gap: 22px;
+    max-width: 36em;
+  }
+  .text h2 {
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .chars {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

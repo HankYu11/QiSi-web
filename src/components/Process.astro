@@ -1,350 +1,173 @@
 ---
-import Seal from "./Seal.astro";
+// 一深一亮 (CIS 02): navy = reliable engineering, orange = warm, energetic innovation.
+// Here: bright = what AI speeds up, deep = what we own and answer for.
+import Chapter from "./Chapter.astro";
+import Grain from "./Grain.astro";
 import type { Copy } from "../i18n/copy";
-import { md } from "../i18n/md";
 interface Props {
   t: Copy;
 }
 const { t } = Astro.props;
 const p = t.process;
-const spark = `<svg class="spark" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0.8 C8.6 5.6 10.4 7.4 15.2 8 C10.4 8.6 8.6 10.4 8 15.2 C7.4 10.4 5.6 8.6 0.8 8 C5.6 7.4 7.4 5.6 8 0.8Z"/></svg>`;
 ---
 
 <section class="section process" id="process" aria-labelledby="process-title">
   <div class="wrap">
-    <p class="mono kicker"><span class="num">03</span>{p.kicker}</p>
-
-    <div class="p-head">
-      <h2 id="process-title" class="display h2 reveal">
-        <span class="line" set:html={md(p.titleA)} />
-        <span class="line" set:html={md(p.titleB)} />
-      </h2>
-      <p class="lede reveal" style="--d:120ms">{p.body}</p>
+    <Chapter label={p.chapter} />
+    <div class="head">
+      <h2 id="process-title" class="t-h2">{p.title}</h2>
+      <p class="t-lede muted">{p.intro}</p>
     </div>
 
-    <figure class="pipe reveal">
-      <figcaption class="pipe-cap">
-        <span class="mono">{p.pipelineLabel}</span>
-        <span class="legend">
-          <span class="lg"><Fragment set:html={spark} />{p.legendAi}</span>
-          <span class="lg"><Seal class="lg-seal" />{p.legendUs}</span>
-        </span>
-      </figcaption>
-      <ol class="rail">
+    <div class="pair">
+      <article class="panel bright">
+        <Grain class="crop" color="var(--white)" flip />
+        <p class="word">{p.bright.word}</p>
+        <h3 class="t-h3">{p.bright.title}</h3>
+        <ul>{p.bright.items.map((x) => <li>{x}</li>)}</ul>
+      </article>
+      <article class="panel deep on-navy">
+        <Grain class="crop" color="var(--navy-2)" />
+        <p class="word">{p.deep.word}</p>
+        <h3 class="t-h3">{p.deep.title}</h3>
+        <ul>{p.deep.items.map((x) => <li>{x}</li>)}</ul>
+      </article>
+    </div>
+
+    <div class="own">
+      <h3 class="t-h3 own-title">{p.ownTitle}</h3>
+      <ol class="own-list">
         {
-          p.steps.map((s, i) => (
-            <li class="st">
-              <span class="mono st-n">0{i + 1}</span>
-              <span class="st-name">{s.name}</span>
-              <span class="st-dot" aria-hidden="true" />
-              <span class="st-marks">
-                {s.ai && (
-                  <span class="mk mk-ai" title={p.legendAi}>
-                    <Fragment set:html={spark} />
-                    <span class="sr-only">{p.legendAi}</span>
-                  </span>
-                )}
-                {s.us && (
-                  <span class="mk mk-us" title={p.legendUs}>
-                    <Seal class="mk-seal" />
-                    <span class="sr-only">{p.legendUs}</span>
-                  </span>
-                )}
-              </span>
+          p.own.map((o) => (
+            <li>
+              <Grain class="bullet" color="var(--navy-2)" />
+              <h4>{o.name}</h4>
+              <p class="muted">{o.text}</p>
             </li>
           ))
         }
-        <span class="token" aria-hidden="true"></span>
       </ol>
-    </figure>
-
-    <div class="cols">
-      <div class="col reveal">
-        <h3 class="col-h"><span class="ic ic-ai"><Fragment set:html={spark} /></span>{p.colAi}</h3>
-        <ul>{p.ai.map((x) => <li>{x}</li>)}</ul>
-      </div>
-      <div class="col col-us reveal" style="--d:120ms">
-        <h3 class="col-h"><span class="ic ic-us"><Seal /></span>{p.colUs}</h3>
-        <ul>{p.us.map((x) => <li>{x}</li>)}</ul>
-      </div>
     </div>
   </div>
 </section>
 
 <style>
   .process {
-    padding-bottom: clamp(40px, 5vw, 80px);
+    background: var(--white);
   }
-  .p-head {
+  .head {
     display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: clamp(32px, 5vw, 80px);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(28px, 5vw, 80px);
     align-items: end;
-    margin-top: clamp(32px, 4vw, 56px);
+    margin-top: clamp(24px, 3vw, 40px);
   }
-  .p-head .line {
-    display: block;
-  }
-  .p-head :global(em) {
-    color: var(--seal-ink);
-  }
-
-  .pipe {
-    margin-top: clamp(56px, 7vw, 104px);
-    border-top: 1px solid var(--ink);
-    padding-top: 18px;
-  }
-  .pipe-cap {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 12px 24px;
-    color: var(--ink-2);
-    margin-bottom: clamp(32px, 4vw, 56px);
-  }
-  .legend {
-    display: flex;
-    gap: 20px;
-    font-size: 0.9rem;
-  }
-  .lg {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .lg :global(.spark) {
-    width: 14px;
-    height: 14px;
-    fill: var(--ink);
-  }
-  .lg :global(.lg-seal) {
-    height: 18px;
-    width: auto;
-  }
-
-  .rail {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-  }
-  .rail::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: calc(20% - 10px);
-    top: 95.25px;
-    height: 1.5px;
-    background: var(--ink);
-  }
-  .st {
-    display: grid;
-    grid-template-rows: 20px 52px 24px auto;
-    gap: 6px;
-    position: relative;
-  }
-  .st-n {
-    color: var(--seal-ink);
-  }
-  .st-name {
-    align-self: end;
-    font-family: var(--f-display);
-    font-size: clamp(1.4rem, 1rem + 1.3vw, 2.2rem);
-    font-weight: 420;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  :root[data-lang="zh"] .st-name {
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    line-height: 1.3;
-  }
-  .st-dot {
-    align-self: center;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 1.5px solid var(--ink);
-    position: relative;
-    z-index: 1;
-  }
-  .st-marks {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
-  .mk {
-    display: inline-grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1px solid var(--rule);
-    background: #f8f5ee;
-  }
-  .mk :global(.spark) {
-    width: 16px;
-    height: 16px;
-    fill: var(--ink);
-  }
-  .mk :global(.mk-seal) {
-    height: 22px;
-    width: auto;
-  }
-  .token {
-    position: absolute;
-    top: 89px;
-    left: 0;
-    width: 14px;
-    height: 14px;
-    margin-top: -0.25px;
-    border-radius: 50%;
-    background: var(--seal);
-    box-shadow: 0 0 0 5px #c8341f2a;
-    z-index: 2;
-    animation: travel 9s var(--ease-out) infinite;
-  }
-  @keyframes travel {
-    0%,
-    8% {
-      left: 0;
-      transform: scale(1);
-    }
-    18%,
-    26% {
-      left: 20%;
-    }
-    36%,
-    44% {
-      left: 40%;
-    }
-    54%,
-    62% {
-      left: 60%;
-    }
-    72%,
-    88% {
-      left: 80%;
-      transform: scale(1);
-    }
-    92% {
-      left: 80%;
-      transform: scale(1.8);
-      opacity: 0;
-    }
-    96% {
-      left: 0;
-      transform: scale(0.4);
-      opacity: 0;
-    }
-    100% {
-      left: 0;
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  .cols {
+  .pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: clamp(24px, 4vw, 64px);
-    margin-top: clamp(64px, 8vw, 112px);
+    gap: clamp(14px, 2vw, 24px);
+    margin-top: clamp(48px, 6vw, 80px);
   }
-  .col-h {
-    display: flex;
-    align-items: center;
+  .panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    padding: clamp(28px, 3.5vw, 52px);
+    display: grid;
+    align-content: start;
     gap: 14px;
-    font-size: 1.05rem;
-    font-weight: 600;
-    padding-bottom: 18px;
-    border-bottom: 1.5px solid var(--ink);
+    min-height: 100%;
   }
-  .ic {
-    display: inline-grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--rule);
-    flex: none;
+  .bright {
+    background: var(--orange);
+    color: var(--navy);
   }
-  .ic :global(.spark) {
-    width: 16px;
-    height: 16px;
-    fill: var(--ink);
+  .deep {
+    background: var(--navy);
   }
-  .ic-us :global(svg) {
-    height: 24px;
-    width: auto;
+  .panel :global(.crop) {
+    position: absolute;
+    width: clamp(180px, 22vw, 300px);
+    right: -6%;
+    top: -18%;
+    opacity: 0.9;
+    pointer-events: none;
   }
-  .col li {
-    padding-block: 16px;
-    border-bottom: 1px solid var(--rule);
-    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
-    display: flex;
-    gap: 14px;
+  .bright :global(.crop) {
+    opacity: 0.22;
   }
-  .col li::before {
-    content: "—";
-    color: var(--ink-3);
+  .word {
+    position: relative;
+    font-weight: 900;
+    font-size: clamp(4rem, 2.6rem + 4vw, 7rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
-  .col-us li::before {
-    content: "✓";
-    color: var(--seal-ink);
-    font-weight: 700;
+  .panel h3,
+  .panel ul {
+    position: relative;
+  }
+  .panel ul {
+    display: grid;
+    margin-top: 8px;
+  }
+  .panel li {
+    padding-block: 13px;
+    border-top: 1px solid #1b285033;
+    font-size: 1.02rem;
+  }
+  .deep li {
+    border-top-color: var(--line-navy);
+    color: var(--on-navy-2);
   }
 
-  @media (max-width: 1000px) {
-    .p-head {
+  .own {
+    margin-top: clamp(64px, 8vw, 112px);
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(28px, 5vw, 80px);
+  }
+  .own-title {
+    font-size: clamp(1.6rem, 1.2rem + 1.3vw, 2.4rem);
+    font-weight: 900;
+  }
+  .own-list {
+    display: grid;
+  }
+  .own-list li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 11em) minmax(0, 1fr);
+    gap: 4px 20px;
+    align-items: baseline;
+    padding-block: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .own-list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .own-list :global(.bullet) {
+    width: 13px;
+    height: auto;
+    align-self: center;
+  }
+  .own-list h4 {
+    font-weight: 700;
+    font-size: 1.12rem;
+  }
+
+  @media (max-width: 900px) {
+    .head,
+    .pair,
+    .own {
       grid-template-columns: 1fr;
     }
   }
-  @media (max-width: 720px) {
-    .rail {
-      grid-template-columns: 1fr;
-      gap: 0;
-      padding-left: 34px;
+  @media (max-width: 620px) {
+    .own-list li {
+      grid-template-columns: 22px 1fr;
     }
-    .rail::before {
-      left: 6.25px;
-      right: auto;
-      top: 8px;
-      bottom: 28px;
-      width: 1.5px;
-      height: auto;
-    }
-    .st {
-      grid-template-columns: auto 1fr auto;
-      grid-template-rows: auto;
-      align-items: center;
-      gap: 12px;
-      padding-block: 14px;
-      border-bottom: 1px solid var(--rule);
-    }
-    .st-dot {
-      position: absolute;
-      left: -34px;
-      margin: 0;
-    }
-    .st-name {
-      font-size: 1.45rem;
-    }
-    .st-marks {
-      margin: 0;
-    }
-    .mk {
-      width: 34px;
-      height: 34px;
-    }
-    .token {
-      display: none;
-    }
-    .cols {
-      grid-template-columns: 1fr;
-    }
-    .legend {
-      flex-wrap: wrap;
-      gap: 8px 16px;
+    .own-list p {
+      grid-column: 2;
     }
   }
 </style>

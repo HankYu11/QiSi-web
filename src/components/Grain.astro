@@ -1,0 +1,15 @@
+---
+import { GRAIN_D } from "../brand";
+// One rice grain, using the exact outline from the logo (CIS 09: single grain as focal point or bullet).
+interface Props {
+  color?: string;
+  class?: string;
+  flip?: boolean; // the orange grain is the navy grain rotated 180°
+  style?: string;
+}
+const { color = "var(--orange)", class: cls, flip = false, style } = Astro.props;
+---
+
+<svg class={cls} style={style} viewBox="110 140 190 250" aria-hidden="true" focusable="false">
+  <path d={GRAIN_D} fill={color} transform={flip ? "rotate(180 205 265)" : undefined}></path>
+</svg>

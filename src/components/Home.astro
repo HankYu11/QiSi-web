@@ -1,9 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
-import Defs from "./Defs.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
-import SignOff from "./SignOff.astro";
+import Name from "./Name.astro";
 import Work from "./Work.astro";
 import Process from "./Process.astro";
 import Build from "./Build.astro";
@@ -18,12 +17,10 @@ const t = copy[lang];
 
 <Base t={t} lang={lang}>
   <a class="skip" href="#main">{t.a11y.skip}</a>
-  <span id="top"></span>
-  <Defs />
   <Header t={t} lang={lang} />
   <main id="main">
     <Hero t={t} />
-    <SignOff t={t} />
+    <Name t={t} />
     <Work t={t} lang={lang} />
     <Process t={t} />
     <Build t={t} />

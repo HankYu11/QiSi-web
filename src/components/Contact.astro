@@ -1,5 +1,7 @@
 ---
-import Seal from "./Seal.astro";
+import Logo from "./Logo.astro";
+import Grain from "./Grain.astro";
+import pattern from "../assets/brand/pattern-dark.svg?url";
 import { EMAIL, type Copy, type Lang } from "../i18n/copy";
 interface Props {
   t: Copy;
@@ -11,57 +13,38 @@ const f = t.footer;
 const [user, domain] = EMAIL.split("@");
 ---
 
-<section class="contact" id="contact" aria-labelledby="contact-title">
-  <div class="wrap c-in">
-    <p class="mono kicker"><span class="num">05</span>{c.kicker}</p>
-    <div class="c-grid">
-      <div class="c-main">
-        <h2 id="contact-title" class="display h2 c-title reveal">{c.title}</h2>
-        <p class="c-body reveal" style="--d:100ms">{c.body}</p>
-        <div class="mail reveal" style="--d:180ms">
-          <a class="mail-link" href={`mailto:${EMAIL}`}>
-            <span>{user}</span><span class="at">@</span><wbr /><span>{domain}</span>
-          </a>
-          <button
-            class="copy"
-            type="button"
-            data-copy={EMAIL}
-            data-done={c.copied}
-            aria-label={c.copyLabel}
-          >
-            <svg viewBox="0 0 16 16" aria-hidden="true"
-              ><rect x="5" y="5" width="9" height="9" rx="1.5"></rect><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"
-              ></path></svg
-            >
-            <span class="copy-txt" aria-live="polite">{c.copy}</span>
-          </button>
-        </div>
-      </div>
-      <div class="c-seal" aria-hidden="true">
-        <Seal class="big-seal" />
-      </div>
+<section class="contact on-navy" id="contact" aria-labelledby="contact-title" style={`--pattern:url(${pattern})`}>
+  <!-- CIS 09: dark rice pattern, sparse orange grains -->
+  <div class="accents" aria-hidden="true">
+    <Grain class="a a1" flip />
+    <Grain class="a a2" />
+    <Grain class="a a3" flip />
+  </div>
+  <div class="wrap inner">
+    <h2 id="contact-title" class="t-display c-title">{c.title}</h2>
+    <p class="t-lede muted c-body">{c.body}</p>
+    <div class="mail">
+      <a class="mail-link" href={`mailto:${EMAIL}`}><span>{user}</span><span class="at">@</span><wbr />{domain}</a>
+      <button class="btn btn-line copy" type="button" data-copy={EMAIL} data-done={c.copied} aria-label={c.copyLabel}>
+        <span class="copy-txt" aria-live="polite">{c.copy}</span>
+      </button>
     </div>
   </div>
 </section>
 
-<footer class="foot">
+<footer class="foot on-navy">
   <div class="wrap f-in">
-    <div class="f-brand">
-      <Seal class="f-seal" />
-      <div>
-        <p class="f-legal">{f.legal}</p>
-        <p class="f-city">{f.city}</p>
-      </div>
+    <Logo kind="horizontal" variant="reverse" class="f-logo" label={f.legal} />
+    <div class="f-meta">
+      <p>{f.legal}</p>
+      <p class="muted">{f.city}</p>
     </div>
-    <div class="f-links">
-      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-      <span class="f-lang">
-        <a href="/" lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh">中文</a>
-        <a href="/en/" lang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">English</a>
-      </span>
-      <a href="#top" class="f-top">{f.top} ↑</a>
-    </div>
-    <p class="f-copy mono">© {new Date().getFullYear()} QI SI TECHNOLOGY LIMITED</p>
+    <ul class="f-links">
+      <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+      <li><a href="/" lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh">中文</a></li>
+      <li><a href="/en/" lang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">English</a></li>
+    </ul>
+    <p class="f-copy muted">© {new Date().getFullYear()} {f.legal}</p>
   </div>
 </footer>
 
@@ -73,13 +56,10 @@ const [user, domain] = EMAIL.split("@");
       try {
         await navigator.clipboard.writeText(btn.dataset.copy!);
         label.textContent = btn.dataset.done!;
-        btn.classList.add("done");
-        setTimeout(() => {
-          label.textContent = orig;
-          btn.classList.remove("done");
-        }, 2200);
+        setTimeout(() => (label.textContent = orig), 2200);
       } catch {
-        location.href = `mailto:${btn.dataset.copy}`;
+        const link = document.querySelector(".mail-link");
+        if (link) getSelection()?.selectAllChildren(link);
       }
     });
   });
@@ -87,175 +67,121 @@ const [user, domain] = EMAIL.split("@");
 
 <style>
   .contact {
-    --c-bg: #a82a17;
-    background: var(--c-bg);
-    color: var(--paper);
-    padding-block: clamp(80px, 10vw, 160px);
+    position: relative;
     overflow: hidden;
+    padding-block: clamp(96px, 12vw, 176px);
+    background-color: var(--navy);
+    background-image: var(--pattern);
+    background-size: 120px 120px;
   }
-  .contact .kicker {
-    color: #f6d9cf;
+  .contact::before {
+    /* keep the text area calm: pattern fades out behind the copy */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--navy) 0%, var(--navy) 38%, #1b2850cc 60%, transparent 100%);
   }
-  .contact .kicker .num {
-    color: var(--paper);
+  .accents {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
   }
-  .contact .kicker::after {
-    background: #ffffff38;
+  .accents :global(.a) {
+    position: absolute;
+    width: 38px;
+    height: auto;
   }
-  .contact :focus-visible {
-    outline-color: var(--paper);
+  .accents :global(.a1) {
+    right: 12%;
+    top: 16%;
   }
-  .c-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: clamp(32px, 5vw, 80px);
-    align-items: center;
-    margin-top: clamp(32px, 4vw, 56px);
+  .accents :global(.a2) {
+    right: 28%;
+    bottom: 14%;
+  }
+  .accents :global(.a3) {
+    right: 6%;
+    bottom: 34%;
+  }
+  .inner {
+    position: relative;
   }
   .c-title {
-    max-width: 13em;
+    max-width: 11em;
   }
   .c-body {
     margin-top: 24px;
-    font-size: clamp(1.06rem, 0.98rem + 0.4vw, 1.3rem);
-    color: #fbe9e2;
-    max-width: 34em;
+    max-width: 32em;
   }
   .mail {
     margin-top: clamp(40px, 5vw, 64px);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 16px 28px;
+    gap: 18px 28px;
   }
   .mail-link {
-    font-family: "Fraunces Variable", serif;
-    font-size: clamp(2rem, 0.8rem + 5vw, 5.6rem);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
-    font-weight: 380;
+    font-weight: 900;
+    font-size: clamp(1.9rem, 0.8rem + 4.6vw, 5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     text-decoration: none;
-    background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
-    transition: background-size 0.5s var(--ease-out);
     overflow-wrap: anywhere;
+    background: linear-gradient(var(--orange), var(--orange)) 0 100% / 0 4px no-repeat;
+    transition: background-size 0.4s var(--ease);
   }
   .mail-link:hover {
-    background-size: 100% 2px;
+    background-size: 100% 4px;
   }
-  .mail-link .at {
-    font-style: italic;
-    color: #f7c8b8;
+  .at {
+    color: var(--orange);
   }
   .copy {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    height: 46px;
-    padding-inline: 18px;
-    border-radius: 999px;
-    border: 1.5px solid #ffffff70;
-    background: transparent;
-    color: var(--paper);
-    font-weight: 600;
-    cursor: pointer;
-    transition:
-      background 0.2s,
-      color 0.2s;
-  }
-  .copy svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.4;
-  }
-  .copy:hover,
-  .copy.done {
-    background: var(--paper);
-    color: var(--c-bg);
-    border-color: var(--paper);
-  }
-  .c-seal :global(.big-seal) {
-    --seal-fill: var(--paper);
-    --seal-cut: var(--c-bg);
-    height: clamp(220px, 26vw, 380px);
-    width: auto;
-    transform: rotate(6deg);
-    opacity: 0.96;
+    min-height: 48px;
   }
 
   .foot {
-    background: var(--night);
-    color: var(--on-night-2);
-    padding-block: 48px 40px;
-    font-size: 0.94rem;
-  }
-  .foot :focus-visible {
-    outline-color: var(--on-night);
+    background: var(--navy);
+    border-top: 1px solid var(--line-navy);
+    padding-block: 44px 36px;
+    font-size: 0.95rem;
   }
   .f-in {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 32px;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px 36px;
     align-items: center;
   }
-  .f-brand {
-    display: flex;
-    gap: 16px;
-    align-items: center;
+  .foot :global(.f-logo) {
+    width: 148px;
+    height: auto;
   }
-  .f-brand :global(.f-seal) {
-    height: 48px;
-    width: auto;
-  }
-  .f-legal {
-    color: var(--on-night);
-    font-weight: 600;
-    letter-spacing: 0.02em;
+  .f-meta p:first-child {
+    font-weight: 700;
   }
   .f-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 28px;
-    align-items: center;
+    gap: 6px 22px;
   }
   .f-links a {
-    color: var(--on-night);
+    display: inline-block;
+    padding-block: 10px;
     text-decoration: none;
   }
-  .f-links a:hover {
+  .f-links a:hover,
+  .f-links a[aria-current] {
     text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .f-lang {
-    display: inline-flex;
-    gap: 14px;
-  }
-  .f-lang a[aria-current] {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--orange);
   }
   .f-copy {
     grid-column: 1 / -1;
-    padding-top: 24px;
-    border-top: 1px solid var(--night-rule);
-    font-size: 0.7rem;
+    padding-top: 22px;
+    border-top: 1px solid var(--line-navy);
+    font-size: 0.82rem;
   }
-
   @media (max-width: 860px) {
-    .c-grid {
-      grid-template-columns: 1fr;
-    }
-    .c-seal {
-      position: absolute;
-      right: -40px;
-      top: 40px;
-      opacity: 0.16;
-      pointer-events: none;
-    }
-    .c-in {
-      position: relative;
-    }
     .f-in {
       grid-template-columns: 1fr;
     }

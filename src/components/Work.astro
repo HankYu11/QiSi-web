@@ -1,570 +1,955 @@
 ---
-import Seal from "./Seal.astro";
+import { Image } from "astro:assets";
+import Chapter from "./Chapter.astro";
+import Grain from "./Grain.astro";
 import type { Copy, Lang } from "../i18n/copy";
+import webHero from "../assets/ftg/web-home-hero.png";
+import webMobile from "../assets/ftg/web-home-mobile.png";
+import adminAttention from "../assets/ftg/admin-attention.png";
+import cardBakery from "../assets/ftg/card-bakery-feed.png";
+import cardBento from "../assets/ftg/card-bento-feed.png";
+import cardDessertFeed from "../assets/ftg/card-dessert-feed.png";
+import cardDessertHunt from "../assets/ftg/card-dessert-hunt.png";
+import cardBakeryHunt from "../assets/ftg/card-bakery-hunt.png";
+import phoneHunt from "../assets/ftg/phone-hunt.png";
+import phoneElig from "../assets/ftg/phone-merchant-eligibility.png";
+
 interface Props {
   t: Copy;
   lang: Lang;
 }
 const { t, lang } = Astro.props;
 const w = t.work;
-const [app, backend, admin, site] = w.nodes;
-const primary = lang === "zh" ? w.nameZh : w.nameEn;
-const secondary = lang === "zh" ? w.nameEn : w.nameZh;
+const cardW = [320, 480, 640];
 ---
 
-<section class="section work on-night" id="work" aria-labelledby="work-title">
-  <div class="wrap">
-    <p class="mono kicker"><span class="num">02</span>{w.kicker}</p>
-
-    <div class="w-head">
-      <h2 id="work-title" class="w-name reveal">
-        <span class="w-primary" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{primary}</span>
-        <span class="w-secondary" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{secondary}</span>
-      </h2>
-      <div class="w-sum reveal" style="--d:120ms">
-        <p class="lede">{w.summary}</p>
-        <dl class="w-meta">
+<section class="work" id="work" aria-labelledby="work-title">
+  <!-- Opening -->
+  <div class="wrap opening">
+    <Chapter label={w.chapter} />
+    <h2 id="work-title" class="title">
+      <span class="name" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{w.name}</span>
+      <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{w.nameAlt}</span>
+    </h2>
+    <div class="op-grid">
+      <p class="tagline">{w.tagline}</p>
+      <div class="op-side">
+        <p class="status"><span class="dot" aria-hidden="true"></span>{w.status}</p>
+        <p class="muted">{w.summary}</p>
+        <dl class="facts">
           {
-            w.meta.map((m) => (
+            w.facts.map((f) => (
               <div>
-                <dt class="mono">{m.k}</dt>
-                <dd>{m.v}</dd>
+                <dt>{f.k}</dt>
+                <dd>{f.v}</dd>
               </div>
             ))
           }
         </dl>
       </div>
     </div>
+  </div>
 
-    <div class="map-head">
-      <h3 class="display map-title">{w.mapTitle}</h3>
-    </div>
-
-    <div class="map" data-map>
-      <svg class="wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="ln ln-app" d="M0 25 C 30 25, 30 50, 50 50"></path>
-        <path class="ln ln-backend" d="M0 75 C 30 75, 30 50, 50 50"></path>
-        <path class="ln ln-admin" d="M100 25 C 70 25, 70 50, 50 50"></path>
-        <path class="ln ln-site" d="M100 75 C 70 75, 70 50, 50 50"></path>
-        <path class="flow ln-app" pathLength="1" d="M0 25 C 30 25, 30 50, 50 50"></path>
-        <path class="flow ln-backend" pathLength="1" d="M0 75 C 30 75, 30 50, 50 50"></path>
-        <path class="flow ln-admin" pathLength="1" d="M100 25 C 70 25, 70 50, 50 50"></path>
-        <path class="flow ln-site" pathLength="1" d="M100 75 C 70 75, 70 50, 50 50"></path>
-      </svg>
-
-      <div class="hub" aria-hidden="true">
-        <div class="hub-ring">
-          <Seal class="hub-seal" />
-          <span class="mono">{w.hub}</span>
+  <!-- Showcase stage: real screens -->
+  <div class="wrap">
+    <figure class="showcase on-navy">
+      <div class="sc-stage">
+        <div class="browser sc-browser">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+          <Image src={webHero} widths={[720, 1080, 1440]} sizes="(min-width: 1100px) 760px, 80vw" alt={w.alts.webHero} />
         </div>
+        <div class="phone sc-phone">
+          <Image src={webMobile} widths={[300, 450, 600]} sizes="(min-width: 1100px) 260px, 38vw" alt={w.alts.webMobile} />
+        </div>
+        <Image class="sc-card c1" src={cardDessertHunt} widths={cardW} sizes="(min-width: 1100px) 240px, 30vw" alt={w.alts.hunt} />
+        <Image class="sc-card c2" src={cardBakery} widths={cardW} sizes="(min-width: 1100px) 260px, 32vw" alt={w.alts.feed} />
+      </div>
+      <figcaption class="muted">{w.stageCaption}</figcaption>
+    </figure>
+  </div>
+
+  <!-- How it works: sticky stage on desktop, inline visuals on phones -->
+  <div class="wrap flow" data-flow>
+    <h3 class="t-h2 flow-title">{w.flowTitle}</h3>
+    <div class="flow-grid">
+      <div class="flow-stage">
+        <div class="stage-inner" aria-hidden="true">
+          <div class="vis vis-discover" data-vis="discover">
+            <Image class="fan f1" src={cardDessertFeed} widths={cardW} sizes="300px" alt="" />
+            <Image class="fan f2" src={cardBento} widths={cardW} sizes="300px" alt="" />
+            <Image class="fan f3" src={cardBakery} widths={cardW} sizes="300px" alt="" />
+          </div>
+          <div class="vis vis-hunt" data-vis="hunt">
+            <Image class="shot" src={phoneHunt} widths={[300, 456]} sizes="300px" alt="" />
+            <span class="swipe s-up">↑ {w.hunt.up}</span>
+            <span class="swipe s-left">← {w.hunt.left}</span>
+            <span class="swipe s-right">{w.hunt.right} →</span>
+          </div>
+          <div class="vis vis-eligibility" data-vis="eligibility">
+            <Image class="shot" src={phoneElig} widths={[300, 548]} sizes="300px" alt="" />
+            <div class="chips over">
+              {w.eligibility.map((e, i) => <span class="chip" style={`--i:${i}`}>{e}</span>)}
+            </div>
+          </div>
+          <div class="vis vis-pickup" data-vis="pickup">
+            <ol class="steps">
+              {
+                w.pickup.map((p, i) => (
+                  <li style={`--i:${i}`}>
+                    <Grain class="sg" color={i === 2 ? "var(--orange)" : "var(--navy-2)"} flip={i === 2} />
+                    <span>{p}</span>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+          <div class="vis vis-knock" data-vis="knock">
+            <ol class="track">
+              {
+                w.knock.map((k, i) => (
+                  <li style={`--i:${i}`}>
+                    <span class="node" />
+                    <span>{k}</span>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+        </div>
+        <p class="stage-cap muted">{w.flowCaption}</p>
       </div>
 
-      {
-        [app, backend, admin, site].map((n, i) => (
-          <article class={`node node-${n.id}`} data-node={n.id} style={`--d:${i * 90}ms`}>
-            <div class="art" aria-hidden="true">
-              {n.id === "app" && (
-                <svg viewBox="0 0 240 120">
-                  <rect class="s" x="54" y="10" width="44" height="78" rx="9" />
-                  <rect class="f" x="66" y="15" width="20" height="4" rx="2" />
-                  <rect class="f" x="61" y="28" width="30" height="16" rx="3" />
-                  <rect class="f2" x="61" y="50" width="22" height="4" rx="2" />
-                  <rect class="f2" x="61" y="58" width="16" height="4" rx="2" />
-                  <rect class="acc" x="61" y="72" width="30" height="8" rx="4" />
-                  <rect class="s" x="142" y="10" width="44" height="78" rx="4" />
-                  <circle class="f" cx="164" cy="17" r="2" />
-                  <rect class="f" x="149" y="28" width="30" height="16" rx="2" />
-                  <rect class="f2" x="149" y="50" width="22" height="4" rx="2" />
-                  <rect class="f2" x="149" y="58" width="16" height="4" rx="2" />
-                  <rect class="acc" x="149" y="72" width="30" height="8" rx="2" />
-                  <path class="s dash" d="M76 88 V100 H164 V88" />
-                  <path class="s" d="M120 100 V106" />
-                  <rect class="code" x="88" y="104" width="64" height="14" rx="3" />
-                  <path class="codeln" d="M96 111 h10 M110 111 h18 M132 111 h12" />
-                </svg>
+      <ol class="flow-steps">
+        {
+          w.flow.map((f, i) => (
+            <li class="fstep" data-step={f.id}>
+              <span class="fn" aria-hidden="true">{i + 1}</span>
+              <h4 class="t-h3">{f.title}</h4>
+              <p class="muted">{f.body}</p>
+              {f.id === "discover" && (
+                <div class="inline-vis" aria-hidden="true">
+                  <Image src={cardBakery} widths={cardW} sizes="80vw" alt="" />
+                </div>
               )}
-              {n.id === "backend" && (
-                <svg viewBox="0 0 240 120">
-                  <path class="s dash" d="M20 60 H70 M170 60 H220" />
-                  <g>
-                    <rect class="s slab" x="70" y="18" width="100" height="22" rx="4" />
-                    <rect class="s slab" x="70" y="49" width="100" height="22" rx="4" />
-                    <rect class="s slab" x="70" y="80" width="100" height="22" rx="4" />
-                    <rect class="f2" x="82" y="27" width="36" height="4" rx="2" />
-                    <rect class="f2" x="82" y="58" width="28" height="4" rx="2" />
-                    <rect class="f2" x="82" y="89" width="40" height="4" rx="2" />
-                    <circle class="led l1" cx="156" cy="29" r="3" />
-                    <circle class="led l2" cx="156" cy="60" r="3" />
-                    <circle class="led l3" cx="156" cy="91" r="3" />
-                  </g>
-                  <circle class="acc" cx="20" cy="60" r="4" />
-                  <circle class="acc" cx="220" cy="60" r="4" />
-                </svg>
+              {f.id === "hunt" && (
+                <div class="inline-vis" aria-hidden="true">
+                  <Image class="phone-shot" src={phoneHunt} widths={[300, 456]} sizes="60vw" alt="" />
+                </div>
               )}
-              {n.id === "admin" && (
-                <svg viewBox="0 0 240 120">
-                  <rect class="s" x="30" y="10" width="180" height="100" rx="6" />
-                  <path class="s" d="M66 10 V110" />
-                  <rect class="f" x="38" y="20" width="20" height="4" rx="2" />
-                  <rect class="f2" x="38" y="32" width="18" height="3" rx="1.5" />
-                  <rect class="f2" x="38" y="40" width="14" height="3" rx="1.5" />
-                  <rect class="f2" x="38" y="48" width="18" height="3" rx="1.5" />
-                  <rect class="tile" x="76" y="20" width="38" height="22" rx="3" />
-                  <rect class="tile acc-fill" x="120" y="20" width="38" height="22" rx="3" />
-                  <rect class="tile" x="164" y="20" width="38" height="22" rx="3" />
-                  <g class="bars">
-                    <rect x="80" y="76" width="10" height="24" rx="2" />
-                    <rect x="96" y="66" width="10" height="34" rx="2" />
-                    <rect x="112" y="82" width="10" height="18" rx="2" />
-                    <rect x="128" y="58" width="10" height="42" rx="2" />
-                    <rect x="144" y="70" width="10" height="30" rx="2" />
-                  </g>
-                  <rect class="f2" x="166" y="56" width="36" height="4" rx="2" />
-                  <rect class="f2" x="166" y="66" width="28" height="4" rx="2" />
-                  <rect class="f2" x="166" y="76" width="32" height="4" rx="2" />
-                  <rect class="f2" x="166" y="86" width="22" height="4" rx="2" />
-                </svg>
+              {f.id === "eligibility" && (
+                <div class="inline-vis" aria-hidden="true">
+                  <Image class="phone-shot" src={phoneElig} widths={[300, 548]} sizes="60vw" alt="" />
+                </div>
               )}
-              {n.id === "site" && (
-                <svg viewBox="0 0 240 120">
-                  <rect class="s" x="30" y="10" width="180" height="100" rx="6" />
-                  <path class="s" d="M30 26 H210" />
-                  <circle class="f2c" cx="40" cy="18" r="2.5" />
-                  <circle class="f2c" cx="49" cy="18" r="2.5" />
-                  <circle class="f2c" cx="58" cy="18" r="2.5" />
-                  <rect class="f" x="44" y="40" width="86" height="9" rx="2" />
-                  <rect class="f" x="44" y="54" width="64" height="9" rx="2" />
-                  <rect class="f2" x="44" y="72" width="70" height="4" rx="2" />
-                  <rect class="f2" x="44" y="80" width="56" height="4" rx="2" />
-                  <rect class="acc" x="44" y="92" width="34" height="9" rx="4.5" />
-                  <circle class="acc-soft" cx="172" cy="66" r="26" />
-                  <circle class="acc" cx="172" cy="66" r="12" />
-                </svg>
-              )}
-            </div>
-            <p class="mono tech">{n.tech}</p>
-            <h4 class="node-name">{n.name}</h4>
-            <p class="node-body">{n.body}</p>
-          </article>
-        ))
-      }
+            </li>
+          ))
+        }
+      </ol>
     </div>
+    <p class="flow-cap muted">{w.flowCaption}</p>
+  </div>
 
-    <div class="w-foot">
-      <p class="w-closing reveal">{w.closing}</p>
-      <p class="w-note reveal" style="--d:100ms">
-        <span class="mono" aria-hidden="true">※</span>
-        {w.note}
-      </p>
+  <!-- Surfaces -->
+  <div class="surfaces-wrap">
+    <div class="wrap">
+      <div class="sf-head">
+        <h3 class="t-h2">{w.surfacesTitle}</h3>
+        <p class="t-lede muted">{w.surfacesIntro}</p>
+      </div>
+      <div class="bento">
+        {
+          w.surfaces.map((s) => (
+            <article class={`tile tile-${s.id}`}>
+              <div class="tile-text">
+                <p class="tech">{s.tech}</p>
+                <h4 class="t-h3">{s.name}</h4>
+                <p class="muted">{s.body}</p>
+              </div>
+              {s.id === "app" && (
+                <div class="tile-vis app-vis" aria-hidden="true">
+                  <Image class="av a1" src={cardBento} widths={cardW} sizes="260px" alt="" />
+                  <Image class="av a2" src={cardBakeryHunt} widths={cardW} sizes="240px" alt="" />
+                </div>
+              )}
+              {s.id === "backend" && (
+                <svg class="tile-vis arch" viewBox="0 0 360 236" aria-hidden="true">
+                  <g class="box">
+                    <rect x="4" y="8" width="112" height="44" rx="12" />
+                    <text x="60" y="35">iOS · Android</text>
+                    <rect x="124" y="8" width="112" height="44" rx="12" />
+                    <text x="180" y="35">Admin</text>
+                    <rect x="244" y="8" width="112" height="44" rx="12" />
+                    <text x="300" y="35">Website</text>
+                  </g>
+                  <path class="wire" d="M60 52 V84 M180 52 V84 M300 52 V84" />
+                  <rect class="spec" x="4" y="84" width="352" height="36" rx="10" />
+                  <text class="spec-t" x="180" y="107">OpenAPI · 117 endpoints</text>
+                  <path class="wire" d="M180 120 V150" />
+                  <rect class="core" x="90" y="150" width="180" height="56" rx="16" />
+                  <text class="core-t" x="180" y="184">Ktor API</text>
+                  <text class="run-t" x="180" y="228">Google Cloud Run</text>
+                </svg>
+              )}
+              {s.id === "admin" && (
+                <div class="tile-vis browser small">
+                  <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+                  <Image src={adminAttention} widths={[640, 960, 1440]} sizes="(min-width: 1100px) 700px, 90vw" alt={w.alts.admin} />
+                  <p class="tag">{w.sampleNote}</p>
+                </div>
+              )}
+              {s.id === "web" && (
+                <div class="tile-vis phone mini">
+                  <Image src={webMobile} widths={[300, 450]} sizes="200px" alt="" />
+                </div>
+              )}
+            </article>
+          ))
+        }
+      </div>
+      <div class="proof on-navy">
+        <div class="proof-head">
+          <h3 class="t-h2">{w.proofTitle}</h3>
+          <p class="muted">{w.proofIntro}</p>
+        </div>
+        <ul class="proof-list">
+          {
+            w.proof.map((p) => (
+              <li>
+                <span class="pn">{p.n}</span>
+                <span class="pl">{p.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="proof-note muted">{w.proofNote}</p>
+      </div>
+      <p class="note"><Grain class="ng" color="var(--navy-2)" />{w.note}</p>
     </div>
   </div>
 </section>
 
 <script>
-  const map = document.querySelector<HTMLElement>("[data-map]");
-  if (map) {
-    const nodes = map.querySelectorAll<HTMLElement>("[data-node]");
-    const on = (id?: string) => (id ? (map.dataset.active = id) : delete map.dataset.active);
-    nodes.forEach((n) => {
-      n.addEventListener("mouseenter", () => on(n.dataset.node));
-      n.addEventListener("focus", () => on(n.dataset.node));
-      n.addEventListener("mouseleave", () => on());
-      n.addEventListener("blur", () => on());
-    });
+  const flow = document.querySelector<HTMLElement>("[data-flow]");
+  if (flow && "IntersectionObserver" in window) {
+    const steps = [...flow.querySelectorAll<HTMLElement>("[data-step]")];
+    const set = (id: string) => {
+      flow.dataset.active = id;
+      steps.forEach((s) => s.classList.toggle("on", s.dataset.step === id));
+    };
+    set(steps[0].dataset.step!);
+    const io = new IntersectionObserver(
+      (es) => es.forEach((e) => e.isIntersecting && set((e.target as HTMLElement).dataset.step!)),
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    steps.forEach((s) => io.observe(s));
   }
 </script>
 
 <style>
   .work {
-    background: var(--night);
-    color: var(--on-night);
-    position: relative;
+    background: var(--cream);
+    padding-top: clamp(72px, 8vw, 120px);
   }
-  .w-head {
+  .op-grid {
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: clamp(32px, 5vw, 80px);
-    align-items: end;
-    margin-top: clamp(32px, 4vw, 56px);
-    padding-bottom: clamp(56px, 7vw, 96px);
-    border-bottom: 1px solid var(--night-rule);
+    margin-top: clamp(28px, 3.5vw, 48px);
+    align-items: start;
   }
-  .w-name {
+  .title {
     display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-    font-weight: 400;
-    margin: 0;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 28px;
+    margin-top: clamp(20px, 2.5vw, 32px);
   }
-  .w-primary {
-    font-family: var(--f-display);
-    font-size: clamp(4rem, 2rem + 8vw, 10.5rem);
-    line-height: 0.92;
-    letter-spacing: -0.035em;
-    font-weight: 380;
+  .name {
+    font-weight: 900;
+    font-size: clamp(3.6rem, 1.6rem + 7.6vw, 9.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
   }
-  .w-primary:lang(zh-Hant-TW) {
-    font-family: "QiSi Serif TC", serif;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+  .name:lang(zh-Hant-TW) {
+    letter-spacing: 0.02em;
     line-height: 1.05;
   }
-  .w-secondary {
-    font-family: var(--f-display);
-    font-style: italic;
-    font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
-    color: #ff8a6e;
-    font-weight: 340;
-    letter-spacing: -0.01em;
+  .alt {
+    font-weight: 700;
+    font-size: clamp(1.3rem, 1rem + 1.2vw, 2rem);
+    color: var(--slate);
   }
-  .w-secondary:lang(zh-Hant-TW) {
-    font-family: "QiSi Serif TC", serif;
-    font-style: normal;
-    font-weight: 600;
-    letter-spacing: 0.2em;
+  .tagline {
+    font-weight: 700;
+    font-size: clamp(1.3rem, 1rem + 1.1vw, 2rem);
+    line-height: 1.4;
+    max-width: 22em;
   }
-  .w-sum {
+  .op-side {
     display: grid;
-    gap: 32px;
+    gap: 20px;
   }
-  .work .lede {
-    color: var(--on-night);
+  .status {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--white);
+    font-weight: 700;
+    font-size: 0.92rem;
   }
-  .w-meta {
+  .status .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #2e9d5b;
+    box-shadow: 0 0 0 4px #2e9d5b26;
+  }
+  .facts {
     display: grid;
-    border-top: 1px solid var(--night-rule);
+    border-top: 1px solid var(--line);
   }
-  .w-meta div {
+  .facts div {
     display: grid;
     grid-template-columns: 7.5em 1fr;
     gap: 16px;
     padding-block: 12px;
-    border-bottom: 1px solid var(--night-rule);
-    align-items: baseline;
+    border-bottom: 1px solid var(--line);
   }
-  .w-meta dt {
-    color: var(--on-night-2);
-  }
-  .w-meta dd {
-    font-size: 0.98rem;
+  .facts dt {
+    font-weight: 700;
+    color: var(--slate);
+    font-size: 0.92rem;
   }
 
-  .map-head {
-    padding-block: clamp(48px, 6vw, 80px) clamp(28px, 3vw, 40px);
+  /* ---- showcase ---- */
+  .showcase {
+    margin-top: clamp(48px, 6vw, 88px);
+    border-radius: calc(var(--radius) * 1.6);
+    padding: clamp(24px, 4vw, 64px) clamp(16px, 4vw, 64px) clamp(20px, 2.4vw, 32px);
+    overflow: hidden;
   }
-  .map-title {
-    font-size: clamp(1.6rem, 1rem + 2vw, 2.8rem);
-    max-width: 18em;
-  }
-  :root[data-lang="zh"] .map-title {
-    font-size: clamp(1.45rem, 1rem + 1.6vw, 2.3rem);
-  }
-
-  /* --- system map --- */
-  .map {
+  .sc-stage {
     position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(180px, 20vw, 280px) minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "app hub admin"
-      "backend hub site";
-    gap: 20px 0;
+    aspect-ratio: 16 / 9;
+    max-width: 100%;
   }
-  .wires {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+  .browser {
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 40px 80px -40px #0008;
+  }
+  .browser .bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    background: #eef1f6;
+  }
+  .browser .bar i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #cdd3df;
+  }
+  .browser .bar span {
+    margin-left: 12px;
+    width: 34%;
+    height: 14px;
+    border-radius: 99px;
+    background: var(--white);
+  }
+  .browser :global(img) {
     width: 100%;
-    height: 100%;
-    overflow: visible;
+    display: block;
   }
-  .ln {
-    fill: none;
-    stroke: var(--night-rule);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-    transition: stroke 0.3s;
+  .sc-browser {
+    position: absolute;
+    left: 0;
+    top: 6%;
+    width: 72%;
   }
-  .flow {
-    fill: none;
-    stroke: #ff8a6e;
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 0.08 0.92;
-    stroke-linecap: round;
-    animation: flow 3.2s linear infinite;
-    opacity: 0.55;
+  .phone {
+    border-radius: 34px;
+    padding: 9px;
+    background: #10162b;
+    box-shadow: 0 40px 80px -30px #000a;
   }
-  .flow.ln-backend {
-    animation-delay: -0.8s;
+  .phone :global(img) {
+    border-radius: 26px;
+    width: 100%;
+    display: block;
   }
-  .flow.ln-admin {
-    animation-delay: -1.6s;
+  .sc-phone {
+    position: absolute;
+    right: 2%;
+    top: 0;
+    width: 25%;
   }
-  .flow.ln-site {
-    animation-delay: -2.4s;
+  .sc-stage :global(.sc-card) {
+    position: absolute;
+    filter: drop-shadow(0 24px 30px #0006);
   }
-  @keyframes flow {
+  .sc-stage :global(.c1) {
+    width: 20%;
+    left: 60%;
+    top: 46%;
+    transform: rotate(6deg);
+  }
+  .sc-stage :global(.c2) {
+    width: 22%;
+    left: -2%;
+    bottom: -6%;
+    transform: rotate(-5deg);
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .sc-stage :global(.c1) {
+        animation: drift-a linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      .sc-stage :global(.c2) {
+        animation: drift-b linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+      .sc-phone {
+        animation: drift-p linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+  @keyframes drift-a {
     from {
-      stroke-dashoffset: 1;
+      transform: translateY(60px) rotate(10deg);
     }
     to {
-      stroke-dashoffset: 0;
+      transform: translateY(-60px) rotate(2deg);
     }
   }
-  .map[data-active] .flow {
-    opacity: 0.15;
+  @keyframes drift-b {
+    from {
+      transform: translateY(80px) rotate(-9deg);
+    }
+    to {
+      transform: translateY(-40px) rotate(-2deg);
+    }
   }
-  .map[data-active="app"] .ln-app,
-  .map[data-active="backend"] .ln-backend,
-  .map[data-active="admin"] .ln-admin,
-  .map[data-active="site"] .ln-site {
-    stroke: #ff8a6e;
-    opacity: 1;
+  @keyframes drift-p {
+    from {
+      transform: translateY(40px);
+    }
+    to {
+      transform: translateY(-40px);
+    }
   }
-  .hub {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    display: grid;
-    place-items: center;
-    z-index: 1;
-    pointer-events: none;
-  }
-  .hub-ring {
-    width: clamp(120px, 12vw, 168px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--night);
-    border: 1px solid var(--night-rule);
-    box-shadow:
-      0 0 0 10px var(--night),
-      0 0 0 11px var(--night-rule);
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 10px;
-    color: var(--on-night-2);
-  }
-  .hub-ring :global(.hub-seal) {
-    height: clamp(44px, 4.6vw, 64px);
-    width: auto;
-  }
-  .hub-ring .mono {
-    font-size: 0.66rem;
+  .showcase figcaption {
+    margin-top: clamp(24px, 3vw, 40px);
+    font-size: 0.88rem;
   }
 
+  /* ---- flow ---- */
+  .flow {
+    padding-block: clamp(88px, 10vw, 152px) clamp(40px, 5vw, 72px);
+  }
+  .flow-title {
+    max-width: 14em;
+  }
+  .flow-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 96px);
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .flow-stage {
+    position: relative;
+  }
+  .stage-inner {
+    position: sticky;
+    top: calc(var(--header-h) + 6vh);
+    height: min(72vh, 620px);
+    border-radius: calc(var(--radius) * 1.6);
+    background: var(--mist);
+    overflow: hidden;
+  }
+  .stage-cap {
+    position: sticky;
+    top: calc(var(--header-h) + 6vh + min(72vh, 620px) + 12px);
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+  .vis {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    transition:
+      opacity 0.45s var(--ease),
+      transform 0.6s var(--ease);
+    pointer-events: none;
+  }
+  .flow[data-active="discover"] .vis-discover,
+  .flow[data-active="hunt"] .vis-hunt,
+  .flow[data-active="eligibility"] .vis-eligibility,
+  .flow[data-active="pickup"] .vis-pickup,
+  .flow[data-active="knock"] .vis-knock {
+    opacity: 1;
+    transform: none;
+  }
+  :global(html:not(.js)) .vis-discover {
+    opacity: 1;
+    transform: none;
+  }
+  .vis :global(.fan) {
+    position: absolute;
+    width: 54%;
+    filter: drop-shadow(0 18px 24px #1b285033);
+    transition: transform 0.7s var(--ease);
+  }
+  .vis :global(.f1) {
+    transform: translate(-22%, -26%) rotate(-8deg);
+  }
+  .vis :global(.f2) {
+    transform: translate(20%, -12%) rotate(6deg);
+  }
+  .vis :global(.f3) {
+    transform: translate(-4%, 22%) rotate(-2deg);
+  }
+  .vis :global(.shot) {
+    height: 88%;
+    width: auto;
+    filter: drop-shadow(0 24px 30px #1b285040);
+  }
+  .chips.over {
+    position: absolute;
+    bottom: 6%;
+    max-width: 92%;
+  }
+  .chips.over .chip {
+    box-shadow: 0 8px 18px -10px #1b285066;
+  }  .swipe {
+    position: absolute;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--white);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 6px 16px -8px #1b285055;
+  }
+  .s-up {
+    top: 7%;
+  }
+  .s-left {
+    left: 5%;
+  }
+  .s-right {
+    right: 5%;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 80%;
+  }
+  .chip {
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: var(--white);
+    font-weight: 700;
+    border: 2px solid transparent;
+  }
+  .vis .chip:first-child,
+  .inline-vis .chip:first-child {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .flow[data-active="eligibility"] .vis .chip {
+    animation: chip 6s calc(var(--i) * 1.5s) infinite;
+  }
+  @keyframes chip {
+    0%,
+    22% {
+      border-color: var(--orange);
+    }
+    25%,
+    100% {
+      border-color: transparent;
+    }
+  }
+  .steps,
+  .track {
+    display: grid;
+    gap: 14px;
+    width: min(78%, 360px);
+  }
+  .steps li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    border-radius: 16px;
+    background: var(--white);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .steps :global(.sg) {
+    width: 16px;
+    height: auto;
+    flex: none;
+  }
+  .track {
+    position: relative;
+    gap: 34px;
+  }
+  .track::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--line);
+  }
+  .track li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
   .node {
-    background: var(--night-2);
-    border: 1px solid var(--night-rule);
-    border-radius: 4px;
-    padding: clamp(18px, 2vw, 28px);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--navy-2);
+    flex: none;
+  }
+  .track li:last-child .node {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+  .flow-steps {
+    display: grid;
+  }
+  .fstep {
+    min-height: min(60vh, 520px);
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    padding-block: 24px;
+    opacity: 0.35;
+    transition: opacity 0.4s;
+  }
+  :global(html:not(.js)) .fstep,
+  .fstep.on {
+    opacity: 1;
+  }
+  .fn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 900;
+  }
+  .fstep.on .fn {
+    background: var(--orange);
+    color: var(--navy);
+  }
+  .fstep p {
+    max-width: 30em;
+  }
+  .inline-vis,
+  .flow-cap {
+    display: none;
+  }
+
+  /* ---- surfaces ---- */
+  .surfaces-wrap {
+    padding-block: clamp(64px, 8vw, 120px) clamp(80px, 10vw, 152px);
+  }
+  .sf-head {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(28px, 5vw, 80px);
+    align-items: end;
+  }
+  .bento {
+    margin-top: clamp(40px, 5vw, 72px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+    padding: clamp(24px, 2.8vw, 40px);
+    display: grid;
+    gap: 24px;
+    align-content: start;
+  }
+  .tile-text {
+    display: grid;
+    gap: 8px;
+    max-width: 30em;
+  }
+  .tech {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--orange-text);
+  }
+  .tile-app {
+    grid-column: span 7;
+    background: var(--navy);
+    color: var(--white);
+  }
+  .tile-app .muted {
+    color: var(--on-navy-2);
+  }
+  .tile-app .tech {
+    color: var(--orange);
+  }
+  .tile-backend {
+    grid-column: span 5;
+  }
+  .tile-admin {
+    grid-column: span 8;
+  }
+  .tile-web {
+    grid-column: span 4;
+    background: var(--mist);
+  }
+  .app-vis {
+    position: relative;
+    height: 300px;
+  }
+  .app-vis :global(.av) {
+    position: absolute;
+    filter: drop-shadow(0 20px 26px #0007);
+  }
+  .app-vis :global(.a1) {
+    width: 46%;
+    left: 4%;
+    top: 14%;
+    transform: rotate(-4deg);
+  }
+  .app-vis :global(.a2) {
+    width: 38%;
+    right: 6%;
+    top: 0;
+    transform: rotate(5deg);
+  }
+  .arch {
+    width: 100%;
+    height: auto;
+  }
+  .arch .box rect {
+    fill: var(--mist);
+  }
+  .arch text {
+    font: 700 15px var(--font);
+    fill: var(--navy);
+    text-anchor: middle;
+  }
+  .arch .wire {
+    fill: none;
+    stroke: var(--navy-2);
+    stroke-width: 2;
+    stroke-dasharray: 4 5;
+  }
+  .arch .core {
+    fill: var(--navy);
+  }
+  .arch .core-t {
+    fill: var(--white);
+    font-weight: 900;
+    font-size: 18px;
+  }
+  .arch .spec {
+    fill: var(--peach);
+  }
+  .arch .spec-t {
+    fill: var(--orange-text);
+    font-size: 14px;
+  }
+  .arch .run-t {
+    fill: var(--slate);
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .browser.small {
+    box-shadow: 0 24px 48px -30px #1b285066;
+    border: 1px solid var(--line);
+  }
+  .tag {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    color: var(--slate);
+    background: var(--white);
+    border-top: 1px solid var(--line);
+  }
+  .phone.mini {
+    width: min(60%, 210px);
+    justify-self: center;
+    margin-bottom: -80px;
+  }
+  .proof {
+    margin-top: 16px;
+    border-radius: calc(var(--radius) * 1.2);
+    padding: clamp(28px, 4vw, 64px);
+  }
+  .proof-head {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: end;
+  }
+  .proof-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(36px, 4vw, 56px);
+    padding-top: clamp(28px, 3vw, 40px);
+    border-top: 1px solid var(--line-navy);
+  }
+  .proof-list li {
     display: grid;
     align-content: start;
     gap: 10px;
-    outline: none;
-    transition:
-      border-color 0.3s,
-      transform 0.4s var(--ease-out),
-      background 0.3s;
   }
-  .node:hover,
-  .node:focus-visible {
-    border-color: #ff8a6e;
-    background: #221f19;
+  .pn {
+    font-weight: 900;
+    font-size: clamp(2.6rem, 1.6rem + 2.8vw, 4.4rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--orange);
+    font-variant-numeric: tabular-nums;
   }
-  .node:focus-visible {
-    box-shadow: 0 0 0 2px var(--on-night);
+  .pl {
+    color: var(--on-navy-2);
+    font-size: 0.98rem;
   }
-  .node-app {
-    grid-area: app;
+  .proof-note {
+    margin-top: clamp(24px, 3vw, 40px);
+    font-size: 0.85rem;
   }
-  .node-backend {
-    grid-area: backend;
-  }
-  .node-admin {
-    grid-area: admin;
-  }
-  .node-site {
-    grid-area: site;
-  }
-  .art {
-    background: var(--night);
-    border: 1px solid var(--night-rule);
-    border-radius: 3px;
-    padding: 14px 8px;
-    margin-bottom: 10px;
-  }
-  .art svg {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 2 / 1;
-  }
-  .art .s {
-    fill: none;
-    stroke: #8f877a;
-    stroke-width: 1.4;
-  }
-  .art .dash {
-    stroke-dasharray: 3 4;
-  }
-  .art .f {
-    fill: #5d574b;
-  }
-  .art .f2 {
-    fill: #3e3a31;
-  }
-  .art .f2c {
-    fill: #4a453b;
-  }
-  .art .acc {
-    fill: #e0563c;
-  }
-  .art .acc-soft {
-    fill: #e0563c33;
-  }
-  .art .code {
-    fill: #2a2720;
-    stroke: #e0563c;
-    stroke-width: 1.2;
-  }
-  .art .codeln {
-    stroke: #ff8a6e;
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-  .art .slab {
-    fill: #1d1b16;
-  }
-  .art .led {
-    fill: #57b37a;
-  }
-  .art .led.l2 {
-    animation: blink 2.4s infinite;
-  }
-  .art .led.l3 {
-    animation: blink 3.1s 0.6s infinite;
-  }
-  @keyframes blink {
-    50% {
-      fill: #2a2720;
+  @media (max-width: 1000px) {
+    .proof-head {
+      grid-template-columns: 1fr;
+    }
+    .proof-list {
+      grid-template-columns: 1fr 1fr;
     }
   }
-  .art .tile {
-    fill: #2a2720;
-    stroke: #4a453b;
+  @media (max-width: 520px) {
+    .proof-list {
+      grid-template-columns: 1fr;
+    }
   }
-  .art .acc-fill {
-    fill: #e0563c;
-    stroke: none;
-  }
-  .art .bars rect {
-    fill: #5d574b;
-    transform-box: fill-box;
-    transform-origin: bottom;
-    transition: transform 0.6s var(--ease-out);
-  }
-  .art .bars rect:nth-child(4) {
-    fill: #e0563c;
-  }
-  .node:hover .bars rect:nth-child(odd) {
-    transform: scaleY(1.25);
-  }
-  .node:hover .bars rect:nth-child(even) {
-    transform: scaleY(0.8);
-  }
-  .tech {
-    color: #ff8a6e;
-    text-transform: none;
-    letter-spacing: 0.02em;
-  }
-  .node-name {
-    font-family: var(--f-display);
-    font-weight: 450;
-    font-size: clamp(1.35rem, 1.1rem + 0.7vw, 1.75rem);
-    letter-spacing: -0.015em;
-    line-height: 1.15;
-  }
-  :root[data-lang="zh"] .node-name {
-    font-weight: 600;
-    letter-spacing: 0.06em;
-  }
-  .node-body {
-    color: var(--on-night-2);
-    font-size: 0.97rem;
-  }
-
-  .w-foot {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: clamp(32px, 5vw, 80px);
-    margin-top: clamp(48px, 6vw, 88px);
-    align-items: start;
-  }
-  .w-closing {
-    font-family: var(--f-display);
-    font-size: clamp(1.35rem, 1rem + 1.2vw, 2.1rem);
-    line-height: 1.3;
-    font-weight: 380;
-    letter-spacing: -0.01em;
-  }
-  :root[data-lang="zh"] .w-closing {
-    font-weight: 500;
-    line-height: 1.7;
-    letter-spacing: 0.03em;
-    font-size: clamp(1.2rem, 1rem + 0.9vw, 1.65rem);
-  }
-  .w-note {
+  .note {
+    margin-top: 28px;
     display: flex;
+    align-items: center;
     gap: 12px;
-    color: var(--on-night-2);
+    color: var(--slate);
     font-size: 0.95rem;
-    padding-top: 10px;
-    border-top: 1px solid var(--night-rule);
   }
-  .w-note .mono {
-    color: #ff8a6e;
-    font-size: 0.95rem;
+  .note :global(.ng) {
+    width: 12px;
+    height: auto;
+    flex: none;
   }
 
   @media (max-width: 1000px) {
-    .w-head,
-    .w-foot {
+    .op-grid,
+    .sf-head {
       grid-template-columns: 1fr;
+    }
+    .tile-app,
+    .tile-backend,
+    .tile-admin,
+    .tile-web {
+      grid-column: span 12;
+    }
+    .phone.mini {
+      margin-bottom: -120px;
     }
   }
-  @media (max-width: 760px) {
-    .map {
+  @media (max-width: 820px) {
+    .flow-grid {
       grid-template-columns: 1fr;
-      grid-template-areas: "hub" "app" "backend" "admin" "site";
-      gap: 16px;
     }
-    .wires {
+    .flow-stage {
       display: none;
     }
-    .hub {
-      grid-column: 1;
-      grid-row: auto;
-      grid-area: hub;
-      justify-items: start;
-      margin-bottom: 8px;
+    .fstep {
+      min-height: 0;
+      opacity: 1;
+      padding-block: 28px;
+      border-top: 1px solid var(--line);
     }
-    .hub-ring {
-      width: auto;
-      aspect-ratio: auto;
-      border-radius: 999px;
-      grid-auto-flow: column;
-      padding: 10px 20px 10px 12px;
-      box-shadow: none;
+    .fstep .fn {
+      background: var(--orange);
+      color: var(--navy);
     }
-    .hub-ring :global(.hub-seal) {
-      height: 36px;
+    .flow-cap {
+      display: block;
+      font-size: 0.85rem;
+      margin-top: 8px;
     }
-    .art {
-      padding: 10px;
+    .inline-vis {
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      margin-top: 8px;
+      border-radius: var(--radius);
+      background: var(--mist);
     }
-    .art svg {
-      height: 104px;
-      aspect-ratio: auto;
+    .inline-vis :global(.phone-shot) {
+      width: min(70%, 240px);
+    }
+    .inline-vis :global(img) {
+      width: min(100%, 300px);
+      filter: drop-shadow(0 14px 20px #1b285033);
+    }
+    .sc-stage {
+      aspect-ratio: 4 / 5;
+    }
+    .sc-browser {
+      width: 100%;
+      top: 0;
+    }
+    .sc-phone {
+      width: 46%;
+      top: auto;
+      bottom: 4%;
+      right: 2%;
+    }
+    .sc-stage :global(.c1) {
+      width: 40%;
+      left: 4%;
+      top: 44%;
+    }
+    .sc-stage :global(.c2) {
+      display: none;
+    }
+    .app-vis {
+      height: 240px;
     }
   }
 </style>

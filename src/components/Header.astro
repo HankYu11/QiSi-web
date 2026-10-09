@@ -1,23 +1,17 @@
 ---
-import Seal from "./Seal.astro";
-import type { Copy, Lang } from "../i18n/copy";
+import Logo from "./Logo.astro";
+import { EMAIL, type Copy, type Lang } from "../i18n/copy";
 interface Props {
   t: Copy;
   lang: Lang;
 }
 const { t, lang } = Astro.props;
-const home = t.path;
-const navHref = (h: string) => `${home}${h}`;
 ---
 
 <header class="hdr" data-hdr>
   <div class="wrap hdr-in">
-    <a class="brand" href={home} aria-label={t.a11y.home}>
-      <Seal class="brand-seal" />
-      <span class="brand-word">
-        <span class="brand-en">QI SI</span>
-        <span class="brand-zh" lang="zh-Hant-TW">奇斯科技</span>
-      </span>
+    <a class="brand" href={t.path} aria-label={t.a11y.home}>
+      <Logo kind="horizontal" />
     </a>
 
     <nav class="nav" aria-label={t.a11y.nav} id="site-nav">
@@ -25,26 +19,20 @@ const navHref = (h: string) => `${home}${h}`;
         {
           t.nav.map((n) => (
             <li>
-              <a href={navHref(n.href)}>{n.label}</a>
+              <a href={`${t.path}${n.href}`}>{n.label}</a>
             </li>
           ))
         }
       </ul>
+      <a class="btn btn-navy nav-cta" href={`mailto:${EMAIL}`}>{t.header.cta}</a>
     </nav>
 
-    <div class="hdr-tools">
+    <div class="tools">
       <div class="lang" role="group" aria-label={t.a11y.langSwitch}>
-        <a
-          href="/"
-          lang="zh-Hant-TW"
-          hreflang="zh-Hant-TW"
-          aria-current={lang === "zh" ? "true" : undefined}
-          data-set-lang="zh">中文</a
+        <a href="/" lang="zh-Hant-TW" hreflang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh"
+          >中文</a
         >
-        <span aria-hidden="true">/</span>
-        <a href="/en/" lang="en" hreflang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en"
-          >EN</a
-        >
+        <a href="/en/" lang="en" hreflang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">EN</a>
       </div>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu>
         <span class="sr-only">{t.a11y.menu}</span>
@@ -59,179 +47,164 @@ const navHref = (h: string) => `${home}${h}`;
     position: sticky;
     top: env(safe-area-inset-top, 0px);
     z-index: 50;
-    background: color-mix(in srgb, var(--paper) 86%, transparent);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    background: var(--white);
     border-bottom: 1px solid transparent;
-    transition: border-color 0.3s;
+    transition:
+      border-color 0.25s,
+      box-shadow 0.25s;
   }
   .hdr.scrolled {
-    border-bottom-color: var(--rule);
+    border-bottom-color: var(--line);
+    box-shadow: 0 6px 24px -18px #1b285066;
   }
   .hdr-in {
     display: flex;
     align-items: center;
-    gap: 24px;
-    height: 72px;
+    gap: 28px;
+    height: var(--header-h);
   }
   .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
+    display: block;
     margin-right: auto;
+    padding: 6px 0; /* CIS clear space around the lockup */
   }
-  .brand :global(.brand-seal) {
-    height: 40px;
-    width: auto;
-    transition: transform 0.5s var(--ease-stamp);
+  .brand :global(.logo) {
+    width: 148px; /* CIS minimum on screen: 140px */
+    height: auto;
   }
-  .brand:hover :global(.brand-seal) {
-    transform: rotate(-6deg) scale(1.04);
-  }
-  .brand-word {
+  .nav {
     display: flex;
-    flex-direction: column;
-    line-height: 1;
-    gap: 4px;
-  }
-  .brand-en {
-    font-family: var(--f-display);
-    font-weight: 560;
-    font-size: 1.22rem;
-    letter-spacing: 0.06em;
-  }
-  .brand-zh {
-    font-family: var(--f-sans);
-    font-size: 0.7rem;
-    letter-spacing: 0.32em;
-    color: var(--ink-2);
+    align-items: center;
+    gap: 8px;
   }
   .nav ul {
     display: flex;
-    gap: 6px;
+    gap: 4px;
   }
-  .nav a {
+  .nav ul a {
     display: block;
-    padding: 8px 12px;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.98rem;
     text-decoration: none;
-    font-size: 0.94rem;
-    font-weight: 500;
     border-radius: 999px;
-    transition: background 0.2s;
+    transition: background-color 0.18s;
   }
-  .nav a:hover {
-    background: var(--paper-2);
+  .nav ul a:hover {
+    background: var(--mist);
   }
-  .hdr-tools {
+  .nav-cta {
+    min-height: 46px;
+    padding: 0 20px;
+    margin-left: 10px;
+    font-size: 0.95rem;
+  }
+  .tools {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   .lang {
     display: flex;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.86rem;
-    font-weight: 600;
-    color: var(--ink-3);
-    border: 1px solid var(--rule);
-    border-radius: 999px;
     padding: 3px;
-  }
-  .lang span {
-    display: none;
+    border-radius: 999px;
+    background: var(--mist);
   }
   .lang a {
-    text-decoration: none;
-    padding: 5px 11px;
+    display: grid;
+    place-items: center;
+    min-width: 46px;
+    min-height: 38px;
+    padding: 0 10px;
     border-radius: 999px;
-    color: var(--ink-2);
-    letter-spacing: 0.02em;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--slate);
+    text-decoration: none;
   }
   .lang a:hover {
-    color: var(--ink);
+    color: var(--navy);
   }
   .lang a[aria-current] {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--white);
+    color: var(--navy);
+    box-shadow: 0 1px 3px #1b285026;
   }
   .menu-btn {
     display: none;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     .hdr-in {
-      height: 64px;
+      height: 68px;
+      gap: 12px;
     }
-    .brand :global(.brand-seal) {
-      height: 34px;
+    .brand :global(.logo) {
+      width: 140px;
     }
     .menu-btn {
       display: inline-grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
-      border: 1px solid var(--rule);
+      width: 46px;
+      height: 46px;
+      border: 0;
       border-radius: 999px;
-      background: transparent;
+      background: var(--navy);
       cursor: pointer;
     }
     .bars {
       display: grid;
-      gap: 5px;
-      width: 16px;
+      gap: 6px;
+      width: 18px;
     }
     .bars i {
       display: block;
-      height: 1.5px;
-      background: var(--ink);
-      transition: transform 0.3s var(--ease-out);
+      height: 2px;
+      border-radius: 2px;
+      background: var(--white);
+      transition: transform 0.25s var(--ease);
     }
     .menu-btn[aria-expanded="true"] .bars i:first-child {
-      transform: translateY(3.25px) rotate(45deg);
+      transform: translateY(4px) rotate(45deg);
     }
     .menu-btn[aria-expanded="true"] .bars i:last-child {
-      transform: translateY(-3.25px) rotate(-45deg);
+      transform: translateY(-4px) rotate(-45deg);
     }
     .nav {
       position: fixed;
-      inset: 64px 0 auto 0;
-      background: var(--paper);
-      border-bottom: 1px solid var(--rule);
-      padding: 8px var(--gutter) 24px;
+      inset: calc(68px + env(safe-area-inset-top, 0px)) 0 auto 0;
       display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      padding: 8px var(--gutter) 28px;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 24px 40px -30px #1b285066;
     }
     :global(.js) .nav.open {
-      display: block;
-      animation: drop 0.35s var(--ease-out);
-    }
-    :global(html:not(.js)) .nav {
-      position: static;
-      display: none;
+      display: flex;
     }
     .nav ul {
       flex-direction: column;
       gap: 0;
     }
-    .nav li + li {
-      border-top: 1px solid var(--rule);
+    .nav ul li + li {
+      border-top: 1px solid var(--line);
     }
-    .nav a {
+    .nav ul a {
       padding: 16px 0;
-      font-family: var(--f-display);
-      font-size: 1.6rem;
+      font-size: 1.35rem;
+      font-weight: 900;
       border-radius: 0;
     }
-    .nav a:hover {
+    .nav ul a:hover {
       background: none;
-      color: var(--seal-ink);
+      color: var(--orange-text);
     }
-  }
-  @keyframes drop {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
+    .nav-cta {
+      margin: 0;
+      min-height: 54px;
     }
   }
 </style>

@@ -1,23 +1,24 @@
 ---
 import Base from "../layouts/Base.astro";
-import Seal from "../components/Seal.astro";
-import Defs from "../components/Defs.astro";
+import Logo from "../components/Logo.astro";
+import Grain from "../components/Grain.astro";
 import { copy } from "../i18n/copy";
 const zh = copy.zh.notFound;
 const en = copy.en.notFound;
 ---
 
 <Base t={copy.zh} lang="zh" title="404｜奇斯科技 QI SI" alternates={false}>
-  <Defs />
-  <main class="nf wrap">
-    <a href="/" class="nf-seal" aria-label={copy.zh.a11y.home}><Seal inked /></a>
-    <p class="mono nf-code">404</p>
-    <h1 class="display nf-title">{zh.title}</h1>
-    <p class="nf-body">{zh.body}</p>
-    <p class="nf-en" lang="en"><span class="nf-en-t">{en.title}</span> {en.body}</p>
-    <div class="nf-links">
-      <a class="btn btn-primary" href="/">{zh.back}</a>
-      <a class="btn btn-ghost" href="/en/" lang="en">{en.back}</a>
+  <main class="nf">
+    <div class="wrap nf-in">
+      <a href="/" class="nf-logo"><Logo label={copy.zh.a11y.home} /></a>
+      <p class="code" aria-hidden="true">4<Grain class="g" />4</p>
+      <h1 class="t-h2">{zh.title}</h1>
+      <p class="muted">{zh.body}</p>
+      <p class="muted en" lang="en"><strong>{en.title}</strong> {en.body}</p>
+      <div class="links">
+        <a class="btn btn-navy" href="/">{zh.back}</a>
+        <a class="btn btn-line" href="/en/" lang="en">{en.back}</a>
+      </div>
     </div>
   </main>
 </Base>
@@ -27,40 +28,40 @@ const en = copy.en.notFound;
     min-height: 100vh;
     min-height: 100dvh;
     display: grid;
-    align-content: center;
-    justify-items: start;
-    gap: 18px;
+    align-items: center;
     padding-block: 64px;
   }
-  .nf-seal :global(svg) {
-    height: 120px;
-    width: auto;
-    transform: rotate(-8deg);
-    margin-bottom: 24px;
+  .nf-in {
+    display: grid;
+    justify-items: start;
+    gap: 18px;
   }
-  .nf-code {
-    color: var(--seal-ink);
+  .nf-logo :global(.logo) {
+    width: 160px;
+    height: auto;
+    margin-bottom: 32px;
   }
-  .nf-title {
-    font-size: clamp(2.2rem, 1.2rem + 4vw, 4.4rem);
+  .code {
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    font-size: clamp(5rem, 3rem + 8vw, 10rem);
+    line-height: 1;
+    color: var(--navy);
   }
-  .nf-body {
-    color: var(--ink-2);
+  .code :global(.g) {
+    width: 0.55em;
+    height: auto;
+    margin-inline: 0.06em;
   }
-  .nf-en {
-    color: var(--ink-3);
+  .en {
     font-size: 0.95rem;
     letter-spacing: 0;
-    line-height: 1.55;
   }
-  .nf-en-t {
-    font-weight: 600;
-    color: var(--ink-2);
-  }
-  .nf-links {
+  .links {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 16px;
+    margin-top: 12px;
   }
 </style>
