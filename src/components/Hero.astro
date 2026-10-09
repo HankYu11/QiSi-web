@@ -1,6 +1,6 @@
 ---
 import { GRAIN_D } from "../brand";
-import { EMAIL, type Copy } from "../i18n/copy";
+import type { Copy } from "../i18n/copy";
 import { md } from "../i18n/md";
 interface Props {
   t: Copy;
@@ -22,7 +22,7 @@ const h = t.hero;
     </h1>
     <p class="t-lede hero-lede">{h.lede}</p>
     <div class="ctas">
-      <a class="btn btn-orange" href={`mailto:${EMAIL}`}>{h.ctaPrimary}</a>
+      <a class="btn btn-orange" href="#contact">{h.ctaPrimary}</a>
       <a class="btn btn-line" href="#work">{h.ctaSecondary}</a>
     </div>
   </div>
