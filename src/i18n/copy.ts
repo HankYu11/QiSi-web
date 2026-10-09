@@ -101,7 +101,7 @@ const en = {
     legal: "QI SI TECHNOLOGY LIMITED",
     city: "Taipei, Taiwan",
   },
-  address: "1F, No. 39, Sec. 2, Kaifeng St., Wanhua Dist., Taipei City, Taiwan",
+  address: "1F., No. 39, Sec. 2, Kaifeng St., Wanhua Dist., Taipei City 108, Taiwan",
   notFound: {
     title: "This page didn’t ship.",
     body: "The address may be mistyped, or the page has moved.",

@@ -4,7 +4,6 @@ import Header from "./Header.astro";
 import Work from "./Work.astro";
 import Contact from "./Contact.astro";
 import Effects from "./Effects.astro";
-import { md } from "../i18n/md";
 import { copy, type Lang } from "../i18n/copy";
 interface Props {
   lang: Lang;
@@ -19,14 +18,14 @@ const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
   <Header t={t} lang={lang} paths={paths} />
   <main id="main">
     <Work t={t} lang={lang} />
-    <section class="next on-navy" aria-labelledby="next-title">
+    <nav class="next" aria-label={t.work.back}>
       <div class="wrap next-in">
-        <h2 id="next-title" class="t-h2" set:html={md(t.work.nextTitle)} />
-        <a class="btn btn-orange" href="#contact" data-magnetic>{t.work.nextCta}</a>
+        <a class="btn btn-line" href={t.path}>← {t.work.back}</a>
+        <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>
       </div>
-    </section>
+    </nav>
   </main>
-  <Contact t={t} lang={lang} />
+  <Contact t={t} lang={lang} paths={paths} />
   <Effects />
 </Base>
 
@@ -36,17 +35,12 @@ const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
 
 <style>
   .next {
-    padding-block: clamp(64px, 8vw, 112px);
-    border-bottom: 1px solid var(--line-navy);
+    background: var(--cream);
+    padding-block: 0 clamp(56px, 6vw, 88px);
   }
   .next-in {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px 48px;
-  }
-  .next h2 {
-    max-width: 16em;
+    gap: 12px;
   }
 </style>

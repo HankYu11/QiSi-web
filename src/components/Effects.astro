@@ -1,13 +1,9 @@
 ---
 // Site-wide motion layer. Everything here is progressive enhancement: without JS, or with
 // prefers-reduced-motion, the page is complete and static.
-import { GRAIN_D } from "../brand";
 ---
 
 <div class="fx-progress" aria-hidden="true"></div>
-<div class="fx-cursor" aria-hidden="true">
-  <svg viewBox="110 140 190 250"><path d={GRAIN_D} transform="rotate(180 205 265)"></path></svg>
-</div>
 
 <script>
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,6 +20,7 @@ import { GRAIN_D } from "../brand";
   onScroll();
 
   /* ---- reveals: headings, ledes and marked blocks rise out of a mask ---- */
+  const revealAll = () => document.querySelectorAll(".fx-reveal").forEach((el) => el.classList.add("fx-in"));
   if (!reduce && "IntersectionObserver" in window) {
     const targets = document.querySelectorAll<HTMLElement>(
       "main h2, main .t-lede, main .chapter, [data-reveal], .contact h2, .contact .t-lede",
@@ -32,37 +29,24 @@ import { GRAIN_D } from "../brand";
       (es) =>
         es.forEach((e) => {
           if (!e.isIntersecting) return;
-          const el = e.target as HTMLElement;
-          el.classList.add("fx-in");
-          if (el.classList.contains("chapter")) decode(el);
-          io.unobserve(el);
+          e.target.classList.add("fx-in");
+          io.unobserve(e.target);
         }),
-      { rootMargin: "0px 0px -10% 0px" },
+      { rootMargin: "0px 0px -8% 0px" },
     );
     targets.forEach((el) => {
       if (el.closest(".hero")) return; // the hero has its own entrance
       el.classList.add("fx-reveal");
       io.observe(el);
     });
-  }
-
-  /* ---- decode: chapter labels resolve from scrambled glyphs ---- */
-  function decode(el: HTMLElement) {
-    const span = el.querySelector("span");
-    if (!span) return;
-    const final = span.textContent ?? "";
-    const pool = (final.replace(/\s/g, "") + "01#<>/").split("");
-    let frame = 0;
-    const total = 16;
-    const tick = () => {
-      frame++;
-      span.textContent = [...final]
-        .map((ch, i) => (ch === " " || i < (frame / total) * final.length ? ch : pool[(i * 7 + frame * 3) % pool.length]))
-        .join("");
-      if (frame < total) requestAnimationFrame(tick);
-      else span.textContent = final;
-    };
-    requestAnimationFrame(tick);
+    // failsafe: never leave content hidden if the observer doesn't report (or when printing)
+    const sweep = () =>
+      document.querySelectorAll<HTMLElement>(".fx-reveal:not(.fx-in)").forEach((el) => {
+        if (el.getBoundingClientRect().top < innerHeight) el.classList.add("fx-in");
+      });
+    setTimeout(sweep, 2500);
+    addEventListener("scroll", () => setTimeout(sweep, 1200), { passive: true });
+    addEventListener("beforeprint", revealAll);
   }
 
   /* ---- count-up numbers ---- */
@@ -110,43 +94,16 @@ import { GRAIN_D } from "../brand";
 
     /* ---- 3D tilt ---- */
     document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
-      const host = el.closest<HTMLElement>("a, figure, section") ?? el;
-      host.addEventListener("pointermove", (e) => {
+      const clamp = (v: number) => Math.max(-0.5, Math.min(0.5, v));
+      el.addEventListener("pointermove", (e) => {
         const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
+        const x = clamp((e.clientX - r.left) / r.width - 0.5);
+        const y = clamp((e.clientY - r.top) / r.height - 0.5);
         el.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
       });
-      host.addEventListener("pointerleave", () => (el.style.transform = ""));
+      el.addEventListener("pointerleave", () => (el.style.transform = ""));
     });
 
-    /* ---- grain cursor ---- */
-    const cur = document.querySelector<HTMLElement>(".fx-cursor")!;
-    let x = -100,
-      y = -100,
-      cx = x,
-      cy = y,
-      raf = 0;
-    const loop = () => {
-      cx += (x - cx) * 0.22;
-      cy += (y - cy) * 0.22;
-      cur.style.transform = `translate(${cx}px, ${cy}px)`;
-      raf = Math.abs(x - cx) + Math.abs(y - cy) > 0.2 ? requestAnimationFrame(loop) : 0;
-    };
-    addEventListener(
-      "pointermove",
-      (e) => {
-        x = e.clientX;
-        y = e.clientY;
-        cur.classList.add("on");
-        const t = e.target as Element;
-        cur.classList.toggle("big", !!t.closest("a, button, [data-spotlight]"));
-        cur.classList.toggle("dark", !!t.closest(".on-navy, .bright"));
-        if (!raf) raf = requestAnimationFrame(loop);
-      },
-      { passive: true },
-    );
-    document.addEventListener("pointerleave", () => cur.classList.remove("on"));
   }
 </script>
 
@@ -158,7 +115,7 @@ import { GRAIN_D } from "../brand";
     right: 0;
     top: env(safe-area-inset-top, 0px);
     height: 3px;
-    background: linear-gradient(90deg, var(--orange), #ffa06e);
+    background: var(--orange);
     transform-origin: 0 50%;
     transform: scaleX(0);
     pointer-events: none;
@@ -166,12 +123,12 @@ import { GRAIN_D } from "../brand";
 
   .js .fx-reveal {
     opacity: 0;
-    transform: translateY(28px);
+    transform: translateY(16px);
     clip-path: inset(0 0 100% 0);
     transition:
-      opacity 0.7s var(--ease),
-      transform 0.9s var(--ease),
-      clip-path 0.9s var(--ease);
+      opacity 0.5s var(--ease),
+      transform 0.6s var(--ease),
+      clip-path 0.6s var(--ease);
   }
   .js .fx-reveal.fx-in {
     opacity: 1;
@@ -190,12 +147,13 @@ import { GRAIN_D } from "../brand";
     border-radius: inherit;
     pointer-events: none;
     opacity: 0;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--orange) 22%, transparent),
-      transparent 60%
-    );
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), #1b28500d, transparent 60%);
     transition: opacity 0.3s;
+  }
+  .on-navy[data-spotlight]::after,
+  .on-navy [data-spotlight]::after,
+  .bright[data-spotlight]::after {
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), #ffffff12, transparent 60%);
   }
   [data-spotlight]:hover::after {
     opacity: 1;
@@ -209,38 +167,4 @@ import { GRAIN_D } from "../brand";
     transform-style: preserve-3d;
   }
 
-  .fx-cursor {
-    position: fixed;
-    z-index: 70;
-    left: -9px;
-    top: -12px;
-    width: 18px;
-    height: 24px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .fx-cursor svg {
-    width: 100%;
-    height: 100%;
-    fill: var(--orange);
-    transition:
-      transform 0.25s var(--ease),
-      fill 0.2s;
-  }
-  .fx-cursor.on {
-    opacity: 0.9;
-  }
-  .fx-cursor.big svg {
-    transform: scale(2.2) rotate(-20deg);
-    opacity: 0.55;
-  }
-  .fx-cursor.dark svg {
-    fill: #ffb489;
-  }
-  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
-    .fx-cursor {
-      display: none;
-    }
-  }
 </style>

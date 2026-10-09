@@ -16,10 +16,10 @@ export const workEn = {
     chapter: "Selected work",
     lede: "An app that helps people walk into the good shop they pass every day. We built every part of it: the iOS and Android app, the backend, the admin dashboard and the website.",
     cta: "Read the case study",
+    caption: "Real FreshToGo screens; shops and prices are sample data.",
   },
   back: "Back to QI SI",
-  nextTitle: "Your product could be next.",
-  nextCta: "Start a project",
+  nextHow: "See how we work",
   chapter: "Case study",
   name: "FreshToGo",
   nameAlt: "鮮款款",
@@ -52,7 +52,7 @@ export const workEn = {
     {
       id: "eligibility",
       title: "The shop decides who can buy",
-      body: "Each bag can be open to everyone, only for people who’ve never bought from the shop, one per person, or only for regulars. The form even previews how many people a bag can reach. A good price brings in new customers without undercutting regulars.",
+      body: "Each bag can be open to everyone, only for people who’ve never bought from the shop, one per person, or only for regulars. The form even previews how many people a bag can reach. New customers get a reason to walk in, and regulars never feel passed over.",
     },
     {
       id: "pickup",
@@ -141,12 +141,12 @@ export const workZh: Work = {
   },
   teaser: {
     chapter: "精選案例",
-    lede: "一個讓人走進每天路過那間好店的 App。iOS 與 Android App、後端、管理後台到官網，每一個部分都是我們打造的。",
+    lede: "一個讓人走進每天路過那間好店的 App。從 iOS 與 Android App、後端、管理後台到官網，每一個部分都由我們打造。",
+    caption: "畫面為鮮款款實際介面，店家與價格為示意。",
     cta: "看完整案例",
   },
   back: "回到奇斯科技",
-  nextTitle: "下一個上線的，|可以是你的產品。",
-  nextCta: "聊聊你的專案",
+  nextHow: "看我們怎麼工作",
   chapter: "案例",
   name: "鮮款款",
   nameAlt: "FreshToGo",
@@ -179,7 +179,7 @@ export const workZh: Work = {
     {
       id: "eligibility",
       title: "店家決定誰能買",
-      body: "每一款鮮款包都能設定所有人都能買、只開放給第一次來的人、同一款每人限買一次，或只給熟客。上架前還能預覽大約有多少人看得到。好價格用來帶新客人，不會讓熟客的原價吃虧。",
+      body: "每一款鮮款包都能設定所有人都能買、只開放給第一次來的人、同一款每人限買一次，或只給熟客。上架前還能預覽大約有多少人看得到。新客人有理由走進來，熟客也不會覺得被比下去。",
     },
     {
       id: "pickup",

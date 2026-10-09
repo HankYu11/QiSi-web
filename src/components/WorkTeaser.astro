@@ -4,7 +4,6 @@ import { Image } from "astro:assets";
 import Chapter from "./Chapter.astro";
 import type { Copy, Lang } from "../i18n/copy";
 import webHero from "../assets/ftg/web-home-hero.png";
-import webMobile from "../assets/ftg/web-home-mobile.png";
 import cardDessertHunt from "../assets/ftg/card-dessert-hunt.png";
 interface Props {
   t: Copy;
@@ -18,7 +17,7 @@ const built = w.surfaces.map((s) => s.name);
 <section class="section teaser" id="work" aria-labelledby="teaser-title">
   <div class="wrap">
     <Chapter label={w.teaser.chapter} />
-    <a class="card on-navy" href={w.path} data-spotlight data-reveal>
+    <a class="card on-navy" href={w.path} aria-labelledby="teaser-title teaser-cta" data-spotlight data-reveal>
       <div class="text">
         <p class="status"><span class="dot" aria-hidden="true"></span>{w.status}</p>
         <h2 id="teaser-title" class="title">
@@ -27,17 +26,17 @@ const built = w.surfaces.map((s) => s.name);
         </h2>
         <p class="lede muted">{w.teaser.lede}</p>
         <ul class="built">{built.map((b) => <li>{b}</li>)}</ul>
-        <span class="btn btn-orange go">{w.teaser.cta} <span aria-hidden="true">→</span></span>
+        <span class="btn btn-orange go" id="teaser-cta">{w.teaser.cta} <span aria-hidden="true">→</span></span>
       </div>
-      <div class="art" aria-hidden="true" data-tilt>
-        <div class="browser">
-          <div class="bar"><i></i><i></i><i></i></div>
-          <Image src={webHero} widths={[640, 960]} sizes="(min-width: 1100px) 560px, 86vw" alt="" />
+      <div class="art-wrap">
+        <div class="art" aria-hidden="true" data-tilt>
+          <div class="browser">
+            <div class="bar"><i></i><i></i><i></i></div>
+            <Image src={webHero} widths={[720, 1080, 1440]} sizes="(min-width: 1100px) 640px, 86vw" alt="" />
+          </div>
+          <Image class="chip-card" src={cardDessertHunt} widths={[320, 480, 640]} sizes="(min-width: 1100px) 230px, 34vw" alt="" />
         </div>
-        <div class="phone">
-          <Image src={webMobile} widths={[300, 450]} sizes="200px" alt="" />
-        </div>
-        <Image class="chip-card" src={cardDessertHunt} widths={[320, 480]} sizes="200px" alt="" />
+        <p class="cap">{w.teaser.caption}</p>
       </div>
     </a>
   </div>
@@ -46,6 +45,12 @@ const built = w.surfaces.map((s) => s.name);
 <style>
   .teaser {
     background: var(--cream);
+    padding-bottom: 64px;
+  }
+  .cap {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: var(--on-navy-2);
   }
   .card {
     position: relative;
@@ -79,8 +84,8 @@ const built = w.surfaces.map((s) => s.name);
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: #3ec27a;
-    box-shadow: 0 0 0 4px #3ec27a33;
+    background: var(--orange);
+    box-shadow: 0 0 0 4px #f46a2a33;
   }
   .title {
     display: flex;
@@ -125,19 +130,20 @@ const built = w.surfaces.map((s) => s.name);
 
   .art {
     position: relative;
-    aspect-ratio: 5 / 4;
+    aspect-ratio: 16 / 11;
+  }
+  .art-wrap {
     perspective: 1200px;
   }
   .browser,
-  .phone,
   .art :global(.chip-card) {
     position: absolute;
     transition: transform 0.6s var(--ease);
   }
   .browser {
     left: 0;
-    top: 6%;
-    width: 84%;
+    top: 0;
+    width: 92%;
     border-radius: 12px;
     overflow: hidden;
     background: var(--white);
@@ -155,35 +161,19 @@ const built = w.surfaces.map((s) => s.name);
     border-radius: 50%;
     background: #cdd3df;
   }
-  .browser :global(img),
-  .phone :global(img) {
+  .browser :global(img) {
     display: block;
     width: 100%;
   }
-  .phone {
+  .art :global(.chip-card) {
     right: 0;
     bottom: 0;
-    width: 30%;
-    padding: 7px;
-    border-radius: 26px;
-    background: #10162b;
-    box-shadow: 0 30px 60px -24px #000c;
-  }
-  .phone :global(img) {
-    border-radius: 20px;
-  }
-  .art :global(.chip-card) {
-    left: 48%;
-    bottom: 2%;
-    width: 26%;
+    width: 34%;
     transform: rotate(-6deg);
     filter: drop-shadow(0 20px 26px #0008);
   }
   .card:hover .browser {
     transform: translate(-6px, -6px);
-  }
-  .card:hover .phone {
-    transform: translate(6px, -10px);
   }
   .card:hover :global(.chip-card) {
     transform: rotate(-2deg) translateY(-14px);

@@ -126,6 +126,9 @@ const p = t.process;
     gap: clamp(28px, 5vw, 80px);
   }
   .own-title {
+    position: sticky;
+    top: calc(var(--header-h) + 32px);
+    align-self: start;
     font-size: clamp(1.6rem, 1.2rem + 1.3vw, 2.4rem);
     font-weight: 900;
   }
@@ -159,6 +162,9 @@ const p = t.process;
     .pair,
     .own {
       grid-template-columns: 1fr;
+    }
+    .own-title {
+      position: static;
     }
   }
   @media (max-width: 620px) {

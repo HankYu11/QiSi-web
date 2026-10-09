@@ -47,6 +47,7 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
       )
     }
     <meta property="og:type" content="website" />
+    {site && <meta property="og:url" content={abs(paths[lang])} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={abs(lang === "zh" ? "/og-zh.png" : "/og-en.png")} />
@@ -59,13 +60,14 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
         "@context": "https://schema.org",
         "@type": "Organization",
         name: "QI SI TECHNOLOGY LIMITED",
-        alternateName: "奇斯科技",
+        alternateName: ["奇斯科技", "QI SI"],
         email: "support@handyla.co",
         address: {
           "@type": "PostalAddress",
           streetAddress: "開封街2段39號1樓",
           addressLocality: "萬華區",
           addressRegion: "台北市",
+          postalCode: "108",
           addressCountry: "TW",
         },
       })}

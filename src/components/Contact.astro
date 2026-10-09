@@ -7,11 +7,14 @@ import { EMAIL, type Copy, type Lang } from "../i18n/copy";
 interface Props {
   t: Copy;
   lang: Lang;
+  paths?: { zh: string; en: string };
 }
-const { t, lang } = Astro.props;
+const { t, lang, paths = { zh: "/", en: "/en/" } } = Astro.props;
 const c = t.contact;
 const f = t.footer;
 const [user, domain] = EMAIL.split("@");
+// zh address wraps only between district and street
+const addr = t.address.split(/(?<=區)/);
 ---
 
 <section class="contact on-navy" id="contact" aria-labelledby="contact-title" style={`--pattern:url(${pattern})`}>
@@ -28,7 +31,7 @@ const [user, domain] = EMAIL.split("@");
     </div>
     <address class="addr">
       <span class="addr-k">{c.addressLabel}</span>
-      <span>{t.address}</span>
+      <span>{addr.map((a) => <span class="keep">{a}</span>)}</span>
     </address>
   </div>
 </section>
@@ -38,12 +41,12 @@ const [user, domain] = EMAIL.split("@");
     <Logo kind="horizontal" variant="reverse" class="f-logo" label={f.legal} />
     <div class="f-meta">
       <p>{f.legal}</p>
-      <p class="muted">{t.address}</p>
+      <p class="muted">{addr.map((a) => <span class="keep">{a}</span>)}</p>
     </div>
     <ul class="f-links">
       <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
-      <li><a href="/" lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh">中文</a></li>
-      <li><a href="/en/" lang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">English</a></li>
+      <li><a href={paths.zh} lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh">中文</a></li>
+      <li><a href={paths.en} lang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">English</a></li>
     </ul>
     <p class="f-copy muted">© {new Date().getFullYear()} {f.legal}</p>
   </div>
@@ -67,6 +70,9 @@ const [user, domain] = EMAIL.split("@");
 </script>
 
 <style>
+  :global([data-lang="zh"]) .keep {
+    white-space: nowrap;
+  }
   .contact {
     position: relative;
     overflow: hidden;
@@ -92,6 +98,9 @@ const [user, domain] = EMAIL.split("@");
     pointer-events: none;
   }
   @media (max-width: 760px) {
+    .addr {
+      max-width: calc(100% - 110px);
+    }
     .contact :global(.crop) {
       width: 220px;
       right: -90px;
