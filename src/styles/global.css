@@ -161,7 +161,8 @@ li,
 dd {
   text-wrap: pretty;
 }
-:root[data-lang="zh"] :is(h1, h2, h3, .keep) {
+/* zh: break only at spaces, punctuation and the word boundaries marked by integrations/zh-breaks.mjs */
+:root[data-lang="zh"] body {
   word-break: keep-all;
   overflow-wrap: anywhere;
 }

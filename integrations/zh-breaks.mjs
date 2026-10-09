@@ -1,0 +1,96 @@
+// Build step: Chinese line breaking at word boundaries.
+// Browsers break CJK text between any two characters, which splits words (產|品, 此|刻). On zh pages we set
+// `word-break: keep-all` (see global.css), so lines may only break at spaces, punctuation and <wbr>.
+// This step segments every Chinese text node into words with ICU (Intl.Segmenter), glues back a small
+// dictionary of phrases that must never split, and inserts <wbr> between words.
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const KEEP = [
+  "奇斯科技", "奇斯", "鮮款款", "鮮款包", "此刻此地", "獨特的可能", "敲碗", "碗友", "狩獵模式",
+  "取餐碼", "取餐", "外送", "上架", "上線", "能用", "訊息", "畫面", "付款", "店家", "後台", "官網",
+  "在地", "現做", "預約", "核銷", "推播", "合約測試", "首購限定", "限購一次", "熟客限定", "所有人", "待聯繫", "洽談中", "已上架", "工作室", "程式碼",
+];
+const CJK = /[㐀-鿿豈-﫿]/;
+const NO_BREAK_BEFORE = /^[，。、；：！？」』）〉》％%,.;:!?)\]…·]/;
+const NO_BREAK_AFTER = /[「『（〈《(\[]$/;
+const seg = new Intl.Segmenter("zh-Hant", { granularity: "word" });
+
+function words(text) {
+  const parts = [...seg.segment(text)].map((s) => s.segment);
+  // glue dictionary phrases that ICU split (longest match first)
+  const out = [];
+  for (let i = 0; i < parts.length; ) {
+    let joined = null;
+    for (let j = Math.min(parts.length, i + 6); j > i + 1; j--) {
+      const cand = parts.slice(i, j).join("");
+      if (KEEP.includes(cand)) {
+        joined = [cand, j];
+        break;
+      }
+    }
+    if (joined) {
+      out.push(joined[0]);
+      i = joined[1];
+    } else out.push(parts[i++]);
+  }
+  return out;
+}
+
+export function breakZh(text) {
+  if (!CJK.test(text)) return text;
+  const w = words(text);
+  let s = w[0];
+  for (let i = 1; i < w.length; i++) {
+    const a = w[i - 1], b = w[i];
+    const ok = !NO_BREAK_BEFORE.test(b) && !NO_BREAK_AFTER.test(a) && !/\s$/.test(a) && !/^\s/.test(b);
+    s += (ok && (CJK.test(a) || CJK.test(b)) ? "<wbr>" : "") + b;
+  }
+  return s;
+}
+
+export function processHtml(html) {
+  const bodyAt = html.indexOf("<body");
+  if (bodyAt < 0) return html;
+  const head = html.slice(0, bodyAt);
+  const tokens = html.slice(bodyAt).split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>)/);
+  // Skip SVG text, and headings / .keep elements, which carry hand-placed breaks (| in the copy).
+  let svg = 0;
+  const manual = []; // stack of tag names opened with manual breaks
+  for (let i = 0; i < tokens.length; i++) {
+    const t = tokens[i];
+    if (!t) continue;
+    if (t.startsWith("<")) {
+      const open = /^<([a-z0-9]+)[\s>]/i.exec(t);
+      const close = /^<\/([a-z0-9]+)/i.exec(t);
+      if (open) {
+        const tag = open[1].toLowerCase();
+        if (tag === "svg") svg++;
+        else if (/^h[1-3]$/.test(tag) || /class="[^"]*\bkeep\b/.test(t)) manual.push(tag);
+      } else if (close) {
+        const tag = close[1].toLowerCase();
+        if (tag === "svg") svg--;
+        else if (manual.length && manual[manual.length - 1] === tag) manual.pop();
+      }
+      continue;
+    }
+    if (svg === 0 && manual.length === 0) tokens[i] = breakZh(t);
+  }
+  return head + tokens.join("");
+}
+
+export default function zhBreaks() {
+  return {
+    name: "zh-breaks",
+    hooks: {
+      "astro:build:done": ({ dir }) => {
+        const root = fileURLToPath(dir);
+        for (const f of ["index.html", "404.html"]) {
+          const p = path.join(root, f);
+          if (fs.existsSync(p)) fs.writeFileSync(p, processHtml(fs.readFileSync(p, "utf8")));
+        }
+      },
+    },
+  };
+}

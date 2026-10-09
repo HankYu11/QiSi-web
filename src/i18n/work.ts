@@ -23,7 +23,7 @@ export const workEn = {
   ],
   stageCaption: "Real screens from the FreshToGo website and app. Shops, prices and counts are sample data.",
   flowTitle: "How a FreshToGo bag works",
-  flowCaption: "App screens from FreshToGo’s own marketing material. Listings are sample data.",
+  flowCaption: "Screens from the FreshToGo app, its marketing material and website; the pickup step is an illustration. Shops and prices are sample data.",
   flow: [
     {
       id: "discover",
@@ -56,9 +56,9 @@ export const workEn = {
   proofIntro:
     "Shipping is the start. FreshToGo is engineered so it can keep changing safely, by us or by whoever comes next.",
   proof: [
-    { n: "1,241", label: "automated tests in the shared app code, including contract tests that pin every API call to the spec" },
+    { n: "1,241", label: "automated tests in the shared app code, plus contract tests that keep the app’s data models matched to the API spec" },
     { n: "34", label: "end-to-end flows that drive the real app on Android and iOS, for shoppers and shops" },
-    { n: "117", label: "endpoints in one OpenAPI contract that the app, admin and website all build against; CI fails if they drift" },
+    { n: "117", label: "API routes in one OpenAPI spec; each surface generates its types from it, and CI fails when they fall behind" },
     { n: "2", label: "store pipelines: Google Play from CI, and iOS through fastlane to TestFlight" },
   ],
   proofNote: "Counted in the FreshToGo repositories in October 2026.",
@@ -78,13 +78,13 @@ export const workEn = {
       id: "backend",
       name: "Backend",
       tech: "Ktor · Google Cloud Run · OpenAPI",
-      body: "The service behind everything: listings, reservations, eligibility rules and accounts, described by one OpenAPI contract.",
+      body: "The service behind everything: listings, reservations, eligibility rules and accounts, all described in one OpenAPI spec.",
     },
     {
       id: "admin",
       name: "Admin dashboard",
       tech: "React · TypeScript · Vite",
-      body: "Where the platform is run day to day: shop applications and verification, users with repeated no-shows, feedback, knock requests, eligibility insights, and the minimum app version that triggers a forced update.",
+      body: "Where the platform is run day to day: shop applications and verification, users with repeated no-shows, feedback, knock requests, eligibility insights, and the minimum supported app version.",
     },
     {
       id: "web",
@@ -103,6 +103,7 @@ export const workEn = {
     admin: "The FreshToGo admin dashboard: a queue of items needing attention, such as merchant applications and unread feedback.",
   },
   hunt: { up: "Reserve", left: "Skip", right: "Keep for later" },
+  arch: { apps: "iOS · Android", admin: "Admin", web: "Website", spec: "OpenAPI · 117 routes", run: "Google Cloud Run" },
   note: "Kotlin Multiplatform and Ktor were the right tools for FreshToGo. The next product gets its own answer.",
 };
 
@@ -126,7 +127,7 @@ export const workZh: Work = {
   ],
   stageCaption: "畫面取自鮮款款官網與 App 實際介面；店家、價格與數字為示意資料。",
   flowTitle: "一份鮮款包，|怎麼運作",
-  flowCaption: "App 畫面取自鮮款款宣傳素材，內容為示意資料。",
+  flowCaption: "畫面取自鮮款款 App、宣傳素材與官網，取餐流程為示意圖；店家與價格為示意資料。",
   flow: [
     {
       id: "discover",
@@ -158,9 +159,9 @@ export const workZh: Work = {
   proofTitle: "上線之後，|還要跑得久",
   proofIntro: "上線只是開始。鮮款款從一開始就為了能持續、安全地改下去而設計，不管之後是我們，還是其他團隊接手。",
   proof: [
-    { n: "1,241", label: "個自動化測試涵蓋 App 共用程式碼，包含把每一支 API 呼叫都對齊規格的合約測試" },
+    { n: "1,241", label: "個自動化測試涵蓋 App 共用程式碼，另有合約測試，讓資料模型始終對齊 API 規格" },
     { n: "34", label: "條端對端測試流程，實際操作 Android 與 iOS 上的 App，消費者端、店家端都測" },
-    { n: "117", label: "個 API 端點收斂在同一份 OpenAPI 規格，App、後台與官網都依它開發；規格一不一致，CI 就擋下" },
+    { n: "117", label: "條 API 路徑寫在同一份 OpenAPI 規格裡；各端都從它產生型別，一旦落後，CI 就會擋下" },
     { n: "2", label: "條上架流程：Google Play 由 CI 自動發布，iOS 透過 fastlane 送上 TestFlight" },
   ],
   proofNote: "數字為 2026 年 10 月於鮮款款程式庫中實際統計。",
@@ -185,7 +186,7 @@ export const workZh: Work = {
       id: "admin",
       name: "管理後台",
       tech: "React · TypeScript · Vite",
-      body: "日常經營平台的地方：店家申請與審核、多次未取餐的使用者、回饋、敲碗推薦、購買資格分析，還能設定 App 的最低版本、觸發強制更新。",
+      body: "日常經營平台的地方：店家申請與審核、多次未取餐的使用者、回饋、敲碗推薦、購買資格分析，還能設定 App 的最低支援版本。",
     },
     {
       id: "web",
@@ -204,5 +205,6 @@ export const workZh: Work = {
     admin: "鮮款款管理後台：待處理事項，例如店家申請與未讀回饋。",
   },
   hunt: { up: "預約", left: "跳過", right: "先收著" },
+  arch: { apps: "iOS・Android", admin: "管理後台", web: "品牌官網", spec: "OpenAPI・117 條路徑", run: "Google Cloud Run" },
   note: "Kotlin Multiplatform 和 Ktor 是鮮款款這個專案最適合的選擇。下一個產品，會有屬於它的答案。",
 };

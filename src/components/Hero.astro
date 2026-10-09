@@ -71,10 +71,10 @@ const h = t.hero;
     --py: 0;
     position: absolute;
     z-index: -1;
-    height: 104%;
+    height: 100%;
     width: auto;
-    right: -19%;
-    bottom: -20%;
+    right: -17%;
+    bottom: -7%;
     overflow: visible;
   }
   .g {
@@ -87,20 +87,21 @@ const h = t.hero;
   .g-bright {
     transform: translate(calc(var(--px) * 10px), calc(var(--py) * 8px));
   }
+  /* Load: the grains start wide apart and ease shut, so the gap between them closes into the S. */
   :global(.js) .g-deep {
-    animation: close-deep 1.6s 0.1s var(--ease) backwards;
+    animation: close-deep 1.25s 0.15s cubic-bezier(0.65, 0, 0.35, 1) backwards;
   }
   :global(.js) .g-bright {
-    animation: close-bright 1.6s 0.1s var(--ease) backwards;
+    animation: close-bright 1.25s 0.15s cubic-bezier(0.65, 0, 0.35, 1) backwards;
   }
   @keyframes close-deep {
     from {
-      transform: translate(-60px, 40px) rotate(-5deg);
+      transform: translate(-120px, 70px);
     }
   }
   @keyframes close-bright {
     from {
-      transform: translate(60px, -40px) rotate(-5deg);
+      transform: translate(120px, -70px);
     }
   }
 

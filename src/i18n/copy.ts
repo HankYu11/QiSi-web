@@ -51,7 +51,7 @@ const en = {
     chapter: "How we work",
     title: "One deep, one bright.",
     intro:
-      "Our two grains are two halves of how we work. The bright one is speed: AI is part of every day here. The deep one is everything we refuse to hand to a machine. You need both.",
+      "In our mark, the deep grain stands for reliable technology and the bright one for warm, energetic innovation. That’s how we work: new ideas reached fast, with AI in our daily work, on a foundation of engineering we answer for. You need both.",
     bright: {
       word: "Fast",
       title: "Where AI speeds us up",
@@ -161,7 +161,7 @@ const zh: Copy = {
     chapter: "工作方式",
     title: "一深一亮。",
     intro:
-      "標誌裡的兩粒米，正是我們工作的兩面。亮的那粒是速度：AI 是我們每天都在用的工具。深的那粒，是我們絕不交給機器決定的事。兩者缺一不可。",
+      "標誌裡的深藍米粒代表穩健可靠的技術底蘊，亮橘米粒代表積極、有溫度的創新能量。我們做事也是這樣：用 AI 加速，更快走到新點子；底下是我們親自把關的工程。兩者缺一不可。",
     bright: {
       word: "快",
       title: "AI 幫我們加速的",
