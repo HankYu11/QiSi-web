@@ -12,7 +12,7 @@ export const workEn = {
   tagline: "Helping people walk into the good shop they pass every day.",
   status: "Live on the App Store and Google Play",
   stores: { label: "Get FreshToGo on", ios: "App Store", android: "Google Play" },
-  appNote: "Real app card renders, sample listings.",
+  appNote: "Real app card renders (Chinese UI), sample listings.",
   summary:
     "FreshToGo is an app for independent food shops in Taiwan. Shops put together a FreshToGo bag (鮮款包) of today’s bread, pastries, bento or deli dishes, with the contents kept a surprise and the price below what the items normally cost. People reserve a bag in the app, then pick it up and pay at the shop. We built the whole product in-house.",
   facts: [
@@ -21,9 +21,9 @@ export const workEn = {
     { k: "Release", v: "Version 1.5, still shipping" },
     { k: "Launch area", v: "Around MRT Xinpu Station, New Taipei" },
   ],
-  stageCaption: "Real screens from the FreshToGo website and app. Shops, prices and counts are sample data.",
+  stageCaption: "Real screens from the FreshToGo website and app (Chinese UI). Shops, prices and counts are sample data.",
   flowTitle: "How a FreshToGo bag works",
-  flowCaption: "Real FreshToGo app cards and website; the “who can buy” and pickup steps are illustrations using the app’s own wording. Shops and prices are sample data.",
+  flowCaption: "Real FreshToGo app cards (Chinese UI) and website; the “who can buy” and pickup steps are illustrations using the app’s own wording. Shops and prices are sample data.",
   flow: [
     {
       id: "discover",
