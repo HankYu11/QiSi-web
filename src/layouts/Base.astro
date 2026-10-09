@@ -1,8 +1,4 @@
 ---
-import "@fontsource-variable/fraunces/opsz.css";
-import "@fontsource-variable/fraunces/opsz-italic.css";
-import "@fontsource-variable/instrument-sans/wght.css";
-import "@fontsource-variable/jetbrains-mono/wght.css";
 import "../styles/global.css";
 import type { Copy, Lang } from "../i18n/copy";
 
@@ -12,44 +8,71 @@ interface Props {
   title?: string;
   description?: string;
   alternates?: boolean;
+  /** this page's path in each language (defaults to the home page) */
+  paths?: { zh: string; en: string };
 }
-const { t, lang, title = t.meta.title, description = t.meta.description, alternates = true } = Astro.props;
+const {
+  t,
+  lang,
+  title = t.meta.title,
+  description = t.meta.description,
+  alternates = true,
+  paths = { zh: "/", en: "/en/" },
+} = Astro.props;
 const site = Astro.site;
 const abs = (p: string) => (site ? new URL(p, site).href : p);
 ---
 
 <!doctype html>
-<html lang={t.htmlLang} data-lang={lang}>
+<html lang={t.htmlLang} data-lang={lang} data-en={paths.en}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f1ece2" />
+    <meta name="theme-color" content="#1b2850" />
     <meta name="color-scheme" content="light" />
+    <link rel="preload" href="/fonts/noto-sans-tc-qisi-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/noto-sans-tc-qisi-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {
-      lang === "zh" && (
-        <link rel="preload" href="/fonts/noto-serif-tc-qisi-600.woff2" as="font" type="font/woff2" crossorigin />
-      )
-    }
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {
       alternates && (
         <>
-          <link rel="canonical" href={abs(t.path)} />
-          <link rel="alternate" hreflang="zh-Hant-TW" href={abs("/")} />
-          <link rel="alternate" hreflang="en" href={abs("/en/")} />
-          <link rel="alternate" hreflang="x-default" href={abs("/")} />
+          <link rel="canonical" href={abs(paths[lang])} />
+          <link rel="alternate" hreflang="zh-Hant-TW" href={abs(paths.zh)} />
+          <link rel="alternate" hreflang="en" href={abs(paths.en)} />
+          <link rel="alternate" hreflang="x-default" href={abs(paths.zh)} />
         </>
       )
     }
     <meta property="og:type" content="website" />
+    {site && <meta property="og:url" content={abs(paths[lang])} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={abs(lang === "zh" ? "/og-zh.png" : "/og-en.png")} />
     <meta property="og:locale" content={lang === "zh" ? "zh_TW" : "en_US"} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "QI SI TECHNOLOGY LIMITED",
+        alternateName: ["奇斯科技", "QI SI"],
+        url: site ? site.href : undefined,
+        email: "support@handyla.co",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "開封街2段39號1樓",
+          addressLocality: "萬華區",
+          addressRegion: "台北市",
+          postalCode: "108",
+          addressCountry: "TW",
+        },
+      })}
+    />
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -57,7 +80,7 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
       lang === "zh" && alternates && (
         <script is:inline>
           try {
-            if (localStorage.getItem("qisi-lang") === "en") location.replace("/en/" + location.hash);
+            if (localStorage.getItem("qisi-lang") === "en") location.replace(document.documentElement.dataset.en + location.hash);
           } catch (e) {}
         </script>
       )

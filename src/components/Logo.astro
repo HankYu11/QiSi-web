@@ -1,0 +1,22 @@
+---
+// Official CIS artwork only. Variants follow CIS 07 (背景應用):
+//   color   — standard, on white / 米白
+//   reverse — on navy: left grain and wordmark turn white, orange grain stays
+import horizontal from "../assets/brand/logo-h-color.svg?raw";
+import mark from "../assets/brand/mark-color.svg?raw";
+
+interface Props {
+  kind?: "horizontal" | "mark";
+  variant?: "color" | "reverse";
+  class?: string;
+  label?: string; // accessible name; omit when decorative
+}
+const { kind = "horizontal", variant = "color", class: cls, label } = Astro.props;
+let svg = { horizontal, mark }[kind];
+if (variant === "reverse") svg = svg.replace('fill="#24345E"', 'fill="#FFFFFF"').replaceAll('fill="#1B2850"', 'fill="#FFFFFF"');
+svg = svg.replace(/ width="[^"]*" height="[^"]*"/, "");
+const a11y = label ? `role="img" aria-label="${label}"` : `aria-hidden="true" focusable="false"`;
+svg = svg.replace("<svg ", `<svg ${a11y} class="logo ${cls ?? ""}" `);
+---
+
+<Fragment set:html={svg} />

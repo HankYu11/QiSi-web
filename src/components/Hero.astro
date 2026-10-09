@@ -1,1106 +1,347 @@
 ---
-import Seal from "./Seal.astro";
-import { EMAIL, type Copy } from "../i18n/copy";
+import { GRAIN_D } from "../brand";
+import type { Copy } from "../i18n/copy";
 import { md } from "../i18n/md";
 interface Props {
   t: Copy;
 }
 const { t } = Astro.props;
 const h = t.hero;
-const arrow = `<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"/></svg>`;
-const down = `<svg class="down" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v11M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.6"/></svg>`;
-const rows = [62, 48, 70];
 ---
 
-<section class="hero" aria-labelledby="hero-title">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="mono eyebrow"><span class="dot" aria-hidden="true"></span>{h.eyebrow}</p>
-      <h1 id="hero-title" class="display hero-title">
-        <span class="line" set:html={md(h.titleA)} />
-        <span class="line" set:html={md(h.titleB)} />
-      </h1>
-      <p class="lede hero-lede">{h.lede}</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href={`mailto:${EMAIL}`}>{h.ctaPrimary}<Fragment set:html={arrow} /></a>
-        <a class="btn btn-ghost" href="#work">{h.ctaSecondary}<Fragment set:html={down} /></a>
-      </div>
+<section class="hero on-navy" aria-labelledby="hero-title">
+  <canvas class="field" data-field aria-hidden="true"></canvas>
+  <!-- The two grains at monumental scale: they glide together on load and the gap between them closes into the S. -->
+  <svg class="grains" data-grains viewBox="100 60 380 330" aria-hidden="true" focusable="false">
+    <g class="g g-deep"><path d={GRAIN_D} fill="#FFFFFF"></path></g>
+    <g class="g g-bright"><path d={GRAIN_D} fill="#F46A2A" transform="rotate(180 289 225)"></path></g>
+  </svg>
+
+  <div class="wrap copy">
+    <h1 id="hero-title" class="t-display hero-title">
+      {h.title.map((line) => <span class="line" set:html={md(line)} />)}
+    </h1>
+    <p class="t-lede hero-lede">{h.lede}</p>
+    <div class="ctas">
+      <a class="btn btn-orange" href="#contact">{h.ctaPrimary}</a>
+      <a class="btn btn-line" href="#work">{h.ctaSecondary}</a>
     </div>
-
-    <figure class="stage" data-stage="3" aria-label={h.figureLabel}>
-      <div class="comp" aria-hidden="true">
-        <!-- Browser window -->
-        <div class="win">
-          <div class="win-bar">
-            <i class="d"></i><i class="d"></i><i class="d"></i>
-            <span class="url"><span class="b" style="--w:46%"></span></span>
-            <span class="live-pill"><i></i>{h.ui.live}</span>
-          </div>
-          <div class="win-body">
-            <div class="side">
-              <span class="logo"></span>
-              <span class="b on" style="--w:70%"></span>
-              <span class="b" style="--w:56%"></span>
-              <span class="b" style="--w:64%"></span>
-              <span class="b" style="--w:48%"></span>
-            </div>
-            <div class="main">
-              <div class="m-head">
-                <span class="b big" style="--w:38%"></span>
-                <span class="m-btn"></span>
-              </div>
-              <div class="cards">
-                <div class="card"><span class="b sm" style="--w:50%"></span><span class="b lg" style="--w:72%"></span></div>
-                <div class="card hl"><span class="b sm" style="--w:42%"></span><span class="b lg" style="--w:64%"></span></div>
-                <div class="card"><span class="b sm" style="--w:56%"></span><span class="b lg" style="--w:58%"></span></div>
-              </div>
-              <div class="chart">
-                <svg viewBox="0 0 300 90" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="area" x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0" stop-color="var(--seal)" stop-opacity=".22"></stop>
-                      <stop offset="1" stop-color="var(--seal)" stop-opacity="0"></stop>
-                    </linearGradient>
-                  </defs>
-                  <path class="area" d="M0 70 C30 64 45 50 75 54 S120 30 150 36 S200 52 225 30 S270 14 300 10 V90 H0Z"></path>
-                  <path class="line" pathLength="1" d="M0 70 C30 64 45 50 75 54 S120 30 150 36 S200 52 225 30 S270 14 300 10"
-                  ></path>
-                </svg>
-              </div>
-              <div class="table">
-                {
-                  rows.map((w, i) => (
-                    <div class="tr">
-                      <span class={`st s${i}`} />
-                      <span class="b" style={`--w:${w}%`} />
-                      <span class="b sm" style="--w:18%" />
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Phone -->
-        <div class="phone">
-          <div class="p-status"><span class="b sm" style="--w:22%"></span><span class="icons"></span></div>
-          <div class="p-head"><span class="b big" style="--w:58%"></span><span class="avatar"></span></div>
-          <div class="p-hero">
-            <span class="sun"></span><span class="hill h1"></span><span class="hill h2"></span>
-            <span class="x"></span>
-          </div>
-          <div class="chips"><span class="chip on"></span><span class="chip"></span><span class="chip"></span></div>
-          <ul class="p-list">
-            <li><span class="thumb t0"></span><span class="lines"><span class="b" style="--w:72%"></span><span class="b sm" style="--w:46%"></span></span></li>
-            <li><span class="thumb t1"></span><span class="lines"><span class="b" style="--w:60%"></span><span class="b sm" style="--w:52%"></span></span></li>
-          </ul>
-          <div class="p-cta"><span class="b" style="--w:40%"></span></div>
-          <div class="p-tabs"><i class="on"></i><i></i><i></i><i></i></div>
-        </div>
-
-        <!-- Wireframe annotations -->
-        <div class="redline r1"><span>24</span></div>
-        <div class="redline r2"><span>16</span></div>
-        <div class="redline r3"><span>8 / 4 col</span></div>
-        <div class="grid-overlay"><i></i><i></i><i></i><i></i></div>
-
-        <!-- Sketch scribbles -->
-        <svg class="scribble" viewBox="0 0 100 92" preserveAspectRatio="none">
-          <path d="M81 76.2 C70 75.6 64.5 77.6 64.8 81 C65.2 85 74 86.2 84 85.6 C95 85 99.6 82.6 99 79.6 C98.4 76.6 91 75.8 80 76.4" pathLength="1"></path>
-          <path d="M44 86 C51 89 57 87.4 62.4 82.6" pathLength="1"></path>
-          <path d="M58.4 82.2 L62.6 82.4 L61.6 86.4" pathLength="1"></path>
-        </svg>
-
-        <!-- Live layer -->
-        <div class="toast">
-          <span class="tick"></span>
-          <span class="toast-txt"><b>{h.ui.deployed}</b><span>{h.ui.checks}</span></span>
-        </div>
-        <div class="stamp"><Seal inked /></div>
-      </div>
-
-      <figcaption class="ctrl">
-        <div class="ctrl-top">
-          <label class="mono" for="fidelity">{h.stageLabel}</label>
-          <span class="mono ctrl-hint">{h.stageHint}</span>
-        </div>
-        <input
-          id="fidelity"
-          type="range"
-          min="0"
-          max="3"
-          step="1"
-          value="3"
-          aria-valuetext={h.stageStatus.replace("{n}", "4").replace("{name}", h.stages[3])}
-          data-status={h.stageStatus}
-          data-names={JSON.stringify(h.stages)}
-        />
-        <ol class="ticks">
-          {
-            h.stages.map((s, i) => (
-              <li>
-                <button type="button" data-to={i} tabindex="-1" aria-hidden="true">
-                  <span class="mono">0{i + 1}</span>
-                  {s}
-                </button>
-              </li>
-            ))
-          }
-        </ol>
-      </figcaption>
-    </figure>
   </div>
 </section>
 
-<script is:inline>
-  // Start the illustration at the sketch stage before first paint (unless motion is reduced).
-  (function () {
-    var f = document.querySelector(".stage");
-    if (f && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      f.setAttribute("data-stage", "0");
-      var r = f.querySelector("input");
-      r.value = "0";
-    }
-  })();
-</script>
-
 <script>
-  const fig = document.querySelector<HTMLElement>(".stage")!;
-  const range = fig.querySelector<HTMLInputElement>("input")!;
-  const names: string[] = JSON.parse(range.dataset.names!);
-  const tpl = range.dataset.status!;
-  let auto: number | undefined;
+  import { GRAIN_D as D } from "../brand";
 
-  const set = (n: number, user = false) => {
-    if (user && auto) {
-      clearTimeout(auto);
-      auto = undefined;
-    }
-    range.value = String(n);
-    fig.dataset.stage = String(n);
-    range.style.setProperty("--p", `${(n / 3) * 100}%`);
-    range.setAttribute("aria-valuetext", tpl.replace("{n}", String(n + 1)).replace("{name}", names[n]));
-    fig.querySelectorAll<HTMLButtonElement>(".ticks button").forEach((b, i) => b.classList.toggle("on", i === n));
-    fig.classList.remove("shift");
-    void fig.offsetWidth;
-    fig.classList.add("shift");
+  /* ---- grain field: tiny rice grains drift on a flow field and part around the pointer ---- */
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-field]")!;
+  const hero = canvas.parentElement!;
+  const ctx = canvas.getContext("2d")!;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const grain = new Path2D(D);
+  type P = { x: number; y: number; s: number; a: number; v: number; o: number; orange: boolean; spin: number; vx: number; vy: number };
+  let ps: P[] = [];
+  let W = 0,
+    H = 0,
+    dpr = 1,
+    mx = -9999,
+    my = -9999,
+    running = false,
+    t = 0,
+    last = 0;
+  const resize = () => {
+    dpr = Math.min(devicePixelRatio || 1, 1.5);
+    W = hero.clientWidth;
+    H = hero.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const n = Math.min(130, Math.round((W * H) / 12000));
+    ps = Array.from({ length: n }, (_, i) => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      s: 5 + Math.random() * 8,
+      a: Math.random() * Math.PI * 2,
+      v: 0.18 + Math.random() * 0.38,
+      o: 0.08 + Math.random() * 0.14,
+      orange: i % 40 === 0,
+      spin: (Math.random() - 0.5) * 0.008,
+      vx: 0,
+      vy: 0,
+    }));
+    draw();
   };
-
-  range.addEventListener("input", () => set(+range.value, true));
-  fig.querySelectorAll<HTMLButtonElement>(".ticks button").forEach((b) =>
-    b.addEventListener("click", () => set(+b.dataset.to!, true)),
-  );
-  set(+range.value);
-
-  if (range.value !== "3") {
-    const step = () => {
-      const n = +range.value;
-      if (n < 3) {
-        set(n + 1);
-        auto = window.setTimeout(step, n === 2 ? 1500 : 1250);
+  const draw = () => {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineCap = "round";
+    for (const p of ps) {
+      const col = p.orange ? "244,106,42" : "255,255,255";
+      const a = p.orange ? 0.8 : p.o;
+      // a short tail behind each grain, drawn explicitly so nothing accumulates between frames
+      const sp = Math.hypot(p.vx, p.vy);
+      if (sp > 0.05) {
+        const len = Math.min(26, 6 + sp * 20);
+        const g = ctx.createLinearGradient(p.x, p.y, p.x - (p.vx / sp) * len, p.y - (p.vy / sp) * len);
+        g.addColorStop(0, `rgba(${col},${a * 0.6})`);
+        g.addColorStop(1, `rgba(${col},0)`);
+        ctx.strokeStyle = g;
+        ctx.lineWidth = p.s * 0.28;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - (p.vx / sp) * len, p.y - (p.vy / sp) * len);
+        ctx.stroke();
       }
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      const k = p.s / 240;
+      ctx.scale(k, k);
+      ctx.translate(-205, -265);
+      ctx.fillStyle = `rgba(${col},${a})`;
+      ctx.fill(grain);
+      ctx.restore();
+    }
+  };
+  const step = (now: number) => {
+    if (!running) return;
+    const dt = Math.min(3, last ? (now - last) / 16.67 : 1); // frame-rate independent
+    last = now;
+    t += dt;
+    for (const p of ps) {
+      // a slowly shifting flow field: grains stream diagonally, like the mark's direction
+      const f = Math.sin(p.x * 0.0021 + t * 0.003) * Math.cos(p.y * 0.0018 - t * 0.002);
+      const dir = -0.75 + f * 1.1;
+      let vx = Math.cos(dir) * p.v,
+        vy = Math.sin(dir) * p.v;
+      const dx = p.x - mx,
+        dy = p.y - my,
+        d2 = dx * dx + dy * dy;
+      if (d2 < 170 * 170) {
+        const d = Math.sqrt(d2) || 1;
+        const push = (1 - d / 170) * 2.4;
+        vx += (dx / d) * push;
+        vy += (dy / d) * push;
+      }
+      p.vx += (vx - p.vx) * 0.2;
+      p.vy += (vy - p.vy) * 0.2;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.a += (p.spin + f * 0.002) * dt;
+      if (p.x < -30) p.x = W + 30;
+      if (p.x > W + 30) p.x = -30;
+      if (p.y < -30) p.y = H + 30;
+      if (p.y > H + 30) p.y = -30;
+    }
+    draw();
+    requestAnimationFrame(step);
+  };
+  const start = () => {
+    if (running || still) return;
+    running = true;
+    last = 0;
+    requestAnimationFrame(step);
+  };
+  resize();
+  new ResizeObserver(resize).observe(hero);
+  if (!still) {
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => (e.isIntersecting && !document.hidden ? start() : (running = false))).observe(hero);
+    } else start();
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) running = false;
+      else if (hero.getBoundingClientRect().bottom > 0) start();
+    });
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+    });
+    hero.addEventListener("pointerleave", () => (mx = my = -9999));
+  }
+
+  const svg = document.querySelector<SVGElement>("[data-grains]");
+  if (svg && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(pointer: fine)").matches) {
+    // The grains lean apart and together with the pointer, so the S-shaped gap breathes.
+    let tx = 0,
+      ty = 0,
+      x = 0,
+      y = 0,
+      raf = 0;
+    const tick = () => {
+      x += (tx - x) * 0.07;
+      y += (ty - y) * 0.07;
+      svg.style.setProperty("--px", x.toFixed(4));
+      svg.style.setProperty("--py", y.toFixed(4));
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.0005 ? requestAnimationFrame(tick) : 0;
     };
-    auto = window.setTimeout(step, 1100);
+    addEventListener(
+      "pointermove",
+      (e) => {
+        tx = e.clientX / innerWidth - 0.5;
+        ty = e.clientY / innerHeight - 0.5;
+        if (!raf) raf = requestAnimationFrame(tick);
+      },
+      { passive: true },
+    );
   }
 </script>
 
 <style>
   .hero {
-    padding-top: clamp(28px, 4.5vw, 72px);
-    padding-bottom: clamp(48px, 5vw, 72px);
-  }
-  .hero-grid {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: clamp(560px, calc(100svh - var(--header-h)), 900px);
     display: grid;
-    grid-template-columns: minmax(0, 1.04fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 80px);
     align-items: center;
+    padding-block: clamp(64px, 9vw, 128px);
   }
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--ink-2);
-    margin-bottom: clamp(20px, 2.5vw, 32px);
+  .field {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* keep the copy column clean: the field lives on the right, around the mark */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 40%, #000 66%);
+    mask-image: linear-gradient(90deg, transparent 0 40%, #000 66%);
   }
-  .eyebrow .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--seal);
+  .grains {
+    --px: 0;
+    --py: 0;
+    position: absolute;
+    z-index: -1;
+    /* sized by width so the art never reaches into the copy column on tall screens */
+    width: min(64vw, 940px);
+    height: auto;
+    right: -17%;
+    bottom: -7%;
+    overflow: visible;
+  }
+  .g {
+    transform-box: view-box;
+    transform-origin: 290px 225px;
+  }
+  .g-deep {
+    transform: translate(calc(var(--px) * -10px), calc(var(--py) * -8px));
+  }
+  .g-bright {
+    transform: translate(calc(var(--px) * 10px), calc(var(--py) * 8px));
+  }
+  /* Load: the grains start wide apart and ease shut, so the gap between them closes into the S. */
+  :global(.js) .g-deep {
+    animation: close-deep 1.25s 0.15s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+  }
+  :global(.js) .g-bright {
+    animation: close-bright 1.25s 0.15s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+  }
+  @keyframes close-deep {
+    from {
+      transform: translate(-36px, 22px);
+    }
+  }
+  @keyframes close-bright {
+    from {
+      transform: translate(36px, -22px);
+    }
+  }
+  @media (max-width: 700px) {
+    .copy .hero-lede {
+      max-width: none;
+    }
+    .field {
+      -webkit-mask-image: linear-gradient(180deg, #000 0 30%, transparent 52%);
+      mask-image: linear-gradient(180deg, #000 0 30%, transparent 52%);
+    }
+    /* phones: the art sits right above the headline, so it only fades and settles in place */
+    :global(.js) .g-deep,
+    :global(.js) .g-bright {
+      animation-name: settle;
+    }
+  }
+  @keyframes settle {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+  }
+
+  .copy {
+    position: relative;
   }
   .hero-title {
-    font-size: clamp(3rem, 1.3rem + 5.4vw, 7rem);
-    margin-bottom: clamp(24px, 3vw, 36px);
+    max-width: 9.5em;
   }
   :root[data-lang="zh"] .hero-title {
-    font-size: clamp(2.5rem, 1.1rem + 4.4vw, 5.6rem);
-    line-height: 1.16;
+    max-width: 8em;
   }
   .hero-title .line {
     display: block;
   }
-  .hero-title :global(em) {
-    color: var(--seal-ink);
+  .hero-title .line:last-child {
+    color: var(--orange);
   }
   .hero-lede {
-    margin-bottom: clamp(28px, 3vw, 40px);
+    margin-top: clamp(24px, 3vw, 36px);
+    max-width: min(31em, 44vw);
+    color: var(--on-navy-2);
   }
   .ctas {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
+    margin-top: clamp(32px, 4vw, 48px);
   }
-
-  /* ---------- Stage ---------- */
-  .stage {
-    --line: var(--ink);
-    --bw: 1.6px;
-    --surface: transparent;
-    --bar: var(--ink);
-    --bar-h: 0.32cqw;
-    --r: 0.8cqw;
-    container-type: inline-size;
-    position: relative;
+  :global(.js) .copy > * {
+    animation: rise 0.9s var(--ease) backwards;
   }
-  .comp {
-    position: relative;
-    aspect-ratio: 1 / 0.92;
-    transition: filter 0.4s;
+  :global(.js) .copy > :nth-child(2) {
+    animation-delay: 0.12s;
   }
-  .stage.shift .comp {
-    animation: settle 0.55s var(--ease-out);
+  :global(.js) .copy > :nth-child(3) {
+    animation-delay: 0.22s;
   }
-  @keyframes settle {
+  @keyframes rise {
     from {
-      opacity: 0.55;
-      transform: scale(0.985);
+      opacity: 0;
+      transform: translateY(14px);
     }
-  }
-  .b {
-    display: block;
-    width: var(--w, 60%);
-    height: var(--bar-h);
-    background: var(--bar);
-    border-radius: 99px;
-    transition:
-      height 0.4s var(--ease-out),
-      background 0.4s;
-  }
-  .b.big {
-    height: calc(var(--bar-h) * 1.9);
-  }
-  .b.sm {
-    height: calc(var(--bar-h) * 0.75);
-    opacity: 0.7;
-  }
-  .b.lg {
-    height: calc(var(--bar-h) * 2.2);
   }
 
-  .win,
-  .phone {
-    position: absolute;
-    border: var(--bw) solid var(--line);
-    background: var(--surface);
-    transition:
-      transform 0.6s var(--ease-out),
-      box-shadow 0.6s,
-      border-color 0.4s,
-      background 0.4s,
-      border-radius 0.4s;
-  }
-  .win {
-    left: 0;
-    top: 2%;
-    width: 79%;
-    height: 72%;
-    border-radius: var(--r);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  .win-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.9cqw;
-    height: 6.4cqw;
-    padding-inline: 2cqw;
-    border-bottom: var(--bw) solid var(--line);
-    flex: none;
-  }
-  .win-bar .d {
-    width: 1.3cqw;
-    height: 1.3cqw;
-    border-radius: 50%;
-    border: var(--bw) solid var(--line);
-  }
-  .url {
-    flex: 0 1 42%;
-    margin-left: 2cqw;
-    height: 3cqw;
-    border: var(--bw) solid var(--line);
-    border-radius: 99px;
-    display: flex;
-    align-items: center;
-    padding-inline: 1.4cqw;
-  }
-  .live-pill {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8cqw;
-    font-family: var(--f-mono);
-    font-size: 1.7cqw;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    padding: 0.5cqw 1.4cqw;
-    border-radius: 99px;
-    background: #e3efe6;
-    color: #1d5a35;
-    opacity: 0;
-    transform: translateY(-4px);
-    transition: 0.4s var(--ease-out);
-  }
-  .live-pill i {
-    width: 1.1cqw;
-    height: 1.1cqw;
-    border-radius: 50%;
-    background: #2c8a50;
-    box-shadow: 0 0 0 0 #2c8a5088;
-  }
-  .win-body {
-    flex: 1;
-    display: flex;
-    min-height: 0;
-  }
-  .side {
-    width: 22%;
-    border-right: var(--bw) solid var(--line);
-    padding: 2.2cqw 1.8cqw;
-    display: flex;
-    flex-direction: column;
-    gap: 2.1cqw;
-    transition: background 0.4s;
-  }
-  .side .logo {
-    width: 3cqw;
-    height: 4.6cqw;
-    border: var(--bw) solid var(--line);
-    border-radius: 0.4cqw;
-    margin-bottom: 0.8cqw;
-  }
-  .main {
-    flex: 1;
-    padding: 2.4cqw 2.6cqw;
-    display: flex;
-    flex-direction: column;
-    gap: 2.2cqw;
-    min-width: 0;
-  }
-  .m-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .m-btn {
-    width: 9cqw;
-    height: 3.2cqw;
-    border-radius: 99px;
-    border: var(--bw) solid var(--line);
-  }
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.6cqw;
-  }
-  .card {
-    border: var(--bw) solid var(--line);
-    border-radius: var(--r);
-    padding: 1.6cqw;
-    display: grid;
-    gap: 1.3cqw;
-    transition: 0.4s;
-  }
-  .chart {
-    flex: 1;
-    min-height: 0;
-    border-bottom: var(--bw) solid var(--line);
-  }
-  .chart svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-  .chart .line {
-    fill: none;
-    stroke: var(--line);
-    stroke-width: 1.6;
-    vector-effect: non-scaling-stroke;
-  }
-  .chart .area {
-    fill: none;
-  }
-  .table {
-    display: grid;
-    gap: 1.5cqw;
-  }
-  .tr {
-    display: grid;
-    grid-template-columns: 1.4cqw 1fr 20%;
-    align-items: center;
-    gap: 1.6cqw;
-  }
-  .tr .b.sm {
-    justify-self: end;
-    width: 100%;
-  }
-  .st {
-    width: 1.4cqw;
-    height: 1.4cqw;
-    border-radius: 50%;
-    border: var(--bw) solid var(--line);
-  }
-
-  .phone {
-    right: 1%;
-    top: 22%;
-    width: 34%;
-    height: 76%;
-    border-radius: 4.6cqw;
-    padding: 2.6cqw 2.2cqw 1.6cqw;
-    display: flex;
-    flex-direction: column;
-    gap: 1.9cqw;
-    overflow: hidden;
-  }
-  .p-status {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-inline: 1cqw;
-  }
-  .p-status .icons {
-    width: 5cqw;
-    height: 1.1cqw;
-    border-radius: 99px;
-    border: var(--bw) solid var(--line);
-  }
-  .p-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-inline: 0.4cqw;
-  }
-  .avatar {
-    width: 3.6cqw;
-    height: 3.6cqw;
-    border-radius: 50%;
-    border: var(--bw) solid var(--line);
-  }
-  .p-hero {
-    position: relative;
-    height: 17cqw;
-    border-radius: var(--r);
-    border: var(--bw) solid var(--line);
-    overflow: hidden;
-    flex: none;
-    transition: 0.4s;
-  }
-  .sun,
-  .hill {
-    position: absolute;
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-  .sun {
-    width: 6cqw;
-    height: 6cqw;
-    border-radius: 50%;
-    right: 3cqw;
-    top: 2.4cqw;
-    background: #f2b33d;
-  }
-  .hill {
-    border-radius: 50% 50% 0 0;
-    bottom: -4cqw;
-  }
-  .hill.h1 {
-    width: 22cqw;
-    height: 14cqw;
-    left: -5cqw;
-    background: #2f5d50;
-  }
-  .hill.h2 {
-    width: 22cqw;
-    height: 11cqw;
-    right: -6cqw;
-    background: var(--seal);
-  }
-  .x {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background:
-      linear-gradient(to top right, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px)),
-      linear-gradient(to top left, transparent calc(50% - 0.5px), var(--line) 50%, transparent calc(50% + 0.5px));
-  }
-  .chips {
-    display: flex;
-    gap: 1cqw;
-  }
-  .chip {
-    width: 7.4cqw;
-    height: 3cqw;
-    border-radius: 99px;
-    border: var(--bw) solid var(--line);
-    transition: 0.4s;
-  }
-  .p-list {
-    display: grid;
-    gap: 1.6cqw;
-  }
-  .p-list li {
-    display: flex;
-    gap: 1.6cqw;
-    align-items: center;
-  }
-  .thumb {
-    flex: none;
-    width: 6.6cqw;
-    height: 6.6cqw;
-    border-radius: calc(var(--r) * 0.9);
-    border: var(--bw) solid var(--line);
-    transition: 0.4s;
-  }
-  .lines {
-    flex: 1;
-    display: grid;
-    gap: 1.1cqw;
-  }
-  .p-cta {
-    margin-top: auto;
-    height: 5.4cqw;
-    border-radius: 99px;
-    border: var(--bw) solid var(--line);
-    display: grid;
-    place-items: center;
-    transition: 0.4s;
-  }
-  .p-cta .b {
-    margin: 0 auto;
-  }
-  .p-tabs {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 1.4cqw;
-    border-top: var(--bw) solid var(--line);
-  }
-  .p-tabs i {
-    width: 2.4cqw;
-    height: 2.4cqw;
-    border-radius: 0.7cqw;
-    border: var(--bw) solid var(--line);
-  }
-
-  /* annotation layers */
-  .redline,
-  .grid-overlay,
-  .scribble,
-  .toast,
-  .stamp {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-  .redline {
-    color: var(--seal-ink);
-    font-family: var(--f-mono);
-    font-size: 1.6cqw;
-    font-weight: 600;
-  }
-  .redline::before {
-    content: "";
-    position: absolute;
-    background: currentColor;
-  }
-  .redline span {
-    position: absolute;
-    background: var(--paper);
-    padding: 0 0.6cqw;
-    white-space: nowrap;
-  }
-  .r1 {
-    /* vertical gap between phone hero and chips */
-    left: 72.6%;
-    top: 52.6%;
-    width: 1px;
-    height: 1.9%;
-    border-block: 1px solid currentColor;
-    padding-inline: 4px;
-  }
-  .r1::before {
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-  }
-  .r1 span {
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .r2 {
-    /* horizontal padding inside window main */
-    left: 17.6%;
-    top: 21%;
-    width: 2.6%;
-    height: 1px;
-  }
-  .r2::before {
-    inset: 0;
-  }
-  .r2 span {
-    top: -3cqw;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .r3 {
-    right: 1%;
-    top: 16.5%;
-  }
-  .r3 span {
-    right: 0;
-    background: none;
-  }
-  .grid-overlay {
-    right: calc(1% + 2.2cqw);
-    top: 22%;
-    height: 76%;
-    width: calc(34% - 4.4cqw);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.2cqw;
-  }
-  .grid-overlay i {
-    background: color-mix(in srgb, var(--seal) 5%, transparent);
-    border-inline: 1px solid color-mix(in srgb, var(--seal) 30%, transparent);
-  }
-  .scribble {
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-  .scribble path,
-  .scribble ellipse {
-    fill: none;
-    stroke: var(--seal-ink);
-    stroke-width: 2;
-    vector-effect: non-scaling-stroke;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-  }
-  .toast {
-    left: 3%;
-    top: 79%;
-    display: flex;
-    align-items: center;
-    gap: 1.6cqw;
-    padding: 1.6cqw 2.4cqw 1.6cqw 1.8cqw;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 1.4cqw;
-    box-shadow: 0 1.4cqw 4cqw -1cqw #16140f55;
-    transform: translateY(10px);
-    transition:
-      opacity 0.45s,
-      transform 0.6s var(--ease-out);
-    max-width: 52%;
-  }
-  .tick {
-    flex: none;
-    width: 3.6cqw;
-    height: 3.6cqw;
-    border-radius: 50%;
-    background: #2c8a50 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-      center/70% no-repeat;
-  }
-  .toast-txt {
-    display: grid;
-    line-height: 1.25;
-    min-width: 0;
-  }
-  .toast-txt b {
-    font-size: 2cqw;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  .toast-txt span {
-    font-size: 1.65cqw;
-    color: #c8c1b3;
-    white-space: nowrap;
-  }
-  .stamp {
-    left: 51%;
-    top: 77.5%;
-    width: 8.6%;
-    transform: rotate(-8deg) scale(1.7);
-    transition:
-      opacity 0.18s,
-      transform 0.45s var(--ease-stamp);
-  }
-
-  /* ---- Stage 0: sketch ---- */
-  .stage[data-stage="0"] {
-    --surface: var(--paper);
-  }
-  .stage[data-stage="0"] .comp {
-    filter: url(#rough);
-  }
-  .stage[data-stage="0"] .win {
-    transform: rotate(-1.4deg);
-  }
-  .stage[data-stage="0"] .phone {
-    transform: rotate(2.2deg) translateY(-1%);
-  }
-  .stage[data-stage="0"] .x {
-    opacity: 1;
-  }
-  .stage[data-stage="0"] .scribble {
-    opacity: 1;
-  }
-  .stage[data-stage="0"] .scribble :is(path, ellipse) {
-    animation: draw 0.9s 0.25s var(--ease-out) forwards;
-  }
-  @keyframes draw {
-    to {
-      stroke-dashoffset: 0;
+  @media (max-width: 1320px) {
+    .grains {
+      right: -24%;
     }
   }
-  .stage[data-stage="0"] .chart .line {
-    stroke-width: 1.8;
-  }
-
-  /* ---- Stage 1: wireframe ---- */
-  .stage[data-stage="1"] {
-    --line: #9a917f;
-    --bw: 1px;
-    --surface: #f8f4ec;
-    --bar: #cbc1ad;
-    --bar-h: 1cqw;
-  }
-  .stage[data-stage="1"] .x {
-    opacity: 0.8;
-  }
-  .stage[data-stage="1"] :is(.redline, .grid-overlay) {
-    opacity: 1;
-  }
-  .stage[data-stage="1"] .chart .line {
-    stroke-dasharray: 0.02 0.012;
-  }
-
-  /* ---- Stage 2 + 3: interface ---- */
-  .stage:is([data-stage="2"], [data-stage="3"]) {
-    --line: #e2dacb;
-    --bw: 1px;
-    --surface: #fbf9f4;
-    --bar: #2a2620;
-    --bar-h: 1cqw;
-    --r: 1.3cqw;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .win {
-    box-shadow: 0 2cqw 6cqw -2cqw #16140f33;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) :is(.win-bar, .side, .chart, .p-tabs) {
-    border-color: #ebe4d6;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .win-bar .d {
-    border: 0;
-    background: #ddd4c3;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .url {
-    background: #f0ebe1;
-    border-color: transparent;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .url .b {
-    background: #b9b09f;
-    height: 0.8cqw;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .side {
-    background: var(--ink);
-    border-color: var(--ink);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .side .b {
-    background: #6f685b;
-    height: 0.9cqw;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .side .b.on {
-    background: var(--paper);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .side .logo {
-    border: 0;
-    background: var(--seal);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .m-btn {
-    background: var(--ink);
-    border-color: var(--ink);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .card {
-    background: #f2ede3;
-    border-color: transparent;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .card .b.sm {
-    background: #8a8274;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .card.hl {
-    background: var(--seal);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .card.hl .b {
-    background: #fff4ee;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .chart .line {
-    stroke: var(--seal);
-    stroke-width: 2.4;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .chart .area {
-    fill: url(#area);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .tr .b {
-    background: #cfc7b8;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .tr .b.sm {
-    background: #8a8274;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .st {
-    border: 0;
-    background: #2c8a50;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .st.s1 {
-    background: #f2b33d;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .phone {
-    background: #fffdf9;
-    border: 1.2cqw solid var(--ink);
-    padding: 1.6cqw 1.2cqw 0.8cqw;
-    box-shadow: 0 3cqw 7cqw -2cqw #16140f55;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-status .icons {
-    border: 0;
-    background: #2a2620;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .avatar {
-    border: 0;
-    background: #f2b33d;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-hero {
-    border: 0;
-    background: #f6e6c8;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) :is(.sun, .hill) {
-    opacity: 1;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .chip {
-    border-color: #e2dacb;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .chip.on {
-    background: var(--ink);
-    border-color: var(--ink);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .thumb {
-    border: 0;
-    background: #2f5d50;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .thumb.t1 {
-    background: #f2b33d;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-list .b.sm {
-    background: #8a8274;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-cta {
-    background: var(--seal);
-    border-color: var(--seal);
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-cta .b {
-    background: #fff4ee;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-tabs i {
-    border: 0;
-    background: #d9d0bf;
-  }
-  .stage:is([data-stage="2"], [data-stage="3"]) .p-tabs i.on {
-    background: var(--ink);
-  }
-
-  /* ---- Stage 3: live ---- */
-  .stage[data-stage="3"] .live-pill {
-    opacity: 1;
-    transform: none;
-  }
-  .stage[data-stage="3"] .live-pill i {
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    70% {
-      box-shadow: 0 0 0 1.2cqw #2c8a5000;
+  @media (max-width: 1100px) and (min-width: 701px) {
+    .grains {
+      height: auto;
+      width: 50vw;
+      right: -17vw;
+      top: 50%;
+      bottom: auto;
+      translate: 0 -50%;
     }
-    100% {
-      box-shadow: 0 0 0 0 #2c8a5000;
+    .copy {
+      padding-right: 34vw;
+    }
+    .copy .hero-lede {
+      max-width: 31em;
     }
   }
-  .stage[data-stage="3"] .chart .line {
-    stroke-dasharray: 1;
-    animation: chart 1.4s var(--ease-out) both;
-  }
-  @keyframes chart {
-    from {
-      stroke-dashoffset: 1;
+  @media (max-width: 700px) {
+    .hero {
+      min-height: 0;
+      align-items: start;
+      padding-top: min(64vw, 380px);
+      padding-bottom: 64px;
     }
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
-  .stage[data-stage="3"] .toast {
-    opacity: 1;
-    transform: none;
-    transition-delay: 0.15s;
-  }
-  .stage[data-stage="3"] .stamp {
-    opacity: 1;
-    transform: rotate(-8deg) scale(1);
-    transition-delay: 0.5s;
-  }
-
-  /* ---------- Control ---------- */
-  .ctrl {
-    margin-top: clamp(20px, 3cqw, 32px);
-    padding-top: 18px;
-    border-top: 1px solid var(--rule);
-  }
-  .ctrl-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 12px;
-  }
-  .ctrl-top label {
-    color: var(--ink);
-  }
-  .ctrl-hint {
-    color: var(--ink-3);
-    text-transform: none;
-    letter-spacing: 0.01em;
-    text-align: right;
-  }
-  input[type="range"] {
-    --p: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 28px;
-    background: transparent;
-    margin: 0;
-    cursor: pointer;
-  }
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 3px;
-    border-radius: 3px;
-    background: linear-gradient(var(--ink), var(--ink)) 0 / var(--p) 100% no-repeat, var(--rule);
-  }
-  input[type="range"]::-moz-range-track {
-    height: 3px;
-    border-radius: 3px;
-    background: linear-gradient(var(--ink), var(--ink)) 0 / var(--p) 100% no-repeat, var(--rule);
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    margin-top: -9.5px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 2px solid var(--ink);
-    box-shadow: 0 2px 6px #16140f33;
-    transition: transform 0.2s;
-  }
-  input[type="range"]::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--paper);
-    border: 2px solid var(--ink);
-  }
-  input[type="range"]:active::-webkit-slider-thumb {
-    transform: scale(1.15);
-  }
-  input[type="range"]:focus-visible {
-    outline: none;
-  }
-  input[type="range"]:focus-visible::-webkit-slider-thumb {
-    outline: 2px solid var(--seal-ink);
-    outline-offset: 3px;
-  }
-  .ticks {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 4px;
-  }
-  .ticks li:nth-child(2) {
-    text-align: center;
-    transform: translateX(-16.6%);
-  }
-  .ticks li:nth-child(3) {
-    text-align: center;
-    transform: translateX(16.6%);
-  }
-  .ticks li:last-child {
-    text-align: right;
-  }
-  .ticks button {
-    background: none;
-    border: 0;
-    padding: 4px 0;
-    cursor: pointer;
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--ink-3);
-    display: inline-flex;
-    gap: 8px;
-    align-items: baseline;
-    transition: color 0.2s;
-  }
-  .ticks button .mono {
-    font-size: 0.68rem;
-  }
-  .ticks button:hover,
-  .ticks button.on {
-    color: var(--ink);
-  }
-  .ticks button.on .mono {
-    color: var(--seal-ink);
-  }
-
-  @media (max-width: 960px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-    }
-    .stage {
-      max-width: 620px;
-    }
-  }
-  @media (max-width: 520px) {
-    .ctrl-hint {
-      display: none;
-    }
-    .ticks button {
-      font-size: 0.82rem;
-      gap: 5px;
-    }
-    .ticks button .mono {
-      display: none;
+    .grains {
+      height: auto;
+      width: min(92vw, 520px);
+      top: max(-14vw, -90px);
+      right: max(-22vw, -150px);
+      bottom: auto;
     }
   }
 </style>

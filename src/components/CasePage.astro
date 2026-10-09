@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Work from "./Work.astro";
+import Contact from "./Contact.astro";
+import Effects from "./Effects.astro";
+import { copy, type Lang } from "../i18n/copy";
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = copy[lang];
+const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
+---
+
+<Base t={t} lang={lang} title={t.work.meta.title} description={t.work.meta.description} paths={paths}>
+  <a class="skip" href="#main">{t.a11y.skip}</a>
+  <Header t={t} lang={lang} paths={paths} />
+  <main id="main">
+    <Work t={t} lang={lang} />
+    <nav class="next" aria-label={t.work.back}>
+      <div class="wrap next-in">
+        <a class="btn btn-line" href={t.path}>← {t.work.back}</a>
+        <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>
+      </div>
+    </nav>
+  </main>
+  <Contact t={t} lang={lang} paths={paths} />
+  <Effects />
+</Base>
+
+<script>
+  import "../scripts/site";
+</script>
+
+<style>
+  .next {
+    background: var(--cream);
+    padding-block: 0 clamp(56px, 6vw, 88px);
+  }
+  .next-in {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
