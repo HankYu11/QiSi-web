@@ -11,6 +11,8 @@ export const workEn = {
   nameAlt: "鮮款款",
   tagline: "Helping people walk into the good shop they pass every day.",
   status: "Live on the App Store and Google Play",
+  stores: { label: "Get FreshToGo on", ios: "App Store", android: "Google Play" },
+  appNote: "Real app card renders, sample listings.",
   summary:
     "FreshToGo is an app for independent food shops in Taiwan. Shops put together a FreshToGo bag (鮮款包) of today’s bread, pastries, bento or deli dishes, with the contents kept a surprise and the price below what the items normally cost. People reserve a bag in the app, then pick it up and pay at the shop. We built the whole product in-house.",
   facts: [
@@ -46,7 +48,7 @@ export const workEn = {
     {
       id: "knock",
       title: "Knock for the shop you want",
-      body: "Name a shop you’d like to see on FreshToGo and knock its bowl (敲碗). Friends can join in from a share link, and you can follow its progress from contacting to listed.",
+      body: "Name a shop you’d like to see on FreshToGo and knock (敲碗) for it. Friends can join in from a share link, and you can follow its progress from contacting to listed.",
     },
   ],
   eligibility: ["First purchase only", "One per person", "Regulars only", "Everyone"],
@@ -96,6 +98,7 @@ export const workEn = {
     webHero: "The FreshToGo website’s home page: the headline “新鮮款著走，美食不錯過” beside two FreshToGo bag cards.",
     webMobile: "The FreshToGo website on a phone, showing listing cards above the headline.",
     feed: "A FreshToGo bag listing card in the app: shop, pickup time, distance and price.",
+    knock: "The FreshToGo knock page for a sample shop: its status is waiting to contact, with the number of neighbours who knocked.",
     hunt: "A hunt-mode card in the app, shown one at a time for swiping.",
     admin: "The FreshToGo admin dashboard: a queue of items needing attention, such as merchant applications and unread feedback.",
   },
@@ -109,8 +112,10 @@ export const workZh: Work = {
   chapter: "案例",
   name: "鮮款款",
   nameAlt: "FreshToGo",
-  tagline: "讓人走進每天路過、卻從沒走進去的那間好店。",
+  tagline: "讓人走進每天路過、|卻從沒走進去的|那間好店。",
   status: "App Store、Google Play 已上架",
+  stores: { label: "下載鮮款款", ios: "App Store", android: "Google Play" },
+  appNote: "App 實際卡片元件，內容為示意。",
   summary:
     "鮮款款是為台灣在地小店打造的 App。店家把當天現做的麵包、甜點、便當或滷味配成一份「鮮款包」，內容打開才知道，價格比平常划算。大家在 App 裡預約，再到店取餐、付款。整個產品，從前到後都是我們自己做的。",
   facts: [
@@ -120,7 +125,7 @@ export const workZh: Work = {
     { k: "首發區域", v: "新北板橋，捷運新埔站周邊" },
   ],
   stageCaption: "畫面取自鮮款款官網與 App 實際介面；店家、價格與數字為示意資料。",
-  flowTitle: "一份鮮款包，怎麼運作",
+  flowTitle: "一份鮮款包，|怎麼運作",
   flowCaption: "App 畫面取自鮮款款宣傳素材，內容為示意資料。",
   flow: [
     {
@@ -150,7 +155,7 @@ export const workZh: Work = {
     },
   ],
   eligibility: ["首購限定", "限購一次", "熟客限定", "所有人"],
-  proofTitle: "上線之後，還要跑得久",
+  proofTitle: "上線之後，|還要跑得久",
   proofIntro: "上線只是開始。鮮款款從一開始就為了能持續、安全地改下去而設計，不管之後是我們，還是其他團隊接手。",
   proof: [
     { n: "1,241", label: "個自動化測試涵蓋 App 共用程式碼，包含把每一支 API 呼叫都對齊規格的合約測試" },
@@ -161,8 +166,8 @@ export const workZh: Work = {
   proofNote: "數字為 2026 年 10 月於鮮款款程式庫中實際統計。",
   pickup: ["App 預約", "出示取餐碼", "到店付款"],
   knock: ["待聯繫", "洽談中", "已上架"],
-  surfacesTitle: "一個產品，四個部分，同一個團隊",
-  surfacesIntro: "鮮款款的每一個部分都由我們設計、開發，所以它像一個系統般運作：決策一致、責任清楚，沒有不同廠商之間對不上的縫隙。",
+  surfacesTitle: "一個產品，四個部分，|同一個團隊",
+  surfacesIntro: "鮮款款的每一個部分都由我們設計、開發，所以整個產品是一體的：決策一致、責任清楚，沒有不同廠商之間對不上的縫隙。",
   surfaces: [
     {
       id: "app",
@@ -194,9 +199,10 @@ export const workZh: Work = {
     webHero: "鮮款款官網首頁：標語「新鮮款著走，美食不錯過」與兩張鮮款包卡片。",
     webMobile: "手機版鮮款款官網，鮮款包卡片在標語上方。",
     feed: "App 裡的鮮款包卡片：店家、取餐時段、距離與價格。",
+    knock: "鮮款款的敲碗頁面：示意店家目前待聯繫，以及敲碗的鄰居人數。",
     hunt: "狩獵模式的卡片，一次一張、滑動選擇。",
     admin: "鮮款款管理後台：待處理事項，例如店家申請與未讀回饋。",
   },
   hunt: { up: "預約", left: "跳過", right: "先收著" },
-  note: "Kotlin Multiplatform 和 Ktor 是鮮款款這個專案的最佳解。下一個產品，會有屬於它的答案。",
+  note: "Kotlin Multiplatform 和 Ktor 是鮮款款這個專案最適合的選擇。下一個產品，會有屬於它的答案。",
 };

@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import Logo from "../components/Logo.astro";
 import Grain from "../components/Grain.astro";
 import { copy } from "../i18n/copy";
+import { md } from "../i18n/md";
 const zh = copy.zh.notFound;
 const en = copy.en.notFound;
 ---
@@ -12,7 +13,7 @@ const en = copy.en.notFound;
     <div class="wrap nf-in">
       <a href="/" class="nf-logo"><Logo label={copy.zh.a11y.home} /></a>
       <p class="code" aria-hidden="true">4<Grain class="g" />4</p>
-      <h1 class="t-h2">{zh.title}</h1>
+      <h1 class="t-h2" set:html={md(zh.title)} />
       <p class="muted">{zh.body}</p>
       <p class="muted en" lang="en"><strong>{en.title}</strong> {en.body}</p>
       <div class="links">

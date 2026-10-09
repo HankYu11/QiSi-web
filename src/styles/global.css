@@ -21,6 +21,29 @@
   font-display: swap;
 }
 
+/* Latin punctuation from Noto Sans: the TC face draws quotes full-width */
+@font-face {
+  font-family: "QiSi Punct";
+  src: url("/fonts/noto-sans-punct-400.woff2") format("woff2");
+  font-weight: 400 500;
+  font-display: swap;
+  unicode-range: U+00B7, U+2013-2014, U+2018-201D, U+2026;
+}
+@font-face {
+  font-family: "QiSi Punct";
+  src: url("/fonts/noto-sans-punct-700.woff2") format("woff2");
+  font-weight: 600 800;
+  font-display: swap;
+  unicode-range: U+00B7, U+2013-2014, U+2018-201D, U+2026;
+}
+@font-face {
+  font-family: "QiSi Punct";
+  src: url("/fonts/noto-sans-punct-900.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+  unicode-range: U+00B7, U+2013-2014, U+2018-201D, U+2026;
+}
+
 /* ---------- Tokens (CIS standard colours) ---------- */
 :root {
   --navy: #1b2850; /* 字標深藍 */
@@ -37,7 +60,7 @@
   --line: #d9dee9;
   --line-navy: #34457a;
 
-  --font: "QiSi Sans", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font: "QiSi Punct", "QiSi Sans", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
 
   --gutter: clamp(20px, 5vw, 72px);
   --max: 1320px;
@@ -80,10 +103,6 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
-}
-:root[data-lang="en"] body {
-  /* Noto Sans TC draws ‘ ’ “ ” full-width; proportional alternates fix English text */
-  font-feature-settings: "palt" 1;
 }
 :root[data-lang="zh"] body {
   line-height: 1.8;
@@ -236,11 +255,11 @@ dd {
   align-items: center;
   gap: 10px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1.2rem; /* ≥18.66px bold = large text, so 文字橘 meets 3:1 on 米白 */
   color: var(--orange-text);
 }
 .chapter svg {
-  width: 13px;
+  width: 15px;
   height: auto;
   flex: none;
 }

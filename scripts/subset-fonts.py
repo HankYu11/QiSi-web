@@ -73,3 +73,17 @@ for w in WEIGHTS:
     dest = OUT / f"noto-sans-tc-qisi-{w}.woff2"
     merged.save(dest)
     print(f"{dest.relative_to(ROOT)}: {len(covered)} glyphs, {dest.stat().st_size // 1024} KB")
+
+# Latin punctuation: Noto Sans TC draws ‘ ’ “ ” · – — … full-width (CJK convention), which breaks English text.
+# Take those few glyphs from Noto Sans (the Latin sibling) into a tiny face listed first in the font stack.
+PUNCT = "‘’“”·–—…"
+LATIN = ROOT / "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-wght-normal.woff2"
+for w in WEIGHTS:
+    f = instantiateVariableFont(TTFont(LATIN), {"wght": w})
+    sub = Subsetter(Options())
+    sub.populate(text=PUNCT)
+    sub.subset(f)
+    f.flavor = "woff2"
+    dest = OUT / f"noto-sans-punct-{w}.woff2"
+    f.save(dest)
+    print(f"{dest.relative_to(ROOT)}: {dest.stat().st_size} bytes")

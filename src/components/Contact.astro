@@ -2,6 +2,7 @@
 import Logo from "./Logo.astro";
 import Grain from "./Grain.astro";
 import pattern from "../assets/brand/pattern-dark.svg?url";
+import { md } from "../i18n/md";
 import { EMAIL, type Copy, type Lang } from "../i18n/copy";
 interface Props {
   t: Copy;
@@ -15,13 +16,9 @@ const [user, domain] = EMAIL.split("@");
 
 <section class="contact on-navy" id="contact" aria-labelledby="contact-title" style={`--pattern:url(${pattern})`}>
   <!-- CIS 09: dark rice pattern, sparse orange grains -->
-  <div class="accents" aria-hidden="true">
-    <Grain class="a a1" flip />
-    <Grain class="a a2" />
-    <Grain class="a a3" flip />
-  </div>
+  <Grain class="crop" flip />
   <div class="wrap inner">
-    <h2 id="contact-title" class="t-display c-title">{c.title}</h2>
+    <h2 id="contact-title" class="t-display c-title" set:html={md(c.title)} />
     <p class="t-lede muted c-body">{c.body}</p>
     <div class="mail">
       <a class="mail-link" href={`mailto:${EMAIL}`}><span>{user}</span><span class="at">@</span><wbr />{domain}</a>
@@ -81,27 +78,21 @@ const [user, domain] = EMAIL.split("@");
     inset: 0;
     background: linear-gradient(90deg, var(--navy) 0%, var(--navy) 38%, #1b2850cc 60%, transparent 100%);
   }
-  .accents {
+  /* CIS 09 大圖裁切: a single grain, cropped by the edge, as the focal point */
+  .contact :global(.crop) {
     position: absolute;
-    inset: 0;
+    right: -9%;
+    bottom: -38%;
+    width: clamp(260px, 34vw, 520px);
+    height: auto;
     pointer-events: none;
   }
-  .accents :global(.a) {
-    position: absolute;
-    width: 38px;
-    height: auto;
-  }
-  .accents :global(.a1) {
-    right: 12%;
-    top: 16%;
-  }
-  .accents :global(.a2) {
-    right: 28%;
-    bottom: 14%;
-  }
-  .accents :global(.a3) {
-    right: 6%;
-    bottom: 34%;
+  @media (max-width: 760px) {
+    .contact :global(.crop) {
+      width: 220px;
+      right: -90px;
+      bottom: -120px;
+    }
   }
   .inner {
     position: relative;
@@ -165,8 +156,10 @@ const [user, domain] = EMAIL.split("@");
     gap: 6px 22px;
   }
   .f-links a {
-    display: inline-block;
-    padding-block: 10px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
     text-decoration: none;
   }
   .f-links a:hover,

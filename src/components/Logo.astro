@@ -4,16 +4,15 @@
 //   reverse — on navy: left grain and wordmark turn white, orange grain stays
 import horizontal from "../assets/brand/logo-h-color.svg?raw";
 import mark from "../assets/brand/mark-color.svg?raw";
-import vertical from "../assets/brand/logo-v-color.svg?raw";
 
 interface Props {
-  kind?: "horizontal" | "mark" | "vertical";
+  kind?: "horizontal" | "mark";
   variant?: "color" | "reverse";
   class?: string;
   label?: string; // accessible name; omit when decorative
 }
 const { kind = "horizontal", variant = "color", class: cls, label } = Astro.props;
-let svg = { horizontal, mark, vertical }[kind];
+let svg = { horizontal, mark }[kind];
 if (variant === "reverse") svg = svg.replace('fill="#24345E"', 'fill="#FFFFFF"').replaceAll('fill="#1B2850"', 'fill="#FFFFFF"');
 svg = svg.replace(/ width="[^"]*" height="[^"]*"/, "");
 const a11y = label ? `role="img" aria-label="${label}"` : `aria-hidden="true" focusable="false"`;

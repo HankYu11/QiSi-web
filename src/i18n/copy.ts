@@ -35,9 +35,6 @@ const en = {
       "QI SI is a product studio in Taipei. We design and build mobile apps, websites and SaaS products for clients, and we’re responsible for them from the first sketch to the live release and after. AI is built into how we work, so we move fast. Our standards keep what we ship solid.",
     ctaPrimary: "Start a project",
     ctaSecondary: "See our work",
-    markLabel: "The QI SI mark: a deep navy grain and a bright orange grain, with an S-shaped gap between them.",
-    deep: { word: "Solid", text: "Engineering you can rely on and maintain" },
-    bright: { word: "Fast", text: "AI built into every step" },
   },
   name: {
     chapter: "Our name",
@@ -148,15 +145,12 @@ const zh: Copy = {
       "奇斯科技是台北的產品工作室，為客戶打造 App、網站與 SaaS 產品。從第一張草圖到正式上線，上線之後也接得住，整段都由我們負責。AI 早已融入我們的工作方式，所以快；對品質的堅持，讓交出去的東西穩。",
     ctaPrimary: "聊聊你的專案",
     ctaSecondary: "看看案例",
-    markLabel: "奇斯科技的標誌：一粒深藍米粒與一粒亮橘米粒，兩粒之間的留白形成一道 S。",
-    deep: { word: "穩", text: "靠得住、接得下去的工程底子" },
-    bright: { word: "快", text: "AI 融入每一個環節" },
   },
   name: {
     chapter: "我們的名字",
     qi: "獨特的可能",
     si: "此刻此地",
-    title: "奇斯，就是獨特的可能在此刻發生的地方。",
+    title: "奇斯，|就是獨特的可能|在此刻發生的地方。",
     body: [
       "你帶來可能性：只有你的事業才想得到的那個產品。我們讓它在此刻成真：設計、開發、上線，並且穩穩地跑下去。",
       "我們的標誌是兩粒米。米是最小、也最日常的養分，一粒一粒累積；兩粒之間的留白，正好是「奇斯」的 S。我們做事也是這樣：踏實地，一次一次穩穩上線。",
@@ -190,7 +184,7 @@ const zh: Copy = {
         "什麼時候可以上線的最後決定",
       ],
     },
-    ownTitle: "我們負責到底的事",
+    ownTitle: "我們負責|到底的事",
     own: [
       { name: "問題", text: "先搞清楚要做什麼、為什麼要做，才打開編輯器。" },
       { name: "體驗", text: "流程、狀態、例外情境、空白畫面、錯誤訊息，每一處都經過設計。" },
@@ -201,7 +195,7 @@ const zh: Copy = {
   },
   build: {
     chapter: "服務",
-    title: "問題需要什麼，我們就做什麼。",
+    title: "問題需要什麼，|我們就做什麼。",
     intro: "我們不綁定任何技術。先弄懂問題，再決定用什麼技術，這個順序不會反過來。",
     stackA: "沒有固定的技術棧。",
     stackB: "適合的技術是答案，不是起點。",
@@ -215,8 +209,8 @@ const zh: Copy = {
     ],
   },
   contact: {
-    title: "手上有需要上線的產品嗎？",
-    body: "跟我們說說你在做什麼、現在進展到哪裡，還有你心中的「完成」長什麼樣子。接下來，交給我們。",
+    title: "手上有|需要上線的產品嗎？",
+    body: "跟我們說說你在做什麼、現在進展到哪裡，還有你心中「完成」的樣子。接下來，交給我們。",
     copy: "複製信箱",
     copied: "已複製",
     copyLabel: "複製電子郵件地址",
@@ -226,7 +220,7 @@ const zh: Copy = {
     city: "台灣台北",
   },
   notFound: {
-    title: "這一頁沒有上線。",
+    title: "這一頁|沒有上線。",
     body: "網址可能打錯了，或是頁面已經搬家。",
     back: "回到首頁",
   },

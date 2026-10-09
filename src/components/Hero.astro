@@ -1,6 +1,7 @@
 ---
 import { GRAIN_D } from "../brand";
 import { EMAIL, type Copy } from "../i18n/copy";
+import { md } from "../i18n/md";
 interface Props {
   t: Copy;
 }
@@ -9,55 +10,39 @@ const h = t.hero;
 ---
 
 <section class="hero on-navy" aria-labelledby="hero-title">
-  <div class="wrap hero-grid">
-    <div class="copy">
-      <h1 id="hero-title" class="t-display hero-title">
-        {h.title.map((line) => <span class="line">{line}</span>)}
-      </h1>
-      <p class="t-lede hero-lede">{h.lede}</p>
-      <div class="ctas">
-        <a class="btn btn-orange" href={`mailto:${EMAIL}`}>{h.ctaPrimary}</a>
-        <a class="btn btn-line" href="#work">{h.ctaSecondary}</a>
-      </div>
-    </div>
+  <!-- The two grains at monumental scale: they glide together on load and the gap between them closes into the S. -->
+  <svg class="grains" data-grains viewBox="100 60 380 330" aria-hidden="true" focusable="false">
+    <g class="g g-deep"><path d={GRAIN_D} fill="#FFFFFF"></path></g>
+    <g class="g g-bright"><path d={GRAIN_D} fill="#F46A2A" transform="rotate(180 289 225)"></path></g>
+  </svg>
 
-    <figure class="mark" data-mark aria-label={h.markLabel}>
-      <svg class="grains" viewBox="100 60 380 330" aria-hidden="true">
-        <g class="g g-deep"><path d={GRAIN_D} fill="#FFFFFF"></path></g>
-        <g class="g g-bright"><path d={GRAIN_D} fill="#F46A2A" transform="rotate(180 289 225)"></path></g>
-      </svg>
-      <figcaption class="notes">
-        <span class="note note-deep">
-          <svg class="nb" viewBox="110 140 190 250" aria-hidden="true"><path d={GRAIN_D} fill="#FFFFFF"></path></svg>
-          <b>{h.deep.word}</b>
-          <span>{h.deep.text}</span>
-        </span>
-        <span class="note note-bright">
-          <svg class="nb" viewBox="110 140 190 250" aria-hidden="true"><path d={GRAIN_D} fill="#F46A2A" transform="rotate(180 205 265)"></path></svg>
-          <b>{h.bright.word}</b>
-          <span>{h.bright.text}</span>
-        </span>
-      </figcaption>
-    </figure>
+  <div class="wrap copy">
+    <h1 id="hero-title" class="t-display hero-title">
+      {h.title.map((line) => <span class="line" set:html={md(line)} />)}
+    </h1>
+    <p class="t-lede hero-lede">{h.lede}</p>
+    <div class="ctas">
+      <a class="btn btn-orange" href={`mailto:${EMAIL}`}>{h.ctaPrimary}</a>
+      <a class="btn btn-line" href="#work">{h.ctaSecondary}</a>
+    </div>
   </div>
 </section>
 
 <script>
-  const mark = document.querySelector<HTMLElement>("[data-mark]");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (mark && !reduce && matchMedia("(pointer: fine)").matches) {
-    // The two grains lean apart/together with the pointer, so the S-shaped gap breathes.
+  const svg = document.querySelector<SVGElement>("[data-grains]");
+  if (svg && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(pointer: fine)").matches) {
+    // The grains lean apart and together with the pointer, so the S-shaped gap breathes.
     let tx = 0,
       ty = 0,
       x = 0,
       y = 0,
       raf = 0;
     const tick = () => {
-      x += (tx - x) * 0.08;
-      y += (ty - y) * 0.08;
-      mark.style.setProperty("--px", x.toFixed(3));
-      mark.style.setProperty("--py", y.toFixed(3));
-      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(tick) : 0;
+      x += (tx - x) * 0.07;
+      y += (ty - y) * 0.07;
+      svg.style.setProperty("--px", x.toFixed(4));
+      svg.style.setProperty("--py", y.toFixed(4));
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.0005 ? requestAnimationFrame(tick) : 0;
     };
     addEventListener(
       "pointermove",
@@ -75,31 +60,68 @@ const h = t.hero;
   .hero {
     position: relative;
     overflow: hidden;
-    padding-block: clamp(56px, 8vw, 120px) clamp(72px, 9vw, 136px);
-  }
-  .hero-grid {
+    isolation: isolate;
+    min-height: clamp(560px, calc(100svh - var(--header-h)), 900px);
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: clamp(32px, 5vw, 72px);
     align-items: center;
+    padding-block: clamp(64px, 9vw, 128px);
+  }
+  .grains {
+    --px: 0;
+    --py: 0;
+    position: absolute;
+    z-index: -1;
+    height: 104%;
+    width: auto;
+    right: -19%;
+    bottom: -20%;
+    overflow: visible;
+  }
+  .g {
+    transform-box: view-box;
+    transform-origin: 290px 225px;
+  }
+  .g-deep {
+    transform: translate(calc(var(--px) * -10px), calc(var(--py) * -8px));
+  }
+  .g-bright {
+    transform: translate(calc(var(--px) * 10px), calc(var(--py) * 8px));
+  }
+  :global(.js) .g-deep {
+    animation: close-deep 1.6s 0.1s var(--ease) backwards;
+  }
+  :global(.js) .g-bright {
+    animation: close-bright 1.6s 0.1s var(--ease) backwards;
+  }
+  @keyframes close-deep {
+    from {
+      transform: translate(-60px, 40px) rotate(-5deg);
+    }
+  }
+  @keyframes close-bright {
+    from {
+      transform: translate(60px, -40px) rotate(-5deg);
+    }
+  }
+
+  .copy {
+    position: relative;
+  }
+  .hero-title {
+    max-width: 9.5em;
+  }
+  :root[data-lang="zh"] .hero-title {
+    max-width: 8em;
   }
   .hero-title .line {
     display: block;
-  }
-  @media (min-width: 620px) {
-    .hero-title .line {
-      white-space: nowrap;
-    }
-    :root[data-lang="zh"] .hero-title {
-      font-size: clamp(2.4rem, 0.6rem + 4.3vw, 5.2rem);
-    }
   }
   .hero-title .line:last-child {
     color: var(--orange);
   }
   .hero-lede {
     margin-top: clamp(24px, 3vw, 36px);
-    max-width: 34em;
+    max-width: 31em;
     color: var(--on-navy-2);
   }
   .ctas {
@@ -108,109 +130,54 @@ const h = t.hero;
     gap: 14px;
     margin-top: clamp(32px, 4vw, 48px);
   }
-
-  /* ---- the mark ---- */
-  .mark {
-    --px: 0;
-    --py: 0;
-    position: relative;
-    justify-self: center;
-    width: min(100%, 560px);
+  :global(.js) .copy > * {
+    animation: rise 0.9s var(--ease) backwards;
   }
-  .grains {
-    width: 100%;
-    height: auto;
-    overflow: visible;
+  :global(.js) .copy > :nth-child(2) {
+    animation-delay: 0.12s;
   }
-  .g {
-    transform-box: view-box;
-    transition: transform 0.2s linear;
+  :global(.js) .copy > :nth-child(3) {
+    animation-delay: 0.22s;
   }
-  .g-deep {
-    transform: translate(calc(var(--px) * -14px), calc(var(--py) * -10px));
-  }
-  .g-bright {
-    transform: translate(calc(var(--px) * 14px), calc(var(--py) * 10px));
-  }
-  :global(.js) .g-deep {
-    animation: in-deep 1.3s 0.15s var(--ease) backwards;
-  }
-  :global(.js) .g-bright {
-    animation: in-bright 1.3s 0.3s var(--ease) backwards;
-  }
-  @keyframes in-deep {
-    from {
-      transform: translate(-90px, 70px) rotate(-8deg);
-      opacity: 0;
-    }
-  }
-  @keyframes in-bright {
-    from {
-      transform: translate(90px, -70px) rotate(-8deg);
-      opacity: 0;
-    }
-  }
-  .notes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: clamp(16px, 2vw, 28px);
-    padding-top: 20px;
-    border-top: 1px solid var(--line-navy);
-  }
-  .note {
-    display: grid;
-    grid-template-columns: 16px 1fr;
-    gap: 2px 12px;
-    align-items: center;
-    font-size: 0.92rem;
-    line-height: 1.5;
-    color: var(--on-navy-2);
-  }
-  .note .nb {
-    width: 14px;
-    height: auto;
-    grid-row: span 2;
-    align-self: start;
-    margin-top: 5px;
-  }
-  .note b {
-    font-size: 1.15rem;
-    font-weight: 900;
-    color: var(--white);
-  }
-  .note-bright b {
-    color: var(--orange);
-  }
-  :global(.js) .note {
-    animation: note-in 0.8s 1.2s var(--ease) both;
-  }
-  :global(.js) .note-bright {
-    animation-delay: 1.35s;
-  }
-  @keyframes note-in {
+  @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(14px);
     }
   }
 
-  @media (max-width: 960px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-    }
-    .mark {
-      width: min(100%, 440px);
-      margin-top: 8px;
+  @media (max-width: 1320px) {
+    .grains {
+      right: -27%;
+      height: 96%;
     }
   }
-  @media (max-width: 520px) {
-    .note {
-      font-size: 0.82rem;
-      max-width: 11em;
+  @media (max-width: 1100px) and (min-width: 701px) {
+    .grains {
+      height: auto;
+      width: 50vw;
+      right: -17vw;
+      top: 50%;
+      bottom: auto;
+      translate: 0 -50%;
     }
-    .note b {
-      font-size: 0.95rem;
+    .copy {
+      padding-right: 34vw;
+    }
+  }
+  @media (max-width: 700px) {
+    .hero {
+      min-height: 0;
+      align-items: start;
+      padding-top: min(64vw, 380px);
+      padding-bottom: 64px;
+    }
+    .grains {
+      height: auto;
+      width: min(92vw, 520px);
+      top: max(-14vw, -90px);
+      right: max(-22vw, -150px);
+      bottom: auto;
     }
   }
 </style>

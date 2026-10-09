@@ -3,6 +3,7 @@
 // Here: bright = what AI speeds up, deep = what we own and answer for.
 import Chapter from "./Chapter.astro";
 import Grain from "./Grain.astro";
+import { md } from "../i18n/md";
 import type { Copy } from "../i18n/copy";
 interface Props {
   t: Copy;
@@ -15,13 +16,12 @@ const p = t.process;
   <div class="wrap">
     <Chapter label={p.chapter} />
     <div class="head">
-      <h2 id="process-title" class="t-h2">{p.title}</h2>
+      <h2 id="process-title" class="t-h2" set:html={md(p.title)} />
       <p class="t-lede muted">{p.intro}</p>
     </div>
 
     <div class="pair">
       <article class="panel bright">
-        <Grain class="crop" color="var(--white)" flip />
         <p class="word">{p.bright.word}</p>
         <h3 class="t-h3">{p.bright.title}</h3>
         <ul>{p.bright.items.map((x) => <li>{x}</li>)}</ul>
@@ -35,7 +35,7 @@ const p = t.process;
     </div>
 
     <div class="own">
-      <h3 class="t-h3 own-title">{p.ownTitle}</h3>
+      <h3 class="t-h3 own-title" set:html={md(p.ownTitle)} />
       <ol class="own-list">
         {
           p.own.map((o) => (
@@ -90,12 +90,9 @@ const p = t.process;
     width: clamp(180px, 22vw, 300px);
     right: -6%;
     top: -18%;
-    opacity: 0.9;
     pointer-events: none;
   }
-  .bright :global(.crop) {
-    opacity: 0.22;
-  }
+
   .word {
     position: relative;
     font-weight: 900;
@@ -148,7 +145,8 @@ const p = t.process;
   .own-list :global(.bullet) {
     width: 13px;
     height: auto;
-    align-self: center;
+    align-self: start;
+    margin-top: 0.42em;
   }
   .own-list h4 {
     font-weight: 700;
