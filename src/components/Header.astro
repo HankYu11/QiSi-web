@@ -57,7 +57,7 @@ const navHref = (h: string) => `${home}${h}`;
 <style>
   .hdr {
     position: sticky;
-    top: 0;
+    top: env(safe-area-inset-top, 0px);
     z-index: 50;
     background: color-mix(in srgb, var(--paper) 86%, transparent);
     backdrop-filter: blur(14px) saturate(1.2);
