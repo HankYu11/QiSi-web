@@ -26,6 +26,10 @@ const [user, domain] = EMAIL.split("@");
         <span class="copy-txt" aria-live="polite">{c.copy}</span>
       </button>
     </div>
+    <address class="addr">
+      <span class="addr-k">{c.addressLabel}</span>
+      <span>{t.address}</span>
+    </address>
   </div>
 </section>
 
@@ -34,7 +38,7 @@ const [user, domain] = EMAIL.split("@");
     <Logo kind="horizontal" variant="reverse" class="f-logo" label={f.legal} />
     <div class="f-meta">
       <p>{f.legal}</p>
-      <p class="muted">{f.city}</p>
+      <p class="muted">{t.address}</p>
     </div>
     <ul class="f-links">
       <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
@@ -130,6 +134,19 @@ const [user, domain] = EMAIL.split("@");
   }
   .copy {
     min-height: 48px;
+  }
+  .addr {
+    margin-top: clamp(28px, 3vw, 40px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-style: normal;
+    font-size: 1.05rem;
+    color: var(--on-navy-2);
+  }
+  .addr-k {
+    font-weight: 700;
+    color: var(--white);
   }
 
   .foot {

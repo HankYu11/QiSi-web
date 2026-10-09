@@ -8,14 +8,23 @@ interface Props {
   title?: string;
   description?: string;
   alternates?: boolean;
+  /** this page's path in each language (defaults to the home page) */
+  paths?: { zh: string; en: string };
 }
-const { t, lang, title = t.meta.title, description = t.meta.description, alternates = true } = Astro.props;
+const {
+  t,
+  lang,
+  title = t.meta.title,
+  description = t.meta.description,
+  alternates = true,
+  paths = { zh: "/", en: "/en/" },
+} = Astro.props;
 const site = Astro.site;
 const abs = (p: string) => (site ? new URL(p, site).href : p);
 ---
 
 <!doctype html>
-<html lang={t.htmlLang} data-lang={lang}>
+<html lang={t.htmlLang} data-lang={lang} data-en={paths.en}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -30,10 +39,10 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     {
       alternates && (
         <>
-          <link rel="canonical" href={abs(t.path)} />
-          <link rel="alternate" hreflang="zh-Hant-TW" href={abs("/")} />
-          <link rel="alternate" hreflang="en" href={abs("/en/")} />
-          <link rel="alternate" hreflang="x-default" href={abs("/")} />
+          <link rel="canonical" href={abs(paths[lang])} />
+          <link rel="alternate" hreflang="zh-Hant-TW" href={abs(paths.zh)} />
+          <link rel="alternate" hreflang="en" href={abs(paths.en)} />
+          <link rel="alternate" hreflang="x-default" href={abs(paths.zh)} />
         </>
       )
     }
@@ -43,6 +52,24 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     <meta property="og:image" content={abs(lang === "zh" ? "/og-zh.png" : "/og-en.png")} />
     <meta property="og:locale" content={lang === "zh" ? "zh_TW" : "en_US"} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "QI SI TECHNOLOGY LIMITED",
+        alternateName: "奇斯科技",
+        email: "support@handyla.co",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "開封街2段39號1樓",
+          addressLocality: "萬華區",
+          addressRegion: "台北市",
+          addressCountry: "TW",
+        },
+      })}
+    />
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -50,7 +77,7 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
       lang === "zh" && alternates && (
         <script is:inline>
           try {
-            if (localStorage.getItem("qisi-lang") === "en") location.replace("/en/" + location.hash);
+            if (localStorage.getItem("qisi-lang") === "en") location.replace(document.documentElement.dataset.en + location.hash);
           } catch (e) {}
         </script>
       )

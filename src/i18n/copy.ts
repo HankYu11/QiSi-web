@@ -36,16 +36,6 @@ const en = {
     ctaPrimary: "Start a project",
     ctaSecondary: "See our work",
   },
-  name: {
-    chapter: "Our name",
-    qi: "a unique possibility",
-    si: "here and now",
-    title: "QI SI is where a unique possibility happens, here and now.",
-    body: [
-      "You bring the possibility: the product only your business could think of. We make it real now, designed, built, launched and kept running.",
-      "Our mark is two grains of rice, the smallest everyday nourishment, one grain added to the next. The gap between them draws the S of QI SI. That’s how we like to work: steadily, one solid release after another.",
-    ],
-  },
   work: workEn,
   process: {
     chapter: "How we work",
@@ -104,11 +94,14 @@ const en = {
     copy: "Copy email",
     copied: "Copied",
     copyLabel: "Copy email address",
+    addressLabel: "Studio",
+    emailLabel: "Email",
   },
   footer: {
     legal: "QI SI TECHNOLOGY LIMITED",
     city: "Taipei, Taiwan",
   },
+  address: "1F, No. 39, Sec. 2, Kaifeng St., Wanhua Dist., Taipei City, Taiwan",
   notFound: {
     title: "This page didn’t ship.",
     body: "The address may be mistyped, or the page has moved.",
@@ -145,16 +138,6 @@ const zh: Copy = {
       "奇斯科技是台北的產品工作室，為客戶打造 App、網站與 SaaS 產品。從第一張草圖到正式上線，上線之後也接得住，整段都由我們負責。AI 早已融入我們的工作方式，所以快；對品質的堅持，讓交出去的東西穩。",
     ctaPrimary: "聊聊你的專案",
     ctaSecondary: "看看案例",
-  },
-  name: {
-    chapter: "我們的名字",
-    qi: "獨特的可能",
-    si: "此刻此地",
-    title: "奇斯，|就是獨特的可能|在此刻發生的地方。",
-    body: [
-      "你帶來可能性：只有你的事業才想得到的那個產品。我們讓它在此刻成真：設計、開發、上線，並且穩穩地跑下去。",
-      "我們的標誌是兩粒米。米是最小、也最日常的養分，一粒一粒累積；兩粒之間的留白，正好是「奇斯」的 S。我們做事也是這樣：踏實地，一次一次穩穩上線。",
-    ],
   },
   work: workZh,
   process: {
@@ -214,11 +197,14 @@ const zh: Copy = {
     copy: "複製信箱",
     copied: "已複製",
     copyLabel: "複製電子郵件地址",
+    addressLabel: "地址",
+    emailLabel: "信箱",
   },
   footer: {
     legal: "奇斯科技 QI SI TECHNOLOGY LIMITED",
     city: "台灣台北",
   },
+  address: "台北市萬華區開封街2段39號1樓",
   notFound: {
     title: "這一頁|沒有上線。",
     body: "網址可能打錯了，或是頁面已經搬家。",

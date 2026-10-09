@@ -25,7 +25,7 @@ const b = t.build;
       <ul class="list">
         {
           b.items.map((it, i) => (
-            <li>
+            <li data-spotlight>
               <Grain class="g" color={i % 2 ? "var(--orange)" : "var(--navy-2)"} flip={i % 2 === 1} />
               <h3 class="t-h3">{it.name}</h3>
               <p class="muted">{it.body}</p>

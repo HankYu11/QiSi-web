@@ -6,6 +6,20 @@
 // Public terminology: 鮮款款 / FreshToGo, 鮮款包, 敲碗, 碗友. Never: surplus / waste / mystery-box wording.
 
 export const workEn = {
+  path: "/en/work/freshtogo/",
+  meta: {
+    title: "FreshToGo case study — QI SI",
+    description:
+      "How QI SI designed and built FreshToGo end to end: an iOS and Android app, backend, admin dashboard and marketing website for independent food shops in Taiwan.",
+  },
+  teaser: {
+    chapter: "Selected work",
+    lede: "An app that helps people walk into the good shop they pass every day. We built every part of it: the iOS and Android app, the backend, the admin dashboard and the website.",
+    cta: "Read the case study",
+  },
+  back: "Back to QI SI",
+  nextTitle: "Your product could be next.",
+  nextCta: "Start a project",
   chapter: "Case study",
   name: "FreshToGo",
   nameAlt: "鮮款款",
@@ -120,6 +134,19 @@ export const workEn = {
 export type Work = typeof workEn;
 
 export const workZh: Work = {
+  path: "/work/freshtogo/",
+  meta: {
+    title: "鮮款款案例｜奇斯科技 QI SI",
+    description: "奇斯科技如何從頭到尾打造鮮款款：iOS 與 Android App、後端、管理後台與品牌官網，一個為台灣在地小店做的產品。",
+  },
+  teaser: {
+    chapter: "精選案例",
+    lede: "一個讓人走進每天路過那間好店的 App。iOS 與 Android App、後端、管理後台到官網，每一個部分都是我們打造的。",
+    cta: "看完整案例",
+  },
+  back: "回到奇斯科技",
+  nextTitle: "下一個上線的，|可以是你的產品。",
+  nextCta: "聊聊你的專案",
   chapter: "案例",
   name: "鮮款款",
   nameAlt: "FreshToGo",

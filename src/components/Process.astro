@@ -21,12 +21,12 @@ const p = t.process;
     </div>
 
     <div class="pair">
-      <article class="panel bright">
+      <article class="panel bright" data-spotlight>
         <p class="word">{p.bright.word}</p>
         <h3 class="t-h3">{p.bright.title}</h3>
         <ul>{p.bright.items.map((x) => <li>{x}</li>)}</ul>
       </article>
-      <article class="panel deep on-navy">
+      <article class="panel deep on-navy" data-spotlight>
         <Grain class="crop" color="var(--navy-2)" />
         <p class="word">{p.deep.word}</p>
         <h3 class="t-h3">{p.deep.title}</h3>

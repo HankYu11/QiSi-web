@@ -1,0 +1,52 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Work from "./Work.astro";
+import Contact from "./Contact.astro";
+import Effects from "./Effects.astro";
+import { md } from "../i18n/md";
+import { copy, type Lang } from "../i18n/copy";
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = copy[lang];
+const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
+---
+
+<Base t={t} lang={lang} title={t.work.meta.title} description={t.work.meta.description} paths={paths}>
+  <a class="skip" href="#main">{t.a11y.skip}</a>
+  <Header t={t} lang={lang} paths={paths} />
+  <main id="main">
+    <Work t={t} lang={lang} />
+    <section class="next on-navy" aria-labelledby="next-title">
+      <div class="wrap next-in">
+        <h2 id="next-title" class="t-h2" set:html={md(t.work.nextTitle)} />
+        <a class="btn btn-orange" href="#contact" data-magnetic>{t.work.nextCta}</a>
+      </div>
+    </section>
+  </main>
+  <Contact t={t} lang={lang} />
+  <Effects />
+</Base>
+
+<script>
+  import "../scripts/site";
+</script>
+
+<style>
+  .next {
+    padding-block: clamp(64px, 8vw, 112px);
+    border-bottom: 1px solid var(--line-navy);
+  }
+  .next-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 48px;
+  }
+  .next h2 {
+    max-width: 16em;
+  }
+</style>

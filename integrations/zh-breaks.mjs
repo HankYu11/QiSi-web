@@ -86,11 +86,15 @@ export default function zhBreaks() {
     name: "zh-breaks",
     hooks: {
       "astro:build:done": ({ dir }) => {
+        // every zh page: all HTML outside /en/
         const root = fileURLToPath(dir);
-        for (const f of ["index.html", "404.html"]) {
-          const p = path.join(root, f);
-          if (fs.existsSync(p)) fs.writeFileSync(p, processHtml(fs.readFileSync(p, "utf8")));
-        }
+        const walk = (d) =>
+          fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+            const p = path.join(d, e.name);
+            if (e.isDirectory()) return p === path.join(root, "en") ? [] : walk(p);
+            return e.name.endsWith(".html") ? [p] : [];
+          });
+        for (const p of walk(root)) fs.writeFileSync(p, processHtml(fs.readFileSync(p, "utf8")));
       },
     },
   };

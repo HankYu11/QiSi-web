@@ -10,6 +10,7 @@ const h = t.hero;
 ---
 
 <section class="hero on-navy" aria-labelledby="hero-title">
+  <canvas class="field" data-field aria-hidden="true"></canvas>
   <!-- The two grains at monumental scale: they glide together on load and the gap between them closes into the S. -->
   <svg class="grains" data-grains viewBox="100 60 380 330" aria-hidden="true" focusable="false">
     <g class="g g-deep"><path d={GRAIN_D} fill="#FFFFFF"></path></g>
@@ -29,6 +30,113 @@ const h = t.hero;
 </section>
 
 <script>
+  import { GRAIN_D as D } from "../brand";
+
+  /* ---- grain field: tiny rice grains drift on a flow field and part around the pointer ---- */
+  const canvas = document.querySelector<HTMLCanvasElement>("[data-field]")!;
+  const hero = canvas.parentElement!;
+  const ctx = canvas.getContext("2d")!;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const grain = new Path2D(D);
+  type P = { x: number; y: number; s: number; a: number; v: number; c: string; spin: number };
+  let ps: P[] = [];
+  let W = 0,
+    H = 0,
+    dpr = 1,
+    mx = -9999,
+    my = -9999,
+    running = false,
+    t = 0;
+  const resize = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = hero.clientWidth;
+    H = hero.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const n = Math.min(170, Math.round((W * H) / 8500));
+    ps = Array.from({ length: n }, (_, i) => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      s: 5 + Math.random() * 9,
+      a: Math.random() * Math.PI * 2,
+      v: 0.25 + Math.random() * 0.55,
+      c: i % 17 === 0 ? "rgba(244,106,42,0.85)" : `rgba(255,255,255,${(0.06 + Math.random() * 0.12).toFixed(3)})`,
+      spin: (Math.random() - 0.5) * 0.01,
+    }));
+    if (still) draw();
+  };
+  const draw = (trail = false) => {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (trail) {
+      // fade the last frame instead of clearing it: grains leave short light trails
+      ctx.fillStyle = "rgba(27, 40, 80, 0.22)";
+      ctx.fillRect(0, 0, W, H);
+    } else ctx.clearRect(0, 0, W, H);
+    for (const p of ps) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      const k = p.s / 240;
+      ctx.scale(k, k);
+      ctx.translate(-205, -265);
+      ctx.fillStyle = p.c;
+      ctx.fill(grain);
+      ctx.restore();
+    }
+  };
+  const step = () => {
+    if (!running) return;
+    t += 1;
+    for (const p of ps) {
+      // a slowly shifting flow field: grains stream diagonally, like the mark's direction
+      const f = Math.sin(p.x * 0.0021 + t * 0.004) * Math.cos(p.y * 0.0018 - t * 0.003);
+      const dir = -0.75 + f * 1.1;
+      p.x += Math.cos(dir) * p.v;
+      p.y += Math.sin(dir) * p.v;
+      p.a += p.spin + f * 0.002;
+      const dx = p.x - mx,
+        dy = p.y - my,
+        d2 = dx * dx + dy * dy;
+      if (d2 < 160 * 160) {
+        const push = (1 - Math.sqrt(d2) / 160) * 2.2;
+        const d = Math.sqrt(d2) || 1;
+        p.x += (dx / d) * push;
+        p.y += (dy / d) * push;
+      }
+      if (p.x < -20) p.x = W + 20;
+      if (p.x > W + 20) p.x = -20;
+      if (p.y < -20) p.y = H + 20;
+      if (p.y > H + 20) p.y = -20;
+    }
+    draw(true);
+    requestAnimationFrame(step);
+  };
+  resize();
+  new ResizeObserver(resize).observe(hero);
+  if (!still) {
+    const io = new IntersectionObserver(([e]) => {
+      const vis = e.isIntersecting && !document.hidden;
+      if (vis && !running) {
+        running = true;
+        requestAnimationFrame(step);
+      } else if (!vis) running = false;
+    });
+    io.observe(hero);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) running = false;
+      else if (hero.getBoundingClientRect().bottom > 0 && !running) {
+        running = true;
+        requestAnimationFrame(step);
+      }
+    });
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+    });
+    hero.addEventListener("pointerleave", () => (mx = my = -9999));
+  }
+
   const svg = document.querySelector<SVGElement>("[data-grains]");
   if (svg && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(pointer: fine)").matches) {
     // The grains lean apart and together with the pointer, so the S-shaped gap breathes.
@@ -65,6 +173,14 @@ const h = t.hero;
     display: grid;
     align-items: center;
     padding-block: clamp(64px, 9vw, 128px);
+  }
+  .field {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
   .grains {
     --px: 0;

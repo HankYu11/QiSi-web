@@ -4,8 +4,10 @@ import type { Copy, Lang } from "../i18n/copy";
 interface Props {
   t: Copy;
   lang: Lang;
+  /** this page's path in each language, for the language switch */
+  paths?: { zh: string; en: string };
 }
-const { t, lang } = Astro.props;
+const { t, lang, paths = { zh: "/", en: "/en/" } } = Astro.props;
 ---
 
 <header class="hdr" data-hdr>
@@ -29,10 +31,10 @@ const { t, lang } = Astro.props;
 
     <div class="tools">
       <div class="lang" role="group" aria-label={t.a11y.langSwitch}>
-        <a href="/" lang="zh-Hant-TW" hreflang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh"
+        <a href={paths.zh} lang="zh-Hant-TW" hreflang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh"
           >中文</a
         >
-        <a href="/en/" lang="en" hreflang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">EN</a>
+        <a href={paths.en} lang="en" hreflang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">EN</a>
       </div>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu>
         <span class="sr-only">{t.a11y.menu}</span>

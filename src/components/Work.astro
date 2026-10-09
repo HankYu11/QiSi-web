@@ -25,14 +25,15 @@ const w = t.work;
 const cardW = [320, 480, 640];
 ---
 
-<section class="work" id="work" aria-labelledby="work-title">
+<article class="work" aria-labelledby="work-title">
   <!-- Opening -->
   <div class="wrap opening">
+    <a class="back" href={t.path}>← {w.back}</a>
     <Chapter label={w.chapter} />
-    <h2 id="work-title" class="title">
+    <h1 id="work-title" class="title">
       <span class="name" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{w.name}</span>
       <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{w.nameAlt}</span>
-    </h2>
+    </h1>
     <div class="op-grid">
       <div class="op-main">
         <p class="tagline keep" set:html={md(w.tagline)} />
@@ -64,7 +65,7 @@ const cardW = [320, 480, 640];
   <!-- Showcase stage: real screens -->
   <div class="wrap">
     <figure class="showcase on-navy">
-      <div class="sc-stage">
+      <div class="sc-stage" data-tilt>
         <div class="browser sc-browser">
           <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
           <Image src={webHero} widths={[720, 1080, 1440]} sizes="(min-width: 1100px) 760px, 80vw" alt={w.alts.webHero} />
@@ -81,7 +82,7 @@ const cardW = [320, 480, 640];
 
   <!-- How it works: sticky stage on desktop, inline visuals on phones -->
   <div class="wrap flow" data-flow>
-    <h3 class="t-h2 flow-title" set:html={md(w.flowTitle)} />
+    <h2 class="t-h2 flow-title" set:html={md(w.flowTitle)} />
     <div class="flow-grid">
       <div class="flow-stage">
         <div class="stage-sticky">
@@ -166,7 +167,7 @@ const cardW = [320, 480, 640];
           w.flow.map((f, i) => (
             <li class="fstep" data-step={f.id}>
               <span class="fn" aria-hidden="true">{i + 1}</span>
-              <h4 class="t-h3">{f.title}</h4>
+              <h3 class="t-h3">{f.title}</h3>
               <p class="muted">{f.body}</p>
               {f.id === "discover" && (
                 <div class="inline-vis" aria-hidden="true">
@@ -237,16 +238,16 @@ const cardW = [320, 480, 640];
   <div class="surfaces-wrap">
     <div class="wrap">
       <div class="sf-head">
-        <h3 class="t-h2" set:html={md(w.surfacesTitle)} />
+        <h2 class="t-h2" set:html={md(w.surfacesTitle)} />
         <p class="t-lede muted">{w.surfacesIntro}</p>
       </div>
       <div class="bento">
         {
           w.surfaces.map((s) => (
-            <article class={`tile tile-${s.id}`}>
+            <article class={`tile tile-${s.id}`} data-spotlight>
               <div class="tile-text">
                 <p class="tech">{s.tech}</p>
-                <h4 class="t-h3">{s.name}</h4>
+                <h3 class="t-h3">{s.name}</h3>
                 <p class="muted">{s.body}</p>
               </div>
               {s.id === "app" && (
@@ -300,14 +301,14 @@ const cardW = [320, 480, 640];
       </div>
       <div class="proof on-navy">
         <div class="proof-head">
-          <h3 class="t-h2" set:html={md(w.proofTitle)} />
+          <h2 class="t-h2" set:html={md(w.proofTitle)} />
           <p class="muted">{w.proofIntro}</p>
         </div>
         <ul class="proof-list">
           {
             w.proof.map((p) => (
               <li>
-                <span class="pn">{p.n}</span>
+                <span class="pn" data-count={p.n.replace(",", "")}>{p.n}</span>
                 <span class="pl">{p.label}</span>
               </li>
             ))
@@ -318,7 +319,7 @@ const cardW = [320, 480, 640];
       <p class="note"><Grain class="ng" color="var(--navy-2)" />{w.note}</p>
     </div>
   </div>
-</section>
+</article>
 
 <script>
   const flow = document.querySelector<HTMLElement>("[data-flow]");
@@ -340,7 +341,20 @@ const cardW = [320, 480, 640];
 <style>
   .work {
     background: var(--cream);
-    padding-top: clamp(72px, 8vw, 120px);
+    padding-top: clamp(32px, 4vw, 56px);
+  }
+  .back {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: clamp(20px, 3vw, 40px);
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--slate);
+  }
+  .back:hover {
+    color: var(--navy);
   }
   .op-grid {
     display: grid;
@@ -987,12 +1001,12 @@ const cardW = [320, 480, 640];
     gap: 12px;
     padding-block: 24px;
   }
-  .fstep h4 {
+  .fstep h3 {
     color: var(--slate);
     transition: color 0.3s;
   }
-  :global(html:not(.js)) .fstep h4,
-  .fstep.on h4 {
+  :global(html:not(.js)) .fstep h3,
+  .fstep.on h3 {
     color: var(--navy);
   }
   .fn {
@@ -1275,7 +1289,7 @@ const cardW = [320, 480, 640];
     }
   }
   @media (max-width: 820px) {
-    .fstep h4 {
+    .fstep h3 {
       color: var(--navy);
     }
     .inline-vis {
