@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 const KEEP = [
   "奇斯科技", "奇斯", "鮮款款", "鮮款包", "此刻此地", "獨特的可能", "敲碗", "碗友", "狩獵模式",
   "取餐碼", "取餐", "外送", "上架", "上線", "能用", "訊息", "畫面", "付款", "店家", "後台", "官網",
-  "在地", "現做", "預約", "核銷", "推播", "合約測試", "首購限定", "限購一次", "熟客限定", "所有人", "待聯繫", "洽談中", "已上架", "工作室", "程式碼",
+  "在地", "現做", "交出去", "送上", "該有", "載入", "第一版", "每一次", "更快", "好價格", "規格裡", "沒上線", "穩穩地", "消費者端", "店家端", "來聊", "串接", "看得到", "預約", "核銷", "推播", "合約測試", "首購限定", "限購一次", "熟客限定", "所有人", "待聯繫", "洽談中", "已上架", "工作室", "程式碼",
 ];
 const CJK = /[㐀-鿿豈-﫿]/;
 const NO_BREAK_BEFORE = /^[，。、；：！？」』）〉》％%,.;:!?)\]…·]/;
@@ -57,7 +57,7 @@ export function processHtml(html) {
   const tokens = html.slice(bodyAt).split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[^>]+>)/);
   // Skip SVG text, and headings / .keep elements, which carry hand-placed breaks (| in the copy).
   let svg = 0;
-  const manual = []; // stack of tag names opened with manual breaks
+  const manual = []; // [tag, depth] for elements with manual breaks; depth counts nested same-name tags
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i];
     if (!t) continue;
@@ -67,11 +67,12 @@ export function processHtml(html) {
       if (open) {
         const tag = open[1].toLowerCase();
         if (tag === "svg") svg++;
-        else if (/^h[1-3]$/.test(tag) || /class="[^"]*\bkeep\b/.test(t)) manual.push(tag);
+        else if (manual.length && manual[manual.length - 1][0] === tag && !t.endsWith("/>")) manual[manual.length - 1][1]++;
+        else if (/^h[1-3]$/.test(tag) || /class="[^"]*\bkeep\b/.test(t)) manual.push([tag, 1]);
       } else if (close) {
         const tag = close[1].toLowerCase();
         if (tag === "svg") svg--;
-        else if (manual.length && manual[manual.length - 1] === tag) manual.pop();
+        else if (manual.length && manual[manual.length - 1][0] === tag && --manual[manual.length - 1][1] === 0) manual.pop();
       }
       continue;
     }

@@ -12,8 +12,7 @@ import cardBento from "../assets/ftg/card-bento-feed.png";
 import cardDessertFeed from "../assets/ftg/card-dessert-feed.png";
 import cardDessertHunt from "../assets/ftg/card-dessert-hunt.png";
 import cardBakeryHunt from "../assets/ftg/card-bakery-hunt.png";
-import phoneHunt from "../assets/ftg/phone-hunt.png";
-import phoneElig from "../assets/ftg/phone-merchant-eligibility.png";
+import cardXiaoguanHunt from "../assets/ftg/card-xiaoguan-hunt.png";
 import webKnock from "../assets/ftg/web-knock-mobile.png";
 import { APP_STORE_URL, GOOGLE_PLAY_URL } from "../brand";
 
@@ -94,13 +93,30 @@ const cardW = [320, 480, 640];
             <Image class="fan f3" src={cardBakery} widths={cardW} sizes="300px" alt="" />
           </div>
           <div class="vis vis-hunt" data-vis="hunt">
-            <Image class="shot" src={phoneHunt} widths={[300, 456]} sizes="300px" alt="" />
+            <div class="deck">
+              <Image class="dk d2" src={cardXiaoguanHunt} widths={cardW} sizes="260px" alt="" />
+              <Image class="dk d1" src={cardBakeryHunt} widths={cardW} sizes="260px" alt="" />
+              <Image class="dk d0" src={cardDessertHunt} widths={cardW} sizes="260px" alt="" />
+            </div>
             <span class="swipe s-up">↑ {w.hunt.up}</span>
             <span class="swipe s-left">← {w.hunt.left}</span>
             <span class="swipe s-right">{w.hunt.right} →</span>
           </div>
           <div class="vis vis-eligibility" data-vis="eligibility">
-            <Image class="shot" src={phoneElig} widths={[300, 548]} sizes="300px" alt="" />
+            <div class="elig-form">
+              <p class="ef-title">{w.eligForm.title}</p>
+              <ul>
+                {
+                  w.eligForm.options.map((o, i) => (
+                    <li class={i === 1 ? "sel" : undefined}>
+                      <span class="radio" />
+                      {o}
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="ef-preview"><span class="spin" />{w.eligForm.preview}</p>
+            </div>
           </div>
           <div class="vis vis-pickup" data-vis="pickup">
             <div class="ticket">
@@ -159,12 +175,22 @@ const cardW = [320, 480, 640];
               )}
               {f.id === "hunt" && (
                 <div class="inline-vis" aria-hidden="true">
-                  <Image class="phone-shot" src={phoneHunt} widths={[300, 456]} sizes="60vw" alt="" />
+                  <Image src={cardDessertHunt} widths={cardW} sizes="60vw" alt="" />
                 </div>
               )}
               {f.id === "eligibility" && (
                 <div class="inline-vis" aria-hidden="true">
-                  <Image class="phone-shot" src={phoneElig} widths={[300, 548]} sizes="60vw" alt="" />
+                  <div class="elig-form">
+                    <p class="ef-title">{w.eligForm.title}</p>
+                    <ul>
+                      {w.eligForm.options.map((o, i) => (
+                        <li class={i === 1 ? "sel" : undefined}>
+                          <span class="radio" />
+                          {o}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
               {f.id === "pickup" && (
@@ -243,7 +269,7 @@ const cardW = [320, 480, 640];
                 </svg>
               )}
               {s.id === "admin" && (
-                <div class="tile-vis browser small">
+                <div class="tile-vis browser small admin-shot">
                   <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
                   <Image src={adminAttention} widths={[700, 1170]} sizes="(min-width: 1360px) 1170px, 92vw" alt={w.alts.admin} />
                   <p class="tag">{w.sampleNote}</p>
@@ -668,7 +694,7 @@ const cardW = [320, 480, 640];
     box-shadow: 0 6px 16px -8px #1b285055;
   }
   .s-up {
-    top: 7%;
+    top: 34px;
   }
   .s-left {
     left: 5%;
@@ -766,6 +792,114 @@ const cardW = [320, 480, 640];
   .track li:not(:first-child) {
     color: var(--slate);
   }
+  .deck {
+    position: relative;
+    width: min(56%, 300px);
+  }
+  .deck :global(.dk) {
+    width: 100%;
+    filter: drop-shadow(0 18px 24px #1b285033);
+  }
+  .deck :global(.d1),
+  .deck :global(.d2) {
+    position: absolute;
+    inset: 0;
+  }
+  .deck :global(.d1) {
+    transform: translateY(14px) scale(0.95);
+    opacity: 0.9;
+  }
+  .deck :global(.d2) {
+    transform: translateY(28px) scale(0.9);
+    opacity: 0.7;
+  }
+  .flow[data-active="hunt"] .deck :global(.d0) {
+    animation: swipe 4.4s 0.6s var(--ease) infinite;
+    position: relative;
+  }
+  @keyframes swipe {
+    0%,
+    18% {
+      transform: none;
+    }
+    32%,
+    42% {
+      transform: translate(-18%, 0) rotate(-7deg);
+    }
+    56%,
+    66% {
+      transform: translate(18%, 0) rotate(7deg);
+    }
+    80%,
+    100% {
+      transform: none;
+    }
+  }
+  .elig-form {
+    width: min(92%, 400px);
+    padding: 22px 22px 18px;
+    border-radius: 20px;
+    background: var(--white);
+    box-shadow: 0 24px 40px -24px #1b285055;
+  }
+  .ef-title {
+    font-weight: 900;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  .elig-form ul {
+    display: grid;
+  }
+  .elig-form li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-block: 11px;
+    border-top: 1px solid var(--line);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .elig-form li.sel {
+    font-weight: 700;
+  }
+  .radio {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    border-radius: 50%;
+    border: 2px solid var(--slate);
+  }
+  .sel .radio {
+    border: 6px solid var(--orange);
+  }
+  .ef-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--mist);
+    font-size: 0.85rem;
+    color: var(--slate);
+  }
+  .spin {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    border-top-color: var(--navy);
+  }
+  .flow[data-active="eligibility"] .spin {
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      rotate: 1turn;
+    }
+  }
   .ticket {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -796,7 +930,7 @@ const cardW = [320, 480, 640];
   .inline-steps {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 8px;
   }
   .t-steps li,
@@ -1090,7 +1224,7 @@ const cardW = [320, 480, 640];
   .note {
     margin-top: 28px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     color: var(--slate);
     font-size: 0.95rem;
@@ -1099,8 +1233,18 @@ const cardW = [320, 480, 640];
     width: 12px;
     height: auto;
     flex: none;
+    margin-top: 0.45em;
   }
 
+  @media (max-width: 700px) {
+    .admin-shot {
+      overflow: hidden;
+    }
+    .admin-shot :global(img) {
+      width: 230%;
+      max-width: none;
+    }
+  }
   @media (max-width: 1000px) {
     .op-grid,
     .sf-head {
@@ -1132,6 +1276,9 @@ const cardW = [320, 480, 640];
       overflow: hidden;
     }
     .inline-vis .ticket {
+      width: 100%;
+    }
+    .inline-vis .elig-form {
       width: 100%;
     }
     .flow-grid {

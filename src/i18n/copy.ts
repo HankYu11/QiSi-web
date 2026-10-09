@@ -51,7 +51,7 @@ const en = {
     chapter: "How we work",
     title: "One deep, one bright.",
     intro:
-      "In our mark, the deep grain stands for reliable technology and the bright one for warm, energetic innovation. That’s how we work: new ideas reached fast, with AI in our daily work, on a foundation of engineering we answer for. You need both.",
+      "In our mark, the deep grain stands for reliable technology and the bright one for warm, energetic innovation. That’s how we work: AI gets us to new ideas fast, and the engineering underneath is ours to answer for. You need both.",
     bright: {
       word: "Fast",
       title: "Where AI speeds us up",
@@ -209,7 +209,7 @@ const zh: Copy = {
     ],
   },
   contact: {
-    title: "手上有|需要上線的產品嗎？",
+    title: "手上有|需要上線的|產品嗎？",
     body: "跟我們說說你在做什麼、現在進展到哪裡，還有你心中「完成」的樣子。接下來，交給我們。",
     copy: "複製信箱",
     copied: "已複製",

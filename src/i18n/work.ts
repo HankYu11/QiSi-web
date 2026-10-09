@@ -23,7 +23,7 @@ export const workEn = {
   ],
   stageCaption: "Real screens from the FreshToGo website and app. Shops, prices and counts are sample data.",
   flowTitle: "How a FreshToGo bag works",
-  flowCaption: "Screens from the FreshToGo app, its marketing material and website; the pickup step is an illustration. Shops and prices are sample data.",
+  flowCaption: "Real FreshToGo app cards and website; the “who can buy” and pickup steps are illustrations using the app’s own wording. Shops and prices are sample data.",
   flow: [
     {
       id: "discover",
@@ -52,13 +52,23 @@ export const workEn = {
     },
   ],
   eligibility: ["First purchase only", "One per person", "Regulars only", "Everyone"],
+  eligForm: {
+    title: "Who can buy",
+    options: [
+      "Everyone can see it",
+      "Only people buying from you for the first time can see it",
+      "Each person can buy this one only once",
+      "Only regulars who have bought from you 3 or more times can see it",
+    ],
+    preview: "Working out how many people can see it right now…",
+  },
   proofTitle: "Built to keep running",
   proofIntro:
     "Shipping is the start. FreshToGo is engineered so it can keep changing safely, by us or by whoever comes next.",
   proof: [
     { n: "1,241", label: "automated tests in the shared app code, plus contract tests that keep the app’s data models matched to the API spec" },
     { n: "34", label: "end-to-end flows that drive the real app on Android and iOS, for shoppers and shops" },
-    { n: "117", label: "API routes in one OpenAPI spec; each surface generates its types from it, and CI fails when they fall behind" },
+    { n: "117", label: "API paths in an OpenAPI spec: the website and admin generate their types from it, the app is checked against it by a contract test, and CI fails on drift" },
     { n: "2", label: "store pipelines: Google Play from CI, and iOS through fastlane to TestFlight" },
   ],
   proofNote: "Counted in the FreshToGo repositories in October 2026.",
@@ -103,7 +113,7 @@ export const workEn = {
     admin: "The FreshToGo admin dashboard: a queue of items needing attention, such as merchant applications and unread feedback.",
   },
   hunt: { up: "Reserve", left: "Skip", right: "Keep for later" },
-  arch: { apps: "iOS · Android", admin: "Admin", web: "Website", spec: "OpenAPI · 117 routes", run: "Google Cloud Run" },
+  arch: { apps: "iOS · Android", admin: "Admin", web: "Website", spec: "OpenAPI · 117 paths", run: "Google Cloud Run" },
   note: "Kotlin Multiplatform and Ktor were the right tools for FreshToGo. The next product gets its own answer.",
 };
 
@@ -121,13 +131,13 @@ export const workZh: Work = {
     "鮮款款是為台灣在地小店打造的 App。店家把當天現做的麵包、甜點、便當或滷味配成一份「鮮款包」，內容打開才知道，價格比平常划算。大家在 App 裡預約，再到店取餐、付款。整個產品，從前到後都是我們自己做的。",
   facts: [
     { k: "我們打造", v: "iOS 與 Android App、後端、管理後台、品牌官網" },
-    { k: "App 內容", v: "消費者端與店家端，41 個畫面，同一套程式碼" },
+    { k: "App 內容", v: "消費者端與店家端，41 個畫面，同一套程式碼" },
     { k: "版本", v: "1.5 版，持續更新中" },
     { k: "首發區域", v: "新北板橋，捷運新埔站周邊" },
   ],
   stageCaption: "畫面取自鮮款款官網與 App 實際介面；店家、價格與數字為示意資料。",
   flowTitle: "一份鮮款包，|怎麼運作",
-  flowCaption: "畫面取自鮮款款 App、宣傳素材與官網，取餐流程為示意圖；店家與價格為示意資料。",
+  flowCaption: "畫面取自鮮款款 App 實際卡片與官網；「誰可以買」與取餐流程為示意圖，文字取自 App。店家與價格為示意資料。",
   flow: [
     {
       id: "discover",
@@ -156,12 +166,17 @@ export const workZh: Work = {
     },
   ],
   eligibility: ["首購限定", "限購一次", "熟客限定", "所有人"],
+  eligForm: {
+    title: "誰可以買",
+    options: ["所有人都看得到", "只有第一次買你家的人看得到", "同一款每個人只能買一次", "只有買過你家 3 次以上的熟客看得到"],
+    preview: "正在算現在有多少人看得到…",
+  },
   proofTitle: "上線之後，|還要跑得久",
   proofIntro: "上線只是開始。鮮款款從一開始就為了能持續、安全地改下去而設計，不管之後是我們，還是其他團隊接手。",
   proof: [
     { n: "1,241", label: "個自動化測試涵蓋 App 共用程式碼，另有合約測試，讓資料模型始終對齊 API 規格" },
     { n: "34", label: "條端對端測試流程，實際操作 Android 與 iOS 上的 App，消費者端、店家端都測" },
-    { n: "117", label: "條 API 路徑寫在同一份 OpenAPI 規格裡；各端都從它產生型別，一旦落後，CI 就會擋下" },
+    { n: "117", label: "條 API 路徑寫在 OpenAPI 規格裡：官網與後台由它產生型別，App 用合約測試對齊，一有落差 CI 就擋下" },
     { n: "2", label: "條上架流程：Google Play 由 CI 自動發布，iOS 透過 fastlane 送上 TestFlight" },
   ],
   proofNote: "數字為 2026 年 10 月於鮮款款程式庫中實際統計。",
