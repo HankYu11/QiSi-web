@@ -14,7 +14,7 @@ const en = {
   meta: {
     title: "QI SI — Product studio in Taipei",
     description:
-      "QI SI TECHNOLOGY is a product studio in Taipei. We design and build mobile apps, websites and SaaS products for clients, and stay responsible for them from the first sketch to the live release.",
+      "QI SI TECHNOLOGY is a product studio in Taipei. We design and build mobile apps, websites and SaaS products that work for our clients and for the people they serve, and stay responsible for them from the first sketch to the live release.",
   },
   a11y: {
     skip: "Skip to content",
@@ -32,9 +32,16 @@ const en = {
   hero: {
     title: ["Where rare ideas", "go live."],
     lede:
-      "QI SI is a product studio in Taipei. We design and build mobile apps, websites and SaaS products for clients, and we’re responsible for them from the first sketch to the live release and after. AI is built into how we work, so we move fast. Our standards keep what we ship solid.",
+      "QI SI is a product studio in Taipei, building apps, websites and SaaS for you and the people you serve. Fast, because AI is built into how we work. Solid, because we answer for every line we ship.",
     ctaPrimary: "Start a project",
     ctaSecondary: "See our work",
+  },
+  // Pinned, scroll-driven statement under the hero. {…} and […] mark the two phrases that stay
+  // on screen when the rest of the sentence scatters: what the client asks for, and what their users need.
+  statement: {
+    label: "What we believe",
+    text: "We build {what you asked for}. Then we go one step further and build [what your users need], because a product only works when it works for the people who pay for it and the people who use it.",
+    end: "Built for both.",
   },
   work: workEn,
   process: {
@@ -57,7 +64,7 @@ const en = {
       word: "Solid",
       title: "What stays with us",
       items: [
-        "Deciding what’s worth building",
+        "Deciding what’s worth building, for you and your users",
         "Architecture, and the trade-offs behind it",
         "Every interaction and every detail of the interface",
         "Reviewing every line before it ships",
@@ -66,7 +73,7 @@ const en = {
     },
     ownTitle: "What we take responsibility for",
     own: [
-      { name: "The problem", text: "We work out what needs to exist, and why, before anyone opens an editor." },
+      { name: "Both sides", text: "What you need, and what the people who’ll use it need. We work out both, and why, before anyone opens an editor." },
       { name: "The experience", text: "Flows, states, edge cases, empty screens and error messages, all designed on purpose." },
       { name: "The engineering", text: "An architecture that fits, code that’s tested and reviewed, and a stack chosen for this product." },
       { name: "The launch", text: "Store releases, servers, the unglamorous last mile. It isn’t finished until it’s live." },
@@ -76,7 +83,7 @@ const en = {
   build: {
     chapter: "Services",
     title: "Whatever the problem calls for.",
-    intro: "We’re technology-agnostic. We choose the stack after we understand the problem, never before.",
+    intro: "We’re technology-agnostic. We choose the stack after we understand the problem and the people it’s for, never before.",
     stackA: "No house stack.",
     stackB: "The right one is an answer, not a starting point.",
     items: [
@@ -90,7 +97,7 @@ const en = {
   },
   contact: {
     title: "Have something that needs to go live?",
-    body: "Tell us what you’re building, where it stands today, and what “done” looks like to you. We’ll take it from there.",
+    body: "Tell us what you’re building, who it’s for, where it stands today, and what “done” looks like to you. We’ll take it from there.",
     copy: "Copy email",
     copied: "Copied",
     copyLabel: "Copy email address",
@@ -117,7 +124,7 @@ const zh: Copy = {
   meta: {
     title: "奇斯科技 QI SI｜台北的產品工作室",
     description:
-      "奇斯科技是台北的產品工作室，為客戶設計、開發 App、網站與 SaaS 產品，從第一張草圖一路負責到正式上線。",
+      "奇斯科技是台北的產品工作室，為客戶設計、開發 App、網站與 SaaS 產品。不只做出客戶要的，也做出客戶的使用者需要的，從第一張草圖一路負責到正式上線。",
   },
   a11y: {
     skip: "跳到主要內容",
@@ -135,9 +142,14 @@ const zh: Copy = {
   hero: {
     title: ["讓獨特的可能，", "在這裡上線。"],
     lede:
-      "奇斯科技是台北的產品工作室，為客戶打造 App、網站與 SaaS 產品。從第一張草圖到正式上線，上線之後也接得住，整段都由我們負責。AI 早已融入我們的工作方式，所以快；對品質的堅持，讓交出去的東西穩。",
+      "奇斯科技是台北的產品工作室，為你、也為你要服務的人，打造 App、網站與 SaaS 產品。AI 讓我們快，親自把關讓成品穩，從草圖到上線之後全程負責。",
     ctaPrimary: "聊聊你的專案",
     ctaSecondary: "看看案例",
+  },
+  statement: {
+    label: "我們相信",
+    text: "我們做出{你要的}，再多走一步，做出[你的使用者需要的]。因為一個產品，要讓委託的你和每天使用它的人都滿意，才算真的做成。",
+    end: "兩邊都要顧到。",
   },
   work: workZh,
   process: {
@@ -160,7 +172,7 @@ const zh: Copy = {
       word: "穩",
       title: "始終由我們把關的",
       items: [
-        "判斷什麼值得做",
+        "判斷什麼值得做，對你、也對你的使用者",
         "架構設計，以及背後的取捨",
         "每一個互動、介面上的每個細節",
         "每一行程式碼上線前的審查",
@@ -169,7 +181,7 @@ const zh: Copy = {
     },
     ownTitle: "我們負責|到底的事",
     own: [
-      { name: "問題", text: "先搞清楚要做什麼、為什麼要做，才打開編輯器。" },
+      { name: "兩邊", text: "你需要什麼，實際使用的人又需要什麼。兩邊都搞清楚、知道為什麼，才打開編輯器。" },
       { name: "體驗", text: "流程、狀態、例外情境、空白畫面、錯誤訊息，每一處都經過設計。" },
       { name: "工程", text: "架構貼合問題，程式碼經過測試與審查，技術選型是為了這個產品。" },
       { name: "上線", text: "上架審核、伺服器，那些不起眼卻最關鍵的最後一哩路。沒上線，就不算完成。" },
@@ -179,7 +191,7 @@ const zh: Copy = {
   build: {
     chapter: "服務",
     title: "問題需要什麼，|我們就做什麼。",
-    intro: "我們不綁定任何技術。先弄懂問題，再決定用什麼技術，這個順序不會反過來。",
+    intro: "我們不綁定任何技術。先弄懂問題、弄懂要用它的人，再決定用什麼技術，這個順序不會反過來。",
     stackA: "沒有固定的技術棧。",
     stackB: "適合的技術是答案，不是起點。",
     items: [
@@ -193,7 +205,7 @@ const zh: Copy = {
   },
   contact: {
     title: "手上有|需要上線的|產品嗎？",
-    body: "跟我們說說你在做什麼、現在進展到哪裡，還有你心中「完成」的樣子。接下來，交給我們。",
+    body: "跟我們說說你在做什麼、做給誰用、現在進展到哪裡，還有你心中「完成」的樣子。接下來，交給我們。",
     copy: "複製信箱",
     copied: "已複製",
     copyLabel: "複製電子郵件地址",

@@ -1,0 +1,277 @@
+---
+// The core message, pinned and driven by scroll (after epic.net's "about" block):
+// the sentence fills in word by word, then everything except the two key phrases scatters,
+// and the two phrases (what you ask for / what your users need) settle together in the centre.
+// Without JS or with reduced motion it is a plain, complete paragraph.
+import Chapter from "./Chapter.astro";
+import { words } from "../../integrations/zh-breaks.mjs";
+import type { Copy, Lang } from "../i18n/copy";
+interface Props {
+  t: Copy;
+  lang: Lang;
+}
+const { t, lang } = Astro.props;
+const s = t.statement;
+const zh = lang === "zh";
+
+type Tok = { t: string; key?: "a" | "b"; gap: boolean };
+const PUNCT = /^[，。、；：！？」』）,.;:!?)]/;
+const toks: Tok[] = [];
+let gapNext = false;
+for (const part of s.text.split(/(\{[^}]+\}|\[[^\]]+\])/)) {
+  if (!part) continue;
+  const key = part[0] === "{" ? "a" : part[0] === "[" ? "b" : undefined;
+  if (key) {
+    toks.push({ t: part.slice(1, -1), key, gap: zh || gapNext });
+    gapNext = false;
+  } else if (zh) {
+    for (const w of words(part)) if (w.trim()) toks.push({ t: w, gap: !PUNCT.test(w) });
+  } else {
+    for (const m of part.matchAll(/(\s*)(\S+)/g)) toks.push({ t: m[2], gap: m[1].length > 0 || (toks.length > 0 && gapNext && m.index === 0) });
+    gapNext = /\s$/.test(part);
+  }
+}
+// Group each token with the punctuation that follows it, so lines only break between groups.
+const groups: Tok[][] = [];
+for (const tk of toks) {
+  if (tk.gap || !groups.length) groups.push([tk]);
+  else groups[groups.length - 1].push(tk);
+}
+// Built as a string: JSX formatting would put spaces between the zh words.
+const esc = (x: string) => x.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const html = groups
+  .map((g) => '<span class="grp">' + g.map((tk) => '<span class="w' + (tk.key ? " key key-" + tk.key : "") + '">' + esc(tk.t) + "</span>").join("") + "</span>")
+  .join(zh ? "<wbr>" : " ");
+---
+
+<section class="statement" data-statement aria-label={s.label}>
+  <div class="pin">
+    <div class="wrap inner">
+      <Chapter label={s.label} />
+      <p class="say keep" set:html={html} />
+      <p class="end">{s.end}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const sec = document.querySelector<HTMLElement>("[data-statement]");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (sec && !reduce) {
+    sec.classList.add("is-scrub");
+    const say = sec.querySelector<HTMLElement>(".say")!;
+    const end = sec.querySelector<HTMLElement>(".end")!;
+    const label = sec.querySelector<HTMLElement>(".chapter")!;
+    const all = [...sec.querySelectorAll<HTMLElement>(".w")];
+    const keys = all.filter((w) => w.classList.contains("key"));
+    const n = all.length;
+
+    // deterministic pseudo-random per word, so the scatter looks the same on every visit
+    const rnd = (i: number, k: number) => {
+      const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453;
+      return x - Math.floor(x);
+    };
+    type Fly = { dx: number; dy: number; sway: number; rot: number; delay: number };
+    let fly: Fly[] = [];
+    let home: { x: number; y: number }[] = [];
+    let endY = 0;
+    let big = 1;
+
+    const measure = () => {
+      const W = say.clientWidth;
+      const H = innerHeight;
+      const cx = W / 2;
+      const cy = say.clientHeight / 2;
+      const lh = keys[0]?.offsetHeight ?? 40;
+      fly = all.map((w, i) => {
+        // words fly up and outward, away from the centre line, on a gentle curve;
+        // the first line goes straight up past the chapter label
+        const side = w.offsetLeft + w.offsetWidth / 2 < cx ? -1 : 1;
+        const top = w.offsetTop < lh * 0.5;
+        return {
+          dx: side * (top ? 0.1 + rnd(i, 1) * 0.3 : 0.25 + rnd(i, 1) * 0.55) * W,
+          dy: -(top ? 1 + rnd(i, 2) * 0.4 : 0.45 + rnd(i, 2) * 0.6) * H,
+          sway: (rnd(i, 3) - 0.5) * 160,
+          rot: (rnd(i, 4) - 0.5) * 80,
+          delay: rnd(i, 5) * 0.08 + (i / n) * 0.04,
+        };
+      });
+      // the payoff: both phrases scaled to fill the stage width, stacked, with the closing line under them
+      const widest = Math.max(...keys.map((k) => k.offsetWidth), 1);
+      big = Math.max(1, Math.min(innerWidth < 640 ? 1.9 : 2.4, (innerWidth * 0.84) / widest));
+      const kh = lh * big;
+      const gap = kh * 0.12;
+      const endH = end.offsetHeight;
+      const span = 2 * kh + gap + kh * 0.25 + endH; // phrase, phrase, space, closing line
+      const top = cy - span / 2 + (H < 700 ? 0 : -H * 0.03);
+      home = keys.map((k, j) => ({
+        x: cx - (k.offsetLeft + k.offsetWidth / 2),
+        y: top + kh / 2 + j * (kh + gap) - (k.offsetTop + k.offsetHeight / 2),
+      }));
+      // .end shares the grid cell with .say and is centred on it
+      endY = top + 2 * kh + gap + kh * 0.25 + endH / 2 - cy;
+    };
+
+    const clamp = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+    const out = (v: number) => 1 - Math.pow(1 - v, 3);
+    const inOut = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2);
+    // words fill from 石墨灰 (readable on 米白 from the start) to navy, or 文字橘 for the second key phrase
+    const FROM = [91, 100, 120];
+    const NAVY = [27, 40, 80];
+    const ORANGE = [201, 78, 24];
+    const mix = (to: number[], k: number) => `rgb(${FROM.map((f, i) => Math.round(f + (to[i] - f) * k)).join(",")})`;
+
+    const update = () => {
+      const r = sec.getBoundingClientRect();
+      const span = r.height - innerHeight;
+      const p = span > 0 ? clamp(-r.top / span) : 1;
+      const read = clamp(p / 0.36); // 0 → 0.36 the sentence fills in; it then holds whole until 0.52
+      let ki = 0;
+      all.forEach((w, i) => {
+        const on = out(clamp((read - (i / n) * 0.85) / 0.15));
+        let x = 0,
+          y = (1 - on) * 10,
+          rot = 0,
+          sc = 1,
+          o = 1;
+        const isKey = w.classList.contains("key");
+        if (isKey) {
+          const k = inOut(clamp((p - 0.64) / 0.22)); // 0.64 → 0.86: the key phrases move through empty space
+          const h = home[ki];
+          if (h) {
+            x = h.x * k;
+            y += h.y * k;
+          }
+          sc = 1 + (big - 1) * k;
+        } else {
+          const f = fly[i];
+          const s = clamp((p - 0.52 - f.delay) / 0.18); // 0.52 → 0.8: the rest scatters
+          const e = s * s;
+          x = f.dx * e + Math.sin(s * Math.PI) * f.sway;
+          y += f.dy * e;
+          rot = f.rot * e;
+          o = 1 - clamp(s / 0.35); // gone early in the flight, so nothing crosses the key phrases
+        }
+        w.style.color = mix(isKey && ki++ === 1 ? ORANGE : NAVY, on);
+        w.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) rotate(${rot.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+        w.style.opacity = o.toFixed(3);
+      });
+      // the label makes room for the enlarged phrases (left alone before then, so the site's reveal can run)
+      label.style.opacity = p > 0.55 ? (1 - clamp((p - 0.62) / 0.08)).toFixed(3) : "";
+      const e = out(clamp((p - 0.82) / 0.12));
+      end.style.opacity = e.toFixed(3);
+      end.style.transform = `translateY(${(endY + (1 - e) * 20).toFixed(1)}px)`;
+    };
+
+    let queued = false;
+    const tick = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    };
+    let active = false;
+    new IntersectionObserver(([e]) => {
+      active = e.isIntersecting;
+      if (active) tick();
+    }).observe(sec);
+    addEventListener("scroll", () => active && tick(), { passive: true });
+    addEventListener("resize", () => {
+      measure();
+      tick();
+    });
+    document.fonts?.ready.then(() => {
+      measure();
+      tick();
+    });
+    measure();
+    update();
+    addEventListener("beforeprint", () => sec.classList.remove("is-scrub"));
+  }
+</script>
+
+<style>
+  .statement {
+    background: var(--cream);
+    padding-block: clamp(80px, 10vw, 140px);
+  }
+  .inner {
+    display: grid;
+    justify-items: center;
+    gap: clamp(28px, 3.5vw, 44px);
+    text-align: center;
+  }
+  .say {
+    position: relative;
+    max-width: 23em;
+    font-size: clamp(1.7rem, 1.05rem + 2.3vw, 3rem);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    color: var(--navy);
+  }
+  :global(:root[data-lang="zh"]) .say {
+    max-width: 17em;
+    font-size: clamp(1.65rem, 1rem + 2.1vw, 2.75rem);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+  .say :global(.key) {
+    font-weight: 900;
+  }
+  .say :global(.key-b) {
+    color: var(--orange-text);
+  }
+  .end {
+    font-weight: 900;
+    font-size: clamp(1.6rem, 1.1rem + 1.5vw, 2.5rem);
+    line-height: 1.2;
+    color: var(--navy);
+  }
+
+  /* scroll-driven version: tall track, sticky stage */
+  .statement.is-scrub {
+    height: 360vh;
+    padding: 0;
+  }
+  /* the next section starts right after the stage lets go; no extra dead air */
+  :global(.statement.is-scrub + .section) {
+    padding-top: clamp(40px, 5vw, 72px);
+  }
+  .is-scrub .pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+  }
+  .is-scrub .inner {
+    padding-top: calc(var(--header-h) * 0.5);
+  }
+  .is-scrub .say,
+  .is-scrub .end {
+    grid-area: 2 / 1;
+  }
+  .is-scrub .end {
+    align-self: center;
+    opacity: 0;
+  }
+  .is-scrub .say :global(.grp) {
+    white-space: nowrap;
+  }
+  .is-scrub .say :global(.w) {
+    display: inline-block;
+    color: var(--slate);
+    will-change: transform, opacity;
+    transform-origin: 50% 60%;
+  }
+  .is-scrub .say :global(.key) {
+    position: relative;
+    z-index: 2;
+    will-change: auto; /* a promoted layer would be rasterised small and blur when scaled up */
+  }
+</style>

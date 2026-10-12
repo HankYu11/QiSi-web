@@ -42,7 +42,7 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
     <div class="op-grid">
       <div class="op-main">
         <p class="tagline keep" set:html={md(c.tagline)} />
-        <p class="muted">{c.summary}</p>
+        <p class="muted" data-words>{c.summary}</p>
       </div>
       <dl class="facts">
         {
@@ -318,7 +318,7 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
       <div class="proof on-navy">
         <div class="proof-head">
           <h2 class="t-h2" set:html={md(c.proofTitle)} />
-          <p class="muted">{c.proofIntro}</p>
+          <p class="muted" data-words>{c.proofIntro}</p>
         </div>
         <ul class="proof-list">
           {

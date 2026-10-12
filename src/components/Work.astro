@@ -46,7 +46,7 @@ const cardW = [320, 480, 640];
     <div class="op-grid">
       <div class="op-main">
         <p class="tagline keep" set:html={md(w.tagline)} />
-        <p class="muted">{w.summary}</p>
+        <p class="muted" data-words>{w.summary}</p>
       </div>
       <dl class="facts">
         {
@@ -300,7 +300,7 @@ const cardW = [320, 480, 640];
       <div class="proof on-navy">
         <div class="proof-head">
           <h2 class="t-h2" set:html={md(w.proofTitle)} />
-          <p class="muted">{w.proofIntro}</p>
+          <p class="muted" data-words>{w.proofIntro}</p>
         </div>
         <ul class="proof-list">
           {
