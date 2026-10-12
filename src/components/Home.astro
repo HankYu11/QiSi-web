@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
 import Hero from "./Hero.astro";
+import Statement from "./Statement.astro";
 import WorkTeaser from "./WorkTeaser.astro";
 import Effects from "./Effects.astro";
 import Process from "./Process.astro";
@@ -20,6 +21,7 @@ const t = copy[lang];
   <Header t={t} lang={lang} />
   <main id="main">
     <Hero t={t} />
+    <Statement t={t} lang={lang} />
     <WorkTeaser t={t} lang={lang} />
     <Process t={t} />
     <Build t={t} />

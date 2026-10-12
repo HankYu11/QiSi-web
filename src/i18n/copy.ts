@@ -32,9 +32,16 @@ const en = {
   hero: {
     title: ["Where rare ideas", "go live."],
     lede:
-      "QI SI is a product studio in Taipei. We design and build mobile apps, websites and SaaS products, and we don’t stop at what you asked for: we build what your users need too, because a product only works when it works for both of you. AI is built into how we work, so we move fast. Our standards keep what we ship solid, from the first sketch to the live release and after.",
+      "QI SI is a product studio in Taipei. We design and build mobile apps, websites and SaaS products for you and for the people you serve, from the first sketch to the live release and after. AI is built into how we work, so we move fast. Our standards keep what we ship solid.",
     ctaPrimary: "Start a project",
     ctaSecondary: "See our work",
+  },
+  // Pinned, scroll-driven statement under the hero. {…} and […] mark the two phrases that stay
+  // on screen when the rest of the sentence scatters: what the client asks for, and what their users need.
+  statement: {
+    label: "What we believe",
+    text: "Most teams build {what you asked for} and stop there. We go one step further and also build [what your users need], because a product only works when it works for the people paying for it and for the people using it.",
+    end: "Built for both.",
   },
   work: workEn,
   process: {
@@ -135,9 +142,14 @@ const zh: Copy = {
   hero: {
     title: ["讓獨特的可能，", "在這裡上線。"],
     lede:
-      "奇斯科技是台北的產品工作室，打造 App、網站與 SaaS 產品。我們不只做出你要的，也做出你的使用者需要的：產品要你和使用者都覺得好用，才算真的做成。AI 早已融入我們的工作方式，所以快；對品質的堅持，讓交出去的東西穩。從第一張草圖到上線之後，整段都由我們負責。",
+      "奇斯科技是台北的產品工作室，為你、也為你要服務的人，打造 App、網站與 SaaS 產品。從第一張草圖到上線之後，整段都由我們負責。AI 早已融入我們的工作方式，所以快；對品質的堅持，讓交出去的東西穩。",
     ctaPrimary: "聊聊你的專案",
     ctaSecondary: "看看案例",
+  },
+  statement: {
+    label: "我們相信",
+    text: "多數團隊做出{你要的}，就停在那裡。我們多走一步，也做出[你的使用者需要的]。因為一個產品，要讓出錢的你和真正用它的人都滿意，才算真的做成。",
+    end: "兩邊，都要顧到。",
   },
   work: workZh,
   process: {

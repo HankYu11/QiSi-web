@@ -19,7 +19,7 @@ const NO_BREAK_BEFORE = /^[，。、；：！？」』）〉》％%,.;:!?)\]…�
 const NO_BREAK_AFTER = /[「『（〈《(\[]$/;
 const seg = new Intl.Segmenter("zh-Hant", { granularity: "word" });
 
-function words(text) {
+export function words(text) {
   const parts = [...seg.segment(text)].map((s) => s.segment);
   // glue dictionary phrases that ICU split (longest match first)
   const out = [];

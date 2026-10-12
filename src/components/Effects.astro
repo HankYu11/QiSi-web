@@ -19,11 +19,27 @@
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  /* ---- longer paragraphs come in word by word, in reading order ---- */
+  // Only plain text (plus the <wbr> word breaks the zh build step adds) is split; anything with other
+  // markup keeps the block reveal. The words stay one run of text, so copy/paste and screen readers are unaffected.
+  const splitWords = (el: HTMLElement) => {
+    if (!el.matches(".t-lede, [data-words]") || [...el.children].some((c) => c.tagName !== "WBR")) return false;
+    const zh = el.querySelector("wbr") !== null;
+    const parts = zh ? el.innerHTML.split(/<wbr>/i) : el.textContent!.trim().split(/\s+/);
+    if (parts.length < 6) return false;
+    const step = Math.min(28, 1100 / parts.length);
+    const esc = (w: string) => w.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    el.innerHTML = parts
+      .map((w, i) => `<span class="fx-w" style="transition-delay:${Math.round(i * step)}ms">${zh ? w : esc(w)}</span>`)
+      .join(zh ? "<wbr>" : " ");
+    return true;
+  };
+
   /* ---- reveals: headings, ledes and marked blocks rise out of a mask ---- */
-  const revealAll = () => document.querySelectorAll(".fx-reveal").forEach((el) => el.classList.add("fx-in"));
+  const revealAll = () => document.querySelectorAll(".fx-reveal, .fx-words").forEach((el) => el.classList.add("fx-in"));
   if (!reduce && "IntersectionObserver" in window) {
     const targets = document.querySelectorAll<HTMLElement>(
-      "main h2, main .t-lede, main .chapter, [data-reveal], .contact h2, .contact .t-lede",
+      "main h2, main .t-lede, main .chapter, [data-reveal], [data-words], .contact h2, .contact .t-lede",
     );
     const io = new IntersectionObserver(
       (es) =>
@@ -36,12 +52,12 @@
     );
     targets.forEach((el) => {
       if (el.closest(".hero")) return; // the hero has its own entrance
-      el.classList.add("fx-reveal");
+      el.classList.add(splitWords(el) ? "fx-words" : "fx-reveal");
       io.observe(el);
     });
     // failsafe: never leave content hidden if the observer doesn't report (or when printing)
     const sweep = () =>
-      document.querySelectorAll<HTMLElement>(".fx-reveal:not(.fx-in)").forEach((el) => {
+      document.querySelectorAll<HTMLElement>(".fx-reveal:not(.fx-in), .fx-words:not(.fx-in)").forEach((el) => {
         if (el.getBoundingClientRect().top < innerHeight) el.classList.add("fx-in");
       });
     setTimeout(sweep, 2500);
@@ -134,6 +150,22 @@
     opacity: 1;
     transform: none;
     clip-path: inset(-20% -10% -20% -10%);
+  }
+
+  .js .fx-words .fx-w {
+    display: inline-block;
+    opacity: 0.08;
+    filter: blur(6px);
+    transform: translateY(0.45em);
+    transition:
+      opacity 0.6s var(--ease),
+      filter 0.6s var(--ease),
+      transform 0.7s var(--ease);
+  }
+  .js .fx-words.fx-in .fx-w {
+    opacity: 1;
+    filter: none;
+    transform: none;
   }
 
   [data-spotlight] {
