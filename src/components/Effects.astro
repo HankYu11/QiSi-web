@@ -154,8 +154,8 @@
 
   .js .fx-words .fx-w {
     display: inline-block;
-    opacity: 0.08;
-    filter: blur(6px);
+    opacity: 0; /* fully hidden until revealed, like .fx-reveal */
+    filter: blur(3px);
     transform: translateY(0.45em);
     transition:
       opacity 0.6s var(--ease),

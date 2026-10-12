@@ -107,6 +107,7 @@ body {
 :root[data-lang="zh"] body {
   line-height: 1.8;
   letter-spacing: 0.015em;
+  text-spacing-trim: trim-start; /* no half-em gap before 「 at the start of a line */
 }
 h1,
 h2,
