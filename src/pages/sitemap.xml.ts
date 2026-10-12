@@ -4,6 +4,8 @@ import type { APIRoute } from "astro";
 const PAGES = [
   { zh: "/", en: "/en/" },
   { zh: "/work/freshtogo/", en: "/en/work/freshtogo/" },
+  { zh: "/work/court-booking/", en: "/en/work/court-booking/" },
+  { zh: "/work/scrap-cars/", en: "/en/work/scrap-cars/" },
 ];
 
 export const GET: APIRoute = ({ site }) => {

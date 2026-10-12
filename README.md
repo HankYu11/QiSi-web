@@ -4,6 +4,8 @@ Company website, live at **https://qisi.handyla.co**. Static site built with [As
 
 - `/` — Traditional Chinese (zh-TW), the default · `/en/` — English
 - `/work/freshtogo/` · `/en/work/freshtogo/` — FreshToGo case study
+- `/work/court-booking/` · `/en/work/court-booking/` — badminton court booking case study
+- `/work/scrap-cars/` · `/en/work/scrap-cars/` — scrap-car operations case study
 
 ## Develop
 
@@ -19,8 +21,9 @@ Canonical, hreflang, og:url and `sitemap.xml` use `https://qisi.handyla.co` (set
 
 - `src/i18n/copy.ts` — home and contact copy, both languages, same shape. `*word*` renders as emphasis, `|` as a manual heading break.
 - `src/i18n/work.ts` — FreshToGo case-study copy and facts.
-- `src/components/` — one component per section. `Home.astro` and `CasePage.astro` assemble the two page types; `Effects.astro` is the site-wide motion layer (all of it off under `prefers-reduced-motion`).
-- `src/assets/brand/` — official logo files from the CIS; `src/assets/ftg/` — FreshToGo screenshots and cards.
+- `src/i18n/cases.ts` — court-booking and scrap-car case-study copy and facts (both languages), plus the cross-link labels. Sources are listed at the top of the file; clients stay anonymous.
+- `src/components/` — one component per section. `Home.astro` and `CasePage.astro` assemble the two page types (`CasePage` renders `Work.astro` for FreshToGo and `CaseStudy.astro` for the other cases; `CaseCards.astro` links between them); `Effects.astro` is the site-wide motion layer (all of it off under `prefers-reduced-motion`).
+- `src/assets/brand/` — official logo files from the CIS; `src/assets/ftg/` — FreshToGo screenshots and cards; `src/assets/court/`, `src/assets/scrap/` — screens captured from the two systems running locally with sample data (venue name replaced, phone numbers masked).
 - `integrations/zh-breaks.mjs` — adds `<wbr>` between Chinese words at build time so lines never break mid-word. Add phrases that must stay together to its `KEEP` list.
 
 ## Fonts

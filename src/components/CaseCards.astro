@@ -1,0 +1,119 @@
+---
+// Link cards to case studies; `exclude` leaves out the page you are on ("freshtogo" or a case slug).
+import { Image } from "astro:assets";
+import type { Copy, Lang } from "../i18n/copy";
+import { cases, caseSlugs, moreWork } from "../i18n/cases";
+import ftgThumb from "../assets/ftg/web-home-hero.png";
+import courtThumb from "../assets/court/admin-schedule.png";
+import scrapThumb from "../assets/scrap/schedule.png";
+interface Props {
+  t: Copy;
+  lang: Lang;
+  exclude?: string;
+  heading?: string;
+}
+const { t, lang, exclude, heading } = Astro.props;
+const m = moreWork[lang];
+const thumbs = { freshtogo: ftgThumb, "court-booking": courtThumb, "scrap-cars": scrapThumb };
+const items = [
+  { id: "freshtogo", path: t.work.path, kind: m.ftgKind, name: t.work.name, lede: t.work.teaser.lede },
+  ...caseSlugs.map((s) => {
+    const c = cases[s][lang];
+    return { id: s, path: c.path, kind: c.card.kind, name: c.name, lede: c.card.lede };
+  }),
+].filter((i) => i.id !== exclude);
+---
+
+<div class="cc">
+  {heading && <h2 class="cc-title t-h3">{heading}</h2>}
+  <ul class={`cc-list n${items.length}`}>
+    {
+      items.map((i) => (
+        <li>
+          <a class="cc-card" href={i.path} data-spotlight>
+            <div class="cc-thumb" aria-hidden="true">
+              <Image src={thumbs[i.id as keyof typeof thumbs]} widths={[480, 720, 960]} sizes="(min-width: 900px) 600px, 92vw" alt="" />
+            </div>
+            <div class="cc-text">
+              <p class="cc-kind">{i.kind}</p>
+              <h3 class="t-h3">{i.name}</h3>
+              <p class="muted">{i.lede}</p>
+              <span class="cc-go">
+                {m.cta} <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .cc-title {
+    margin-bottom: 20px;
+  }
+  .cc-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .cc-card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  }
+  .cc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 50px -36px #1b285088;
+  }
+  .cc-thumb {
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    background: var(--mist);
+    padding: clamp(16px, 2vw, 28px) clamp(16px, 2vw, 28px) 0;
+  }
+  .cc-thumb :global(img) {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 18px 30px -20px #1b285066;
+    transition: transform 0.6s var(--ease);
+  }
+  .cc-card:hover .cc-thumb :global(img) {
+    transform: translateY(-6px);
+  }
+  .cc-text {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: clamp(22px, 2.4vw, 32px);
+  }
+  .cc-kind {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--orange-text);
+  }
+  .cc-go {
+    margin-top: 8px;
+    font-weight: 700;
+  }
+  .cc-go span {
+    display: inline-block;
+    transition: transform 0.2s var(--ease);
+  }
+  .cc-card:hover .cc-go span {
+    transform: translateX(4px);
+  }
+  @media (max-width: 820px) {
+    .cc-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

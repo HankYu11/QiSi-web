@@ -2,26 +2,36 @@
 import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
 import Work from "./Work.astro";
+import CaseStudy from "./CaseStudy.astro";
+import CaseCards from "./CaseCards.astro";
 import Contact from "./Contact.astro";
 import Effects from "./Effects.astro";
 import { copy, type Lang } from "../i18n/copy";
+import { cases, moreWork, type CaseSlug } from "../i18n/cases";
 interface Props {
   lang: Lang;
+  /** omit for FreshToGo */
+  slug?: CaseSlug;
 }
-const { lang } = Astro.props;
+const { lang, slug } = Astro.props;
 const t = copy[lang];
-const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
+const c = slug ? cases[slug][lang] : undefined;
+const paths = c ? { zh: cases[slug!].zh.path, en: cases[slug!].en.path } : { zh: copy.zh.work.path, en: copy.en.work.path };
+const meta = c ? c.meta : t.work.meta;
 ---
 
-<Base t={t} lang={lang} title={t.work.meta.title} description={t.work.meta.description} paths={paths}>
+<Base t={t} lang={lang} title={meta.title} description={meta.description} paths={paths}>
   <a class="skip" href="#main">{t.a11y.skip}</a>
   <Header t={t} lang={lang} paths={paths} />
   <main id="main">
-    <Work t={t} lang={lang} />
-    <nav class="next" aria-label={t.work.back}>
-      <div class="wrap next-in">
-        <a class="btn btn-line" href={t.path}>← {t.work.back}</a>
-        <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>
+    {c ? <CaseStudy t={t} lang={lang} c={c} /> : <Work t={t} lang={lang} />}
+    <nav class="next" aria-label={moreWork[lang].title}>
+      <div class="wrap">
+        <CaseCards t={t} lang={lang} exclude={slug ?? "freshtogo"} heading={moreWork[lang].title} />
+        <div class="next-in">
+          <a class="btn btn-line" href={t.path}>← {t.work.back}</a>
+          <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>
+        </div>
       </div>
     </nav>
   </main>
@@ -42,5 +52,6 @@ const paths = { zh: copy.zh.work.path, en: copy.en.work.path };
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    margin-top: clamp(32px, 4vw, 48px);
   }
 </style>
