@@ -4,7 +4,8 @@
 // - scrap: WaWaEMu/scrap_car_system @ 1ceafb2 — docs/PROPOSAL.md, docs/PRODUCT.md, PROGRESS.md, routes/, app/, tests/
 // Clients stay anonymous: no venue, company, person or LINE account names. Screens were captured from the real
 // apps running locally with sample data; the venue name in the court screens is replaced with sample text.
-// LINE illustrations reuse the apps' own wording (AdminNotificationService, LineIntakeService, ScheduleService).
+// LINE illustrations reuse the apps' own wording (AdminNotificationService, LineRichMenuRole). The scrap-car LINE screen
+// (assets/scrap/line-chat.jpg) is a real phone screenshot with the plate, contact name and phone number blurred.
 
 import type { Lang } from "./copy";
 
@@ -24,9 +25,7 @@ export type ScrapVisual = {
   kind: "scrap";
   sampleNote: string;
   illustration: string;
-  menu: string[];
   roles: { title: string; list: string[] };
-  chat: { ask: string; head: string; rows: string[] };
   stages: string[];
   elig: { title: string; states: string[]; plate: string };
   formula: { profit: string; resale: string; purchase: string; plate: string; driver: string };
@@ -80,17 +79,6 @@ const COURT_FLEX: CourtVisual["flex"] = {
   confirm: "確認核對",
   reject: "拒絕",
   supplement: "補件通知",
-};
-// The owner's rich menu, in order (LineRichMenuRole::Admin->buttons()).
-const SCRAP_MENU = ["新增車輛", "車輛資料", "今日任務", "車輛追蹤", "財務待補", "未開單", "使用說明", "異動書追蹤"];
-const SCRAP_CHAT: ScrapVisual["chat"] = {
-  ask: "今日行程",
-  head: "【今天已預約、待拖吊】",
-  rows: [
-    "・AKD-5520（商家：示意汽車 三重營業所／業務：林小姐）",
-    "・RBF-0921（商家：示意修車廠／業務：王先生）",
-    "・8823-QN（商家：示意汽車 內湖營業所／業務：張小姐）",
-  ],
 };
 
 const courtEn: Case = {
@@ -419,7 +407,7 @@ const scrapEn: Case = {
     { k: "Area", v: "Taipei and New Taipei" },
   ],
   stageCaption:
-    "Real screens from the back office (Chinese UI) and an illustration of the owner’s LINE chat and menu, using the system’s own wording. Plates, people and amounts are sample data.",
+    "Real screens (Chinese UI): the back office with sample data, and a tow notice in LINE from the live system, with personal details blurred.",
   beforeTitle: "What changed for the |business",
   beforeLabel: "Before",
   afterLabel: "Now",
@@ -523,18 +511,17 @@ const scrapEn: Case = {
     kind: "scrap",
     sampleNote: "Real interface, sample data.",
     illustration: "Illustration using the system’s own wording (Chinese UI).",
-    menu: SCRAP_MENU,
     roles: {
       title: "A LINE menu for each role",
       list: ["Owner", "Office assistant", "Salesperson", "Document courier", "Driver (tow)", "Driver (drive-in)", "Guest (not linked)"],
     },
-    chat: SCRAP_CHAT,
     stages: ["Collected", "Filed with scrapyard", "Deregistered", "Tax refund", "Recycling reward"],
     elig: { title: "Subsidy eligibility", states: ["Eligible", "Not eligible", "Not yet known"], plate: "No plate? Tracking number" },
     formula: { profit: "Profit", resale: "Resale price", purchase: "Purchase price", plate: "Plate fee", driver: "Driver fee" },
   },
   alts: {
     browser: "The vehicle list in the back office: plate, salesperson, model, purchase and resale amounts, subsidy eligibility and tow status.",
+    phone: "A tow notice in the company’s LINE account: a card with the pickup date, address and documents to collect, buttons to view photos and mark the car towed or delivered, and the role menu below.",
     schedule: "Today’s tow schedule: each car’s plate, salesperson, pickup location and status, with buttons to mark it towed or delivered.",
     progress: "The office progress board: each car’s current deregistration stage and paperwork status.",
   },
@@ -564,7 +551,7 @@ const scrapZh: Case = {
     { k: "版本", v: "2026 年 7 月上線，持續更新中" },
     { k: "服務區域", v: "雙北" },
   ],
-  stageCaption: "畫面取自後台實際介面，搭配業主 LINE 聊天室與選單示意圖，文字取自系統實際用語。車牌、人名與金額為示意資料。",
+  stageCaption: "畫面取自系統實際介面：後台為示意資料；LINE 畫面為實際使用中的拖吊通知，個人資料已模糊處理。",
   beforeTitle: "每天的工作，|變了什麼",
   beforeLabel: "以前",
   afterLabel: "現在",
@@ -668,15 +655,14 @@ const scrapZh: Case = {
     kind: "scrap",
     sampleNote: "實際介面，資料為示意。",
     illustration: "示意圖，文字取自系統實際用語。",
-    menu: SCRAP_MENU,
     roles: { title: "每種角色，各有一套 LINE 選單", list: ["業主", "行政", "業務", "送件大哥", "司機（拖車）", "司機（自行開）", "訪客（未綁定）"] },
-    chat: SCRAP_CHAT,
     stages: ["完成拖吊", "報廢廠開單", "車籍處理", "退稅", "環保獎勵金"],
     elig: { title: "補助資格", states: ["符合", "不符合", "尚未判定"], plate: "沒有車牌？追蹤編號" },
     formula: { profit: "利潤", resale: "賣車金額", purchase: "收購金額", plate: "牌照費", driver: "司機費" },
   },
   alts: {
     browser: "後台的車輛管理：車牌、業務、車型、收購與賣車金額、補助資格和拖吊狀態。",
+    phone: "公司 LINE 官方帳號裡的拖吊通知：卡片列出拖吊日期、地址與需收資料，可查看照片、標記已拖未交車或已交車，下方是角色選單。",
     schedule: "今日調度：每台車的車牌、業務、拖車地點與狀態，以及標記已拖未交車、已交車的按鈕。",
     progress: "行政進度追蹤：每台車目前的車籍處理階段與送件狀態。",
   },
