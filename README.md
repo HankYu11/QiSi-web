@@ -32,7 +32,7 @@ Canonical, hreflang, og:url and `sitemap.xml` use `https://qisi.handyla.co` (set
 
 ## Deploy
 
-Firebase Hosting site `qisi-web` in the `freshtogo-e52a1` project, served on `qisi.handyla.co`. `.github/workflows/deploy.yml` builds every PR to `main` and deploys when `main` changes. One-time setup:
+Firebase Hosting site `qisi-web` in the `freshtogo-e52a1` project, served on `qisi.handyla.co`. `.github/workflows/build.yml` builds every PR to `main` as a check (no deploy); `.github/workflows/deploy.yml` deploys only when `main` changes, i.e. after a PR is merged. One-time setup:
 
 1. `firebase hosting:sites:create qisi-web --project freshtogo-e52a1`
 2. Firebase console → Hosting → `qisi-web` → Add custom domain → `qisi.handyla.co`, then add the DNS record it shows at your domain registrar.
