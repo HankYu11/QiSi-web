@@ -65,6 +65,30 @@
     addEventListener("beforeprint", revealAll);
   }
 
+  /* ---- scroll-linked progress: [data-scroll] gets --p, 0 as it enters at the bottom, 1 as it leaves at the top ---- */
+  // Styles key off .fx-scroll, so without JS or with reduced motion the element sits in its resting state.
+  const scrubbed = [...document.querySelectorAll<HTMLElement>("[data-scroll]")];
+  if (scrubbed.length && !reduce) {
+    let queued = false;
+    const scrub = () => {
+      queued = false;
+      scrubbed.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > innerHeight + 200) return;
+        const p = Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight + r.height)));
+        el.style.setProperty("--p", p.toFixed(4));
+      });
+    };
+    const queue = () => {
+      if (!queued) requestAnimationFrame(scrub);
+      queued = true;
+    };
+    scrubbed.forEach((el) => el.classList.add("fx-scroll"));
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    scrub();
+  }
+
   /* ---- count-up numbers ---- */
   const counters = document.querySelectorAll<HTMLElement>("[data-count]");
   if (counters.length && !reduce && "IntersectionObserver" in window) {
