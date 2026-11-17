@@ -1,31 +1,28 @@
 ---
-// Link cards to case studies; `exclude` leaves out the page you are on ("freshtogo" or a case slug).
+// Link cards to case studies; `exclude` leaves out the page you are on ("freshtogo" or a case slug),
+// `limit` keeps the first n, and `allLink` adds a link to the work index under the cards.
 import { Image } from "astro:assets";
 import type { Copy, Lang } from "../i18n/copy";
-import { cases, caseSlugs, moreWork } from "../i18n/cases";
-import ftgThumb from "../assets/ftg/web-home-hero.png";
-import courtThumb from "../assets/court/admin-schedule.png";
-import scrapThumb from "../assets/scrap/schedule.png";
+import { moreWork } from "../i18n/cases";
+import { workItems } from "../i18n/workList";
+import { workThumbs as thumbs } from "../assets/workThumbs";
 interface Props {
   t: Copy;
   lang: Lang;
   exclude?: string;
   heading?: string;
+  limit?: number;
+  allLink?: boolean;
 }
-const { t, lang, exclude, heading } = Astro.props;
+const { t, lang, exclude, heading, limit, allLink } = Astro.props;
 const m = moreWork[lang];
-const thumbs = { freshtogo: ftgThumb, "court-booking": courtThumb, "scrap-cars": scrapThumb };
-const items = [
-  { id: "freshtogo", path: t.work.path, kind: m.ftgKind, name: t.work.name, lede: t.work.teaser.lede },
-  ...caseSlugs.map((s) => {
-    const c = cases[s][lang];
-    return { id: s, path: c.path, kind: c.card.kind, name: c.name, lede: c.card.lede };
-  }),
-].filter((i) => i.id !== exclude);
+const items = workItems(lang)
+  .filter((i) => i.id !== exclude)
+  .slice(0, limit);
 ---
 
 <div class="cc">
-  {heading && <h2 class="cc-title t-h3">{heading}</h2>}
+  {heading && <h2 class="cc-title t-h2">{heading}</h2>}
   <ul class={`cc-list n${items.length}`} data-scroll>
     {
       items.map((i) => (
@@ -48,11 +45,23 @@ const items = [
       ))
     }
   </ul>
+  {
+    allLink && (
+      <p class="cc-all">
+        <a class="btn btn-line" href={t.workIndex.path}>
+          {t.workIndex.homeAll} <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    )
+  }
 </div>
 
 <style>
+  .cc-all {
+    margin-top: clamp(24px, 3vw, 36px);
+  }
   .cc-title {
-    margin-bottom: 20px;
+    margin-bottom: clamp(24px, 3vw, 40px);
   }
   .cc-list {
     display: grid;
