@@ -2,6 +2,7 @@
 // 旋轉教練 / Spin Coach: QI SI's own product, still a prototype (copy: src/i18n/lab.ts).
 import { Image } from "astro:assets";
 import Chapter from "./Chapter.astro";
+import "../styles/case-page.css";
 import Grain from "./Grain.astro";
 import SpinHud from "./SpinHud.astro";
 import { md } from "../i18n/md";
@@ -16,7 +17,7 @@ interface Props {
 const { t, lang, c } = Astro.props;
 ---
 
-<article class="lab" aria-labelledby="lab-title">
+<article class="lab cp-lab" aria-labelledby="lab-title">
   <div class="wrap opening">
     <a class="back" href={t.workIndex.path}>← {t.workIndex.back}</a>
     <div class="kick">
@@ -219,9 +220,6 @@ const { t, lang, c } = Astro.props;
     text-decoration: none;
     color: var(--slate);
   }
-  .back:hover {
-    color: var(--navy);
-  }
   .title-row {
     display: flex;
     flex-wrap: wrap;
@@ -229,27 +227,6 @@ const { t, lang, c } = Astro.props;
     justify-content: space-between;
     gap: 20px 40px;
     margin-top: clamp(10px, 1.4vw, 16px);
-  }
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 28px;
-  }
-  .name {
-    font-weight: 900;
-    font-size: clamp(2.8rem, 1.4rem + 5vw, 6.6rem);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-  }
-  .name:lang(zh-Hant-TW) {
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-  }
-  .alt {
-    font-weight: 700;
-    font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
-    color: var(--slate);
   }
   .status {
     display: inline-flex;
@@ -277,36 +254,9 @@ const { t, lang, c } = Astro.props;
     margin-top: clamp(20px, 2.4vw, 32px);
     align-items: start;
   }
-  .op-main {
-    display: grid;
-    gap: 20px;
-  }
-  .tagline {
-    font-weight: 900;
-    font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
-    line-height: 1.22;
-    letter-spacing: -0.015em;
-    max-width: 15em;
-  }
   :global(:root[data-lang="zh"]) .tagline {
     line-height: 1.4;
     letter-spacing: 0.01em;
-  }
-  .facts {
-    display: grid;
-    border-top: 1px solid var(--line);
-  }
-  .facts div {
-    display: grid;
-    grid-template-columns: 7.5em 1fr;
-    gap: 16px;
-    padding-block: 12px;
-    border-bottom: 1px solid var(--line);
-  }
-  .facts dt {
-    font-weight: 700;
-    color: var(--slate);
-    font-size: 0.92rem;
   }
 
   /* ---- stage: the result screen on a navy table-like field ---- */
@@ -443,27 +393,8 @@ const { t, lang, c } = Astro.props;
     border-radius: calc(var(--radius) * 1.2);
     padding: clamp(28px, 4vw, 64px);
   }
-  .proof-head {
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-    gap: clamp(20px, 4vw, 64px);
-    align-items: end;
-  }
   .proof-head .t-h2 {
     text-wrap: balance;
-  }
-  .proof-list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(36px, 4vw, 56px);
-    padding-top: clamp(28px, 3vw, 40px);
-    border-top: 1px solid var(--line-navy);
-  }
-  .proof-list li {
-    display: grid;
-    align-content: start;
-    gap: 10px;
   }
   .pn {
     font-weight: 900;
@@ -544,21 +475,6 @@ const { t, lang, c } = Astro.props;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin-top: clamp(32px, 4vw, 56px);
-  }
-  .tile {
-    position: relative;
-    overflow: hidden;
-    display: grid;
-    gap: 8px;
-    align-content: start;
-    padding: clamp(22px, 2.4vw, 32px);
-    border-radius: calc(var(--radius) * 1.2);
-    background: var(--white);
-  }
-  .tech {
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--orange-text);
   }
   .next {
     display: grid;
