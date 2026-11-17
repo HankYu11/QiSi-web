@@ -189,6 +189,36 @@ const { t, lang, paths = { zh: "/", en: "/en/" } } = Astro.props;
     :global(.js) .nav.open {
       display: flex;
     }
+    /* without JS the toggle can't work: hide it and show the links in a row under the header */
+    :global(html:not(.js)) .menu-btn {
+      display: none;
+    }
+    :global(html:not(.js)) .hdr-in {
+      flex-wrap: wrap;
+      height: auto;
+      padding-block: 10px;
+    }
+    :global(html:not(.js)) .nav {
+      position: static;
+      display: flex;
+      order: 3;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+    }
+    :global(html:not(.js)) .nav ul {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+    }
+    :global(html:not(.js)) .nav ul li + li {
+      border: 0;
+    }
+    :global(html:not(.js)) .nav ul a {
+      padding: 8px 0;
+      font-size: 1rem;
+    }
     .nav ul {
       flex-direction: column;
       gap: 0;
@@ -209,6 +239,21 @@ const { t, lang, paths = { zh: "/", en: "/en/" } } = Astro.props;
     .nav-cta {
       margin: 0;
       min-height: 54px;
+    }
+  }
+
+  /* Windows high contrast: backgrounds and shadows are dropped, so give the menu bars and the
+     current language a system colour and an outline of their own */
+  @media (forced-colors: active) {
+    .bars i {
+      background: CanvasText;
+    }
+    .lang a[aria-current] {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
+    }
+    .menu-btn {
+      border: 1px solid CanvasText;
     }
   }
 </style>

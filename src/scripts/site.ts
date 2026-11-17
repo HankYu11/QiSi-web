@@ -14,6 +14,11 @@ if (btn && nav) {
   };
   btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
   nav.addEventListener("click", (e) => (e.target as HTMLElement).closest("a") && set(false));
+  // a tap or click anywhere outside the open menu closes it, like a native popover
+  document.addEventListener("click", (e) => {
+    const t = e.target as Node;
+    if (nav.classList.contains("open") && !nav.contains(t) && !btn.contains(t)) set(false);
+  });
   addEventListener("keydown", (e) => {
     if (e.key === "Escape" && nav.classList.contains("open")) {
       set(false);

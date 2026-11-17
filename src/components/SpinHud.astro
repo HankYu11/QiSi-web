@@ -262,6 +262,16 @@ const fill = Math.min(100, (Number(hud.rpm) / hud.scaleMax) * 100);
     .k {
       font-size: max(calc(1.6 * var(--u)), 10px);
     }
+    /* the label column grows with the 10px floor, so "SIDE RIGHT" never runs into its bar;
+       the rows share it through subgrid, so the bars still line up */
+    .split {
+      grid-template-columns: max-content 1fr calc(3 * var(--u));
+      column-gap: calc(1.4 * var(--u));
+    }
+    .split li {
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+    }
   }
   @media (prefers-reduced-motion: no-preference) {
     .arc {

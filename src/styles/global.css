@@ -91,13 +91,15 @@ html {
     navigation: auto;
   }
 }
+/* Reduced motion: animations stop, and transitions keep only the properties that don't move anything
+   (colour, opacity, shadows), so hover and focus feedback still eases in instead of snapping. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, opacity, box-shadow, fill, stroke !important;
   }
 }
 body {
@@ -180,6 +182,10 @@ dd {
   max-width: var(--max);
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+/* <picture> wrappers are display: contents (see Img.astro); keep their <source> children out of grid and flex layout */
+source {
+  display: none;
 }
 .sr-only {
   position: absolute !important;

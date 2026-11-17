@@ -27,6 +27,11 @@ const h = t.hero;
       <a class="btn btn-line" href="#work">{h.ctaSecondary}</a>
     </div>
   </div>
+  <!-- Keyboard-only: hidden like the skip link until it has focus, so the hero looks the same for everyone
+       else. Lets a keyboard or screen-reader user stop the looping field (WCAG 2.2.2). -->
+  <button class="field-toggle" type="button" data-field-toggle data-pause={h.pause} data-play={h.play} aria-pressed="false" hidden>
+    {h.pause}
+  </button>
 </section>
 
 <script>
@@ -134,8 +139,9 @@ const h = t.hero;
     draw();
     requestAnimationFrame(step);
   };
+  let paused = false;
   const start = () => {
-    if (running || still) return;
+    if (running || still || paused) return;
     running = true;
     last = 0;
     requestAnimationFrame(step);
@@ -156,6 +162,17 @@ const h = t.hero;
       my = e.clientY - r.top;
     });
     hero.addEventListener("pointerleave", () => (mx = my = -9999));
+    const toggle = hero.querySelector<HTMLButtonElement>("[data-field-toggle]");
+    if (toggle) {
+      toggle.hidden = false;
+      toggle.addEventListener("click", () => {
+        paused = !paused;
+        toggle.setAttribute("aria-pressed", String(paused));
+        toggle.textContent = paused ? toggle.dataset.play! : toggle.dataset.pause!;
+        if (paused) running = false;
+        else start();
+      });
+    }
   }
 
   const svg = document.querySelector<SVGElement>("[data-grains]");
@@ -343,5 +360,30 @@ const h = t.hero;
       right: max(-22vw, -150px);
       bottom: auto;
     }
+  }
+  .field-toggle {
+    position: absolute;
+    /* lines up with the text column (.wrap) */
+    left: max(var(--gutter), (100% - var(--max)) / 2 + var(--gutter));
+    bottom: 16px;
+    z-index: 5;
+    padding: 10px 16px;
+    border: 2px solid var(--white);
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--white);
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    /* off screen until focused, like the skip link */
+    transform: translateY(200%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .field-toggle:focus-visible {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
   }
 </style>
