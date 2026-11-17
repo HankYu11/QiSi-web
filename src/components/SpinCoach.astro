@@ -14,19 +14,20 @@ interface Props {
   c: Lab;
 }
 const { t, lang, c } = Astro.props;
-const max = Math.max(...c.hud.split.map(([, n]) => n));
 ---
 
 <article class="lab" aria-labelledby="lab-title">
   <div class="wrap opening">
     <a class="back" href={t.workIndex.path}>← {t.workIndex.back}</a>
-    <Chapter label={c.chapter} />
+    <div class="kick">
+      <Chapter label={c.chapter} />
+      <p class="status"><span class="dot" aria-hidden="true"></span>{c.status}</p>
+    </div>
     <div class="title-row">
       <h1 id="lab-title" class="title">
         <span class="name" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{c.name}</span>
         <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{c.nameAlt}</span>
       </h1>
-      <p class="status"><span class="dot" aria-hidden="true"></span>{c.status}</p>
     </div>
     <div class="op-grid">
       <div class="op-main">
@@ -75,23 +76,37 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
       <h2 id="split-title" class="t-h3 big">{c.splitTitle}</h2>
       <p class="muted">{c.splitBody}</p>
     </div>
-    <div class="panel split" aria-hidden="true">
-      <p class="sp-type">{c.hud.type}</p>
-      <ul>
-        {
-          c.hud.split.map(([k, n]) => (
-            <li>
-              <span class="sk">{k}</span>
-              <span class="st">
-                <span style={`width:${(n / max) * 100}%`} />
-              </span>
-              <span class="sv">{n}</span>
-            </li>
-          ))
-        }
-      </ul>
-      <p class="sp-u">{c.hud.unitSplit}</p>
-    </div>
+    <figure class="panel axes">
+      <svg viewBox="0 0 440 300" role="img" aria-label={c.axes.label}>
+        <defs>
+          <marker id="ah-o" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#f46a2a"></path>
+          </marker>
+          <marker id="ah-n" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#1b2850"></path>
+          </marker>
+          <marker id="ah-g" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#b9c2d8"></path>
+          </marker>
+        </defs>
+        <!-- flight -->
+        <path d="M20 230 Q 110 120 220 150 L 420 120" fill="none" stroke="#b9c2d8" stroke-width="2" stroke-dasharray="3 7" marker-end="url(#ah-g)"></path>
+        <!-- ball -->
+        <circle cx="220" cy="150" r="52" fill="#fff" stroke="#d9dee9" stroke-width="2"></circle>
+        <!-- backspin: seen side-on, it turns in the picture plane; the top of the ball runs back -->
+        <path d="M276 104 A72 72 0 0 0 150 128" fill="none" stroke="#f46a2a" stroke-width="4" stroke-linecap="round" marker-end="url(#ah-o)"></path>
+        <!-- sidespin: a ring around the vertical axis -->
+        <ellipse cx="220" cy="150" rx="72" ry="16" fill="none" stroke="#1b2850" stroke-width="2.5"></ellipse>
+        <path d="M168 161 A72 16 0 0 0 272 161" fill="none" stroke="#1b2850" stroke-width="3.5" marker-end="url(#ah-n)"></path>
+        <!-- gyro: a ring around the flight direction, seen edge-on to the right -->
+        <ellipse cx="300" cy="137" rx="9" ry="30" fill="none" stroke="#1b2850" stroke-width="2.5" stroke-dasharray="5 4"></ellipse>
+        <path d="M303 108 A9 30 0 0 1 308 140" fill="none" stroke="#1b2850" stroke-width="3.5" marker-end="url(#ah-n)"></path>
+        <text x="214" y="64" class="ax o" text-anchor="middle">{c.axes.back}</text>
+        <text x="110" y="200" class="ax" text-anchor="middle">{c.axes.side}</text>
+        <text x="320" y="196" class="ax">{c.axes.gyro}</text>
+      </svg>
+      <figcaption>{c.axes.note}</figcaption>
+    </figure>
   </section>
 
   <section class="wrap duo flip" aria-labelledby="mark-title">
@@ -186,14 +201,20 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
 <style>
   .lab {
     background: var(--cream);
-    padding-top: clamp(32px, 4vw, 56px);
+    padding-top: clamp(20px, 2.4vw, 32px);
+  }
+  .kick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
   }
   .back {
     display: flex;
     width: fit-content;
     align-items: center;
     min-height: 44px;
-    margin-bottom: clamp(20px, 3vw, 40px);
+    margin-bottom: clamp(12px, 1.6vw, 20px);
     font-weight: 700;
     text-decoration: none;
     color: var(--slate);
@@ -207,7 +228,7 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
     align-items: flex-end;
     justify-content: space-between;
     gap: 20px 40px;
-    margin-top: clamp(16px, 2vw, 24px);
+    margin-top: clamp(10px, 1.4vw, 16px);
   }
   .title {
     display: flex;
@@ -235,8 +256,7 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
     min-height: 44px;
     align-items: center;
     gap: 10px;
-    padding: 8px 16px;
-    margin-bottom: 10px;
+    padding: 6px 16px;
     border-radius: 999px;
     background: var(--navy);
     color: var(--white);
@@ -254,7 +274,7 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: clamp(32px, 5vw, 80px);
-    margin-top: clamp(28px, 3.5vw, 48px);
+    margin-top: clamp(20px, 2.4vw, 32px);
     align-items: start;
   }
   .op-main {
@@ -291,12 +311,10 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
 
   /* ---- stage: the result screen on a navy table-like field ---- */
   .stage {
-    margin-top: clamp(32px, 4vw, 56px);
-    padding: clamp(28px, 5vw, 80px) clamp(16px, 6vw, 120px) clamp(20px, 2.4vw, 32px);
+    margin-top: clamp(28px, 3vw, 44px);
+    padding: clamp(28px, 4vw, 64px) clamp(16px, 6vw, 120px) clamp(20px, 2.4vw, 32px);
     border-radius: calc(var(--radius) * 1.6);
-    background:
-      linear-gradient(transparent calc(50% - 1px), #ffffff22 calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
-      var(--navy);
+    background: var(--navy);
   }
   .stage-in {
     max-width: 980px;
@@ -369,56 +387,24 @@ const max = Math.max(...c.hud.split.map(([, n]) => n));
     border-radius: calc(var(--radius) * 1.2);
     background: var(--white);
   }
-  .split {
+  .axes {
     display: grid;
-    gap: 18px;
+    gap: 12px;
   }
-  .sp-type {
-    font-weight: 900;
-    font-size: clamp(1.2rem, 1rem + 0.8vw, 1.6rem);
-    letter-spacing: 0.06em;
+  .axes svg {
+    width: 100%;
+    height: auto;
   }
-  .split ul {
-    display: grid;
-    gap: 14px;
+  .ax {
+    font: 700 15px var(--font);
+    fill: var(--navy);
   }
-  .split li {
-    display: grid;
-    grid-template-columns: 7.5em 1fr 2.5em;
-    align-items: center;
-    gap: 14px;
-    font-weight: 700;
-    font-size: 0.9rem;
+  .ax.o {
+    fill: var(--orange-text);
   }
-  .sk {
+  .axes figcaption {
+    font-size: 0.82rem;
     color: var(--slate);
-    letter-spacing: 0.06em;
-  }
-  .st {
-    height: 12px;
-    border-radius: 99px;
-    background: var(--mist);
-    overflow: hidden;
-  }
-  .st span {
-    display: block;
-    height: 100%;
-    border-radius: 99px;
-    background: var(--navy);
-  }
-  .split li:first-child .st span {
-    background: var(--orange);
-  }
-  .sv {
-    text-align: right;
-    font-size: 1.1rem;
-  }
-  .sp-u {
-    justify-self: end;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--slate);
-    letter-spacing: 0.08em;
   }
   .mark {
     display: grid;

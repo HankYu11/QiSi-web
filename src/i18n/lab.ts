@@ -2,9 +2,10 @@
 // Facts trace to the project repository (experiments/04-live-coach README and research/, experiments/05-ball-marker),
 // counted November 2026, and to the owner's measurement notes from the 15 Nov 2026 sessions:
 // answers in about 1.1 s (median of 14 clear serves), spin within about 5% of a frame-by-frame count on 4 serves,
-// 18 of 18 real serves recorded (research/missed-serves-2026-11-15.md), 14 of them read clearly.
+// 18 of 18 real serves recorded and no real serve among the skipped clips (experiments/04-live-coach/research/
+// missed-serves-2026-11-15.md; home setup, serving against a wall), 14 of them read clearly. Marking tools: not printed yet.
 // The result screen in the illustration is redrawn from a real app screenshot (0.13.24, a real serve's clip replayed):
-// 2,710 RPM, strong backspin, 42 / 9 / 13 rev/s. Keep it redrawn, not pasted, so it survives the app's redesigns.
+// 2,710 RPM, strong backspin, 42 / 9 / 13 rev/s. 0.1 took 9–16 s a serve (README, 'What 0.1 showed'). Keep it redrawn, not pasted, so it survives the app's redesigns.
 // Not public: pricing, partners, government contacts, team size, the company's district. The coach mode is planned only.
 
 import type { Lang } from "./copy";
@@ -38,7 +39,7 @@ const en = {
   },
   card: {
     kind: "Our own product · Mobile app",
-    lede: "A phone beside the table watches your serve and says, within seconds, how much spin it had and why.",
+    lede: "A phone beside the table watches your serve and says, in about a second, how much spin it had, and why when it had little.",
   },
   chapter: "In the lab",
   name: "Spin Coach",
@@ -48,9 +49,9 @@ const en = {
   summary:
     "Spin decides a serve, and nobody can see it: a beginner can’t tell whether a serve had backspin, let alone why it didn’t. Spin Coach is our own product. A phone on a stand beside the table films every serve in 240 fps slow motion, finds the ball, measures how fast and which way it turned, and says the result out loud before the player picks up the next ball. Everything is measured on the phone.",
   facts: [
-    { k: "We built", v: "The app, the spin-measuring engine, 3D-printed ball-marking tools" },
-    { k: "Status", v: "Prototype, version 0.13, tested on a Pixel 8" },
-    { k: "Platforms", v: "Android now, iOS to follow" },
+    { k: "We built", v: "The app, the spin-measuring engine, designs for 3D-printable ball-marking tools" },
+    { k: "Status", v: "Prototype, version 0.13. Not available to download yet." },
+    { k: "Tested on", v: "Android (Pixel 8)" },
     { k: "Camera", v: "1920×1080 at 240 frames a second" },
   ],
   stageCaption:
@@ -77,23 +78,30 @@ const en = {
   ],
   splitTitle: "One number isn’t enough",
   splitBody:
-    "Two serves at 2,700 RPM can behave nothing alike. The app shows the three parts it measures, on one scale: backspin, which makes the ball stop or come back; sidespin, which bends it; and gyro, the corkscrew part that does little until the bounce.",
+    "Two serves at 2,700 RPM can behave nothing alike. The app splits the spin into three parts around three axes: backspin, end over end, which makes the ball stop or come back; sidespin, which bends it; and gyro, the corkscrew turn along the flight that does little until the bounce.",
+  axes: {
+    label: "A ball in flight with its three spin axes: backspin end over end, sidespin around the vertical, gyro along the flight.",
+    back: "Backspin",
+    side: "Sidespin",
+    gyro: "Gyro",
+    note: "Illustration.",
+  },
   markTitle: "The marking, and the tools for it",
   markBody:
     "A plain ball’s turn is invisible, so the ball is marked: the black half gives the spin over a full turn, a coloured dot seen in a few frames gives it from a quarter turn. Marking by hand is slow and uneven, so we designed 3D-printed tools: a cup that holds the ball to its middle, a tray for a batch, and a stencil for the dots.",
-  markAlt: "Renders of the 3D-printed marking tools: a tray of twelve cups and a dot stencil.",
-  markNote: "3D renders of the tool designs.",
+  markAlt: "Renders of the marking-tool designs: a single cup, a tray of twelve cups and a dot stencil.",
+  markNote: "3D renders of the tool designs; not printed yet.",
   proofTitle: "Measured on real serves",
   proofIntro:
-    "Every reading is checked against slow-motion frames we look at ourselves. These are early numbers from testing, and we say where they stop.",
+    "We check readings against slow-motion frames we count ourselves. These are early numbers from testing, and we say where they stop.",
   proof: [
     { n: "1.1 s", label: "median time from the serve to the answer (14 clear serves)" },
     { n: "5%", label: "within this of a frame-by-frame count, on 4 real serves" },
-    { n: "18 / 18", label: "real serves recorded across three sessions, none missed" },
-    { n: "66", label: "releases so far, each tried on the phone" },
+    { n: "18 / 18", label: "real serves recorded across three sessions; none of the clips the app skipped held a serve" },
+    { n: "16 s → 1 s", label: "slowest answer in the first version, against the median now" },
   ],
   proofNote:
-    "Measured in November 2026, on one Pixel 8, in one room. 14 of the 18 serves read clearly; making more of them readable is the work in progress.",
+    "Measured in November 2026 on one Pixel 8, at home, serving against a wall with no table. 14 of the 18 serves read clearly; making more of them readable is the work in progress.",
   storyTitle: "What the phone taught us",
   storyIntro: "Most of the work was finding out what a phone can really do at 240 frames a second, then changing course.",
   story: [
@@ -105,7 +113,7 @@ const en = {
     {
       v: "0.3",
       title: "Watch the ball, don’t listen for it",
-      body: "Listening for the bat’s click failed in a hall full of other tables. The app now looks for the ball’s flight instead.",
+      body: "In a hall, other tables click too, so listening for the bat can’t work. The app now looks for the ball’s flight instead.",
     },
     {
       v: "0.5",
@@ -127,13 +135,13 @@ const en = {
   surfaces: [
     { name: "Android app", tech: "Kotlin · Camera2 · OpenGL ES · NDK", body: "Slow-motion capture, the serve tracker, the result screen and the spoken results." },
     { name: "Measuring engine", tech: "JavaScript · WebCodecs", body: "Finds the ball in every frame of a flight and fits its rotation, offline, on the phone." },
-    { name: "Ball-marking tools", tech: "OpenSCAD · 3D printing", body: "A cup, a tray and a dot stencil, so every ball is marked the same way, quickly." },
+    { name: "Ball-marking tools", tech: "OpenSCAD · designed for 3D printing", body: "A cup, a tray and a dot stencil, designed so every ball can be marked the same way. Not printed yet." },
   ],
   nextTitle: "What’s next",
   next: [
-    "An iOS version.",
+    "Testing in more halls, at real tables, under more kinds of light.",
     "A coach view that follows each student’s serves over time (planned).",
-    "Testing in more halls, under more kinds of light.",
+    "More phones, including iPhone.",
   ],
   note: "We build products for clients, and we build our own. Both get the same engineering: measure, look at the data, change course.",
   alts: {
@@ -150,7 +158,7 @@ const zh: typeof en = {
   },
   card: {
     kind: "自有產品・手機 App",
-    lede: "手機架在球桌旁看你發球，幾秒內就說出這顆球轉多快、為什麼沒轉。",
+    lede: "手機架在球桌旁看你發球，大約一秒就說出這顆球轉多快，轉不夠時還會說原因。",
   },
   chapter: "研發中",
   name: "旋轉教練",
@@ -160,10 +168,10 @@ const zh: typeof en = {
   summary:
     "發球好不好，關鍵在旋轉，偏偏旋轉看不見：初學者分不出自己的發球有沒有下旋，更不知道為什麼沒轉。旋轉教練是我們自己的產品。手機架在球桌旁，用 240 fps 慢動作拍下每一顆發球，找到球、量出它轉多快、往哪個方向轉，在球員撿下一顆球之前就用語音說出結果。所有量測都在手機上完成。",
   facts: [
-    { k: "我們打造", v: "App、旋轉量測引擎、3D 列印的球體標記工具" },
-    { k: "狀態", v: "開發中原型，0.13 版，在 Pixel 8 上測試" },
-    { k: "平台", v: "目前是 Android，之後推出 iOS 版" },
-    { k: "相機", v: "1920×1080，每秒 240 格" },
+    { k: "我們打造", v: "App、旋轉量測引擎、球的標記工具設計（3D 列印用）" },
+    { k: "狀態", v: "開發中原型，0.13 版，尚未開放下載" },
+    { k: "測試環境", v: "Android（Pixel 8）" },
+    { k: "相機", v: "1920×1080，每秒 240 格" },
   ],
   stageCaption: "結果畫面示意圖，依 App 實際介面重新繪製（英文介面），數值取自一顆真實發球的量測結果。",
   hud: HUD,
@@ -188,33 +196,40 @@ const zh: typeof en = {
   ],
   splitTitle: "只看一個數字不夠",
   splitBody:
-    "同樣 2,700 RPM 的兩顆發球，表現可能完全不同。App 把量到的旋轉拆成三個部分，放在同一個刻度上：讓球停住或往回跑的下旋、讓球拐彎的側旋，以及落地前幾乎沒作用、像螺旋一樣的陀螺旋。",
+    "同樣 2,700 RPM 的兩顆發球，表現可能完全不同。App 把旋轉依三個軸拆開：前後翻滾、讓球停住或往回跑的下旋；讓球拐彎的側旋；以及順著飛行方向、像螺旋一樣，落地前幾乎沒作用的陀螺旋。",
+  axes: {
+    label: "飛行中的球與三個旋轉軸：前後翻滾的下旋、繞垂直軸的側旋、順著飛行方向的陀螺旋。",
+    back: "下旋",
+    side: "側旋",
+    gyro: "陀螺旋",
+    note: "示意圖。",
+  },
   markTitle: "球上的標記，和畫標記的工具",
   markBody:
     "一般的球看不出轉動，所以要先做標記：黑色半邊可以算出轉一整圈的旋轉，彩色圓點只要出現幾格，轉四分之一圈就算得出來。手工畫標記又慢又不一致，所以我們設計了 3D 列印的工具：把球卡在正中間的杯子、一次處理一批的托盤，以及畫圓點用的模板。",
-  markAlt: "3D 列印標記工具的渲染圖：十二格杯子托盤，和畫圓點的模板。",
-  markNote: "工具設計的 3D 渲染圖。",
+  markAlt: "標記工具設計的渲染圖：單個杯子、十二格托盤，和畫圓點的模板。",
+  markNote: "工具設計的 3D 渲染圖，尚未實際列印。",
   proofTitle: "在真實發球上量過",
-  proofIntro: "每一次量測，我們都拿慢動作畫面親自核對。以下是測試初期的數字，也寫清楚它們的限制。",
+  proofIntro: "我們拿慢動作畫面，逐格人工核對量測結果。以下是測試初期的數字，也寫清楚它們的限制。",
   proof: [
     { n: "1.1 秒", label: "從發球到說出結果的中位數（14 顆讀得清楚的發球）" },
-    { n: "5%", label: "4 顆真實發球的轉速，和逐格人工數的差距在這以內" },
-    { n: "18 / 18", label: "三次測試中的真實發球全部錄到，沒有漏掉" },
-    { n: "66", label: "個版本，每一版都在手機上實際試過" },
+    { n: "5%", label: "轉速與逐格人工計數相差不到 5%（4 顆真實發球）" },
+    { n: "18 / 18", label: "三次測試的 18 顆真實發球都錄到了；App 略過的片段裡沒有一顆是發球" },
+    { n: "16 秒 → 1 秒", label: "第一版最慢要等 16 秒，現在的中位數約 1 秒" },
   ],
-  proofNote: "2026 年 11 月在一支 Pixel 8、一個房間裡測得。18 顆發球中 14 顆讀得清楚，讓更多發球讀得出來，是我們正在做的事。",
+  proofNote: "2026 年 11 月用一支 Pixel 8 在家中對牆發球測得，沒有球桌。18 顆發球中 14 顆讀得清楚，讓更多發球讀得出來，是我們正在做的事。",
   storyTitle: "手機教會我們的事",
-  storyIntro: "大部分的功夫，花在弄清楚一支手機在每秒 240 格下真正做得到什麼，然後換方向。",
+  storyIntro: "大部分的功夫，花在弄清楚一支手機在每秒 240 格下真正做得到什麼，再據此調整方向。",
   story: [
     {
       v: "0.1",
       title: "手機真的做得到嗎？",
-      body: "第一版只為了回答問題。答案是：Pixel 8 開放 App 用 1080p、每秒整整 240 格錄影，量測也成功了，只是一顆發球要算 9 到 16 秒。",
+      body: "第一版只是可行性測試。結果是：Pixel 8 開放 App 用 1080p、每秒整整 240 格錄影，量測也成功了，只是一顆發球要算 9 到 16 秒。",
     },
     {
       v: "0.3",
       title: "用看的，不用聽的",
-      body: "靠聽球拍擊球的聲音，在一整排球桌的球館裡行不通。App 改成直接看球的飛行軌跡。",
+      body: "球館裡別桌也在擊球，靠聲音分不出來。App 改成直接看球的飛行軌跡。",
     },
     {
       v: "0.5",
@@ -236,10 +251,10 @@ const zh: typeof en = {
   surfaces: [
     { name: "Android App", tech: "Kotlin · Camera2 · OpenGL ES · NDK", body: "慢動作錄影、發球追蹤、結果畫面與語音播報。" },
     { name: "量測引擎", tech: "JavaScript · WebCodecs", body: "在飛行過程的每一格找到球、算出它怎麼轉，離線在手機上完成。" },
-    { name: "球體標記工具", tech: "OpenSCAD · 3D 列印", body: "杯子、托盤和圓點模板，讓每一顆球都能又快又一致地做好標記。" },
+    { name: "球的標記工具", tech: "OpenSCAD · 3D 列印設計", body: "杯子、托盤和圓點模板，設計來讓每一顆球都標得一致；還沒實際印出來。" },
   ],
   nextTitle: "接下來",
-  next: ["推出 iOS 版。", "教練模式：追蹤每位學員一段時間以來的發球表現（規劃中）。", "到更多球館、在更多種燈光下測試。"],
+  next: ["到更多球館、在真正的球桌和更多種燈光下測試。", "教練模式：追蹤每位學員一段時間以來的發球表現（規劃中）。", "支援更多手機，包括 iPhone。"],
   note: "我們幫客戶做產品，也做自己的產品。兩者用的是同一套工程方法：量測、看數據、隨時調整方向。",
   alts: {
     hud: "App 的結果畫面：2,710 RPM，擊球後的強烈下旋，拆成下旋 42、右側旋 9、陀螺旋 13，單位是每秒轉數。",

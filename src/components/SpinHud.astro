@@ -172,7 +172,7 @@ const max = Math.max(...hud.split.map(([, n]) => n));
     background: #5ff2ff;
   }
   .type {
-    margin-top: calc(1.6 * var(--u));
+    margin-top: calc(1.2 * var(--u));
     font-family: var(--font);
     font-weight: 900;
     font-size: calc(3.1 * var(--u));
@@ -197,6 +197,7 @@ const max = Math.max(...hud.split.map(([, n]) => n));
     grid-template-columns: calc(9.5 * var(--u)) 1fr calc(3 * var(--u));
     align-items: center;
     gap: calc(1.4 * var(--u));
+    line-height: 1;
   }
   .tr {
     height: calc(0.8 * var(--u));
@@ -256,6 +257,12 @@ const max = Math.max(...hud.split.map(([, n]) => n));
     .col {
       left: 7%;
       right: 7%;
+    }
+    .meta,
+    .u,
+    .from,
+    .k {
+      font-size: max(calc(1.6 * var(--u)), 10px);
     }
   }
   @media (prefers-reduced-motion: no-preference) {
