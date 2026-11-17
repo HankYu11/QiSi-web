@@ -5,6 +5,7 @@ const PAGES = [
   { zh: "/", en: "/en/" },
   { zh: "/work/", en: "/en/work/" },
   { zh: "/work/wawa-house/", en: "/en/work/wawa-house/" },
+  { zh: "/work/spin-coach/", en: "/en/work/spin-coach/" },
   { zh: "/work/freshtogo/", en: "/en/work/freshtogo/" },
   { zh: "/work/court-booking/", en: "/en/work/court-booking/" },
   { zh: "/work/scrap-cars/", en: "/en/work/scrap-cars/" },

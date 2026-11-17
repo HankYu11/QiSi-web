@@ -3,31 +3,40 @@ import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
 import Work from "./Work.astro";
 import CaseStudy from "./CaseStudy.astro";
+import SpinCoach from "./SpinCoach.astro";
 import CaseCards from "./CaseCards.astro";
 import Contact from "./Contact.astro";
 import Effects from "./Effects.astro";
 import { copy, type Lang } from "../i18n/copy";
 import { cases, moreWork, type CaseSlug } from "../i18n/cases";
+import { labs, type LabSlug } from "../i18n/lab";
 interface Props {
   lang: Lang;
   /** omit for FreshToGo */
   slug?: CaseSlug;
+  /** one of our own products still in the lab */
+  lab?: LabSlug;
 }
-const { lang, slug } = Astro.props;
+const { lang, slug, lab } = Astro.props;
 const t = copy[lang];
 const c = slug ? cases[slug][lang] : undefined;
-const paths = c ? { zh: cases[slug!].zh.path, en: cases[slug!].en.path } : { zh: copy.zh.work.path, en: copy.en.work.path };
-const meta = c ? c.meta : t.work.meta;
+const l = lab ? labs[lab][lang] : undefined;
+const paths = l
+  ? { zh: labs[lab!].zh.path, en: labs[lab!].en.path }
+  : c
+    ? { zh: cases[slug!].zh.path, en: cases[slug!].en.path }
+    : { zh: copy.zh.work.path, en: copy.en.work.path };
+const meta = l ? l.meta : c ? c.meta : t.work.meta;
 ---
 
 <Base t={t} lang={lang} title={meta.title} description={meta.description} paths={paths}>
   <a class="skip" href="#main">{t.a11y.skip}</a>
   <Header t={t} lang={lang} paths={paths} />
   <main id="main">
-    {c ? <CaseStudy t={t} lang={lang} c={c} /> : <Work t={t} lang={lang} />}
+    {l ? <SpinCoach t={t} lang={lang} c={l} /> : c ? <CaseStudy t={t} lang={lang} c={c} /> : <Work t={t} lang={lang} />}
     <nav class="next" aria-label={moreWork[lang].title}>
       <div class="wrap">
-        <CaseCards t={t} lang={lang} exclude={slug ?? "freshtogo"} heading={moreWork[lang].title} limit={2} />
+        <CaseCards t={t} lang={lang} exclude={lab ?? slug ?? "freshtogo"} heading={moreWork[lang].title} limit={2} />
         <div class="next-in">
           <a class="btn btn-line" href={t.workIndex.path}>{t.workIndex.homeAll} →</a>
           <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>

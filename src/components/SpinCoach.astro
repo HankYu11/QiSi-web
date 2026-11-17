@@ -1,0 +1,637 @@
+---
+// 旋轉教練 / Spin Coach: QI SI's own product, still a prototype (copy: src/i18n/lab.ts).
+import { Image } from "astro:assets";
+import Chapter from "./Chapter.astro";
+import Grain from "./Grain.astro";
+import SpinHud from "./SpinHud.astro";
+import { md } from "../i18n/md";
+import type { Copy, Lang } from "../i18n/copy";
+import type { Lab } from "../i18n/lab";
+import markerTools from "../assets/spin/marker-tools.png";
+interface Props {
+  t: Copy;
+  lang: Lang;
+  c: Lab;
+}
+const { t, lang, c } = Astro.props;
+---
+
+<article class="lab" aria-labelledby="lab-title">
+  <div class="wrap opening">
+    <a class="back" href={t.workIndex.path}>← {t.workIndex.back}</a>
+    <div class="kick">
+      <Chapter label={c.chapter} />
+      <p class="status"><span class="dot" aria-hidden="true"></span>{c.status}</p>
+    </div>
+    <div class="title-row">
+      <h1 id="lab-title" class="title">
+        <span class="name" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{c.name}</span>
+        <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{c.nameAlt}</span>
+      </h1>
+    </div>
+    <div class="op-grid">
+      <div class="op-main">
+        <p class="tagline keep" set:html={md(c.tagline)} />
+        <p class="muted" data-words>{c.summary}</p>
+      </div>
+      <dl class="facts">
+        {
+          c.facts.map((f) => (
+            <div>
+              <dt>{f.k}</dt>
+              <dd class="keep">{f.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="stage">
+      <div class="stage-in" data-tilt>
+        <SpinHud hud={c.hud} label={c.alts.hud} />
+      </div>
+      <figcaption>{c.stageCaption}</figcaption>
+    </figure>
+  </div>
+
+  <section class="wrap steps-wrap" aria-labelledby="steps-title">
+    <h2 id="steps-title" class="t-h2" set:html={md(c.stepsTitle)} />
+    <ol class="steps">
+      {
+        c.steps.map((s, i) => (
+          <li data-reveal>
+            <span class="sn" aria-hidden="true">{i + 1}</span>
+            <h3 class="t-h3">{s.title}</h3>
+            <p class="muted">{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wrap duo" aria-labelledby="split-title">
+    <div class="duo-text">
+      <h2 id="split-title" class="t-h3 big">{c.splitTitle}</h2>
+      <p class="muted">{c.splitBody}</p>
+    </div>
+    <figure class="panel axes">
+      <svg viewBox="0 0 440 300" role="img" aria-label={c.axes.label}>
+        <defs>
+          <marker id="ah-o" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#f46a2a"></path>
+          </marker>
+          <marker id="ah-n" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#1b2850"></path>
+          </marker>
+          <marker id="ah-g" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="#b9c2d8"></path>
+          </marker>
+        </defs>
+        <!-- flight -->
+        <path d="M20 230 Q 110 120 220 150 L 420 120" fill="none" stroke="#b9c2d8" stroke-width="2" stroke-dasharray="3 7" marker-end="url(#ah-g)"></path>
+        <!-- ball -->
+        <circle cx="220" cy="150" r="52" fill="#fff" stroke="#d9dee9" stroke-width="2"></circle>
+        <!-- backspin: seen side-on, it turns in the picture plane; the top of the ball runs back -->
+        <path d="M276 104 A72 72 0 0 0 150 128" fill="none" stroke="#f46a2a" stroke-width="4" stroke-linecap="round" marker-end="url(#ah-o)"></path>
+        <!-- sidespin: a ring around the vertical axis -->
+        <ellipse cx="220" cy="150" rx="72" ry="16" fill="none" stroke="#1b2850" stroke-width="2.5"></ellipse>
+        <path d="M168 161 A72 16 0 0 0 272 161" fill="none" stroke="#1b2850" stroke-width="3.5" marker-end="url(#ah-n)"></path>
+        <!-- gyro: a ring around the flight direction, seen edge-on to the right -->
+        <ellipse cx="300" cy="137" rx="9" ry="30" fill="none" stroke="#1b2850" stroke-width="2.5" stroke-dasharray="5 4"></ellipse>
+        <path d="M303 108 A9 30 0 0 1 308 140" fill="none" stroke="#1b2850" stroke-width="3.5" marker-end="url(#ah-n)"></path>
+        <text x="214" y="64" class="ax o" text-anchor="middle">{c.axes.back}</text>
+        <text x="110" y="200" class="ax" text-anchor="middle">{c.axes.side}</text>
+        <text x="320" y="196" class="ax">{c.axes.gyro}</text>
+      </svg>
+      <figcaption>{c.axes.note}</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap duo flip" aria-labelledby="mark-title">
+    <div class="duo-text">
+      <h2 id="mark-title" class="t-h3 big">{c.markTitle}</h2>
+      <p class="muted">{c.markBody}</p>
+    </div>
+    <figure class="mark">
+      <div class="mark-in">
+        <svg class="mball" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <clipPath id="mb"><circle cx="60" cy="60" r="52"></circle></clipPath>
+          </defs>
+          <circle cx="60" cy="60" r="52" fill="#fff"></circle>
+          <rect x="8" y="8" width="52" height="104" fill="#1b1b1f" clip-path="url(#mb)"></rect>
+          <circle cx="76" cy="30" r="7" fill="#d4202c"></circle>
+          <circle cx="94" cy="76" r="7" fill="#1f9a3a"></circle>
+          <circle cx="68" cy="94" r="7" fill="#2147c7"></circle>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#d9dee9" stroke-width="2"></circle>
+        </svg>
+        <Image src={markerTools} widths={[480, 646]} sizes="(min-width: 900px) 420px, 80vw" alt={c.markAlt} />
+      </div>
+      <figcaption>{c.markNote}</figcaption>
+    </figure>
+  </section>
+
+  <div class="wrap">
+    <div class="proof on-navy">
+      <div class="proof-head">
+        <h2 class="t-h2">{c.proofTitle}</h2>
+        <p class="muted">{c.proofIntro}</p>
+      </div>
+      <ul class="proof-list">
+        {
+          c.proof.map((p) => (
+            <li>
+              <span class="pn">{p.n}</span>
+              <span class="pl">{p.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="proof-note muted">{c.proofNote}</p>
+    </div>
+  </div>
+
+  <section class="wrap story-wrap" aria-labelledby="story-title">
+    <div class="story-head">
+      <h2 id="story-title" class="t-h2">{c.storyTitle}</h2>
+      <p class="t-lede muted">{c.storyIntro}</p>
+    </div>
+    <ol class="story">
+      {
+        c.story.map((s) => (
+          <li data-reveal>
+            <span class="v">v{s.v}</span>
+            <div>
+              <h3 class="t-h3">{s.title}</h3>
+              <p class="muted">{s.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <div class="surfaces-wrap">
+    <div class="wrap">
+      <h2 class="t-h2" set:html={md(c.surfacesTitle)} />
+      <div class="surfaces">
+        {
+          c.surfaces.map((s) => (
+            <article class="tile" data-spotlight>
+              <p class="tech">{s.tech}</p>
+              <h3 class="t-h3">{s.name}</h3>
+              <p class="muted">{s.body}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="next">
+        <h2 class="t-h3 big">{c.nextTitle}</h2>
+        <ul>
+          {c.next.map((n) => <li>{n}</li>)}
+        </ul>
+      </div>
+      <p class="note"><Grain class="ng" color="var(--navy-2)" />{c.note}</p>
+    </div>
+  </div>
+</article>
+
+<style>
+  .lab {
+    background: var(--cream);
+    padding-top: clamp(20px, 2.4vw, 32px);
+  }
+  .kick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+  }
+  .back {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: clamp(12px, 1.6vw, 20px);
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--slate);
+  }
+  .back:hover {
+    color: var(--navy);
+  }
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px 40px;
+    margin-top: clamp(10px, 1.4vw, 16px);
+  }
+  .title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 28px;
+  }
+  .name {
+    font-weight: 900;
+    font-size: clamp(2.8rem, 1.4rem + 5vw, 6.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .name:lang(zh-Hant-TW) {
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+  }
+  .alt {
+    font-weight: 700;
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+    color: var(--slate);
+  }
+  .status {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 4px #f46a2a55;
+  }
+  .op-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 5vw, 80px);
+    margin-top: clamp(20px, 2.4vw, 32px);
+    align-items: start;
+  }
+  .op-main {
+    display: grid;
+    gap: 20px;
+  }
+  .tagline {
+    font-weight: 900;
+    font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    max-width: 15em;
+  }
+  :global(:root[data-lang="zh"]) .tagline {
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+  .facts {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .facts div {
+    display: grid;
+    grid-template-columns: 7.5em 1fr;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .facts dt {
+    font-weight: 700;
+    color: var(--slate);
+    font-size: 0.92rem;
+  }
+
+  /* ---- stage: the result screen on a navy table-like field ---- */
+  .stage {
+    margin-top: clamp(28px, 3vw, 44px);
+    padding: clamp(28px, 4vw, 64px) clamp(16px, 6vw, 120px) clamp(20px, 2.4vw, 32px);
+    border-radius: calc(var(--radius) * 1.6);
+    background: var(--navy);
+  }
+  .stage-in {
+    max-width: 980px;
+    margin-inline: auto;
+  }
+  .stage figcaption {
+    margin-top: clamp(24px, 3vw, 40px);
+    font-size: 0.88rem;
+    color: var(--on-navy-2);
+  }
+
+  /* ---- steps ---- */
+  .steps-wrap {
+    padding-block: clamp(80px, 9vw, 136px) clamp(40px, 5vw, 72px);
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: clamp(32px, 4vw, 56px);
+    counter-reset: s;
+  }
+  .steps li {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: clamp(22px, 2.4vw, 32px);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+  }
+  .sn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 6px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 900;
+  }
+  .steps li:last-child .sn {
+    background: var(--orange);
+    color: var(--navy);
+  }
+
+  /* ---- split + marking ---- */
+  .duo {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(28px, 5vw, 80px);
+    align-items: center;
+    padding-block: clamp(40px, 5vw, 72px);
+  }
+  .duo.flip .duo-text {
+    order: 2;
+  }
+  .duo-text {
+    display: grid;
+    gap: 14px;
+    max-width: 32em;
+  }
+  .big {
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.3rem);
+    font-weight: 900;
+  }
+  .panel {
+    padding: clamp(24px, 3vw, 44px);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+  }
+  .axes {
+    display: grid;
+    gap: 12px;
+  }
+  .axes svg {
+    width: 100%;
+    height: auto;
+  }
+  .ax {
+    font: 700 15px var(--font);
+    fill: var(--navy);
+  }
+  .ax.o {
+    fill: var(--orange-text);
+  }
+  .axes figcaption {
+    font-size: 0.82rem;
+    color: var(--slate);
+  }
+  .mark {
+    display: grid;
+    gap: 14px;
+  }
+  .mark-in {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: clamp(20px, 3vw, 40px);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--mist);
+  }
+  .mark-in {
+    min-height: clamp(260px, 30vw, 380px);
+  }
+  .mark-in :global(img) {
+    width: min(78%, 420px);
+    margin-left: 12%;
+  }
+  .mball {
+    position: absolute;
+    left: clamp(16px, 3vw, 36px);
+    top: clamp(16px, 3vw, 36px);
+    width: clamp(72px, 9vw, 120px);
+    filter: drop-shadow(0 12px 18px #1b285033);
+  }
+  .mark figcaption {
+    font-size: 0.82rem;
+    color: var(--slate);
+  }
+
+  /* ---- proof ---- */
+  .proof {
+    margin-top: clamp(32px, 4vw, 56px);
+    border-radius: calc(var(--radius) * 1.2);
+    padding: clamp(28px, 4vw, 64px);
+  }
+  .proof-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: end;
+  }
+  .proof-head .t-h2 {
+    text-wrap: balance;
+  }
+  .proof-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(36px, 4vw, 56px);
+    padding-top: clamp(28px, 3vw, 40px);
+    border-top: 1px solid var(--line-navy);
+  }
+  .proof-list li {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+  }
+  .pn {
+    font-weight: 900;
+    font-size: clamp(2.2rem, 1.4rem + 2.4vw, 3.6rem);
+    line-height: 1;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+  .pl {
+    color: var(--on-navy-2);
+  }
+  .proof-note {
+    margin-top: clamp(28px, 3vw, 40px);
+    font-size: 0.88rem;
+  }
+
+  /* ---- story ---- */
+  .story-wrap {
+    padding-block: clamp(80px, 9vw, 136px) clamp(40px, 5vw, 72px);
+  }
+  .story-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 64px);
+    align-items: end;
+  }
+  .story {
+    position: relative;
+    display: grid;
+    gap: clamp(24px, 3vw, 36px);
+    margin-top: clamp(36px, 4vw, 56px);
+    padding-left: 0;
+  }
+  .story::before {
+    content: "";
+    position: absolute;
+    left: 2.6em;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--line);
+  }
+  .story li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 5.2em minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 40px);
+    align-items: start;
+  }
+  .story li > div {
+    display: grid;
+    gap: 6px;
+    max-width: 44em;
+  }
+  .v {
+    position: relative;
+    z-index: 1;
+    justify-self: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--navy);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .story li:last-child .v {
+    background: var(--orange);
+    color: var(--navy);
+  }
+
+  /* ---- surfaces, next, note ---- */
+  .surfaces-wrap {
+    padding-block: clamp(48px, 6vw, 88px) clamp(56px, 6vw, 88px);
+  }
+  .surfaces {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: clamp(22px, 2.4vw, 32px);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+  }
+  .tech {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--orange-text);
+  }
+  .next {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(16px, 4vw, 64px);
+    margin-top: clamp(48px, 6vw, 80px);
+    padding-top: clamp(28px, 3vw, 40px);
+    border-top: 1px solid var(--line);
+  }
+  .next ul {
+    display: grid;
+    gap: 10px;
+  }
+  .next li {
+    position: relative;
+    padding-left: 1.4em;
+    font-size: 1.05rem;
+  }
+  .next li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--orange-text);
+    font-weight: 700;
+  }
+  .note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: clamp(40px, 5vw, 64px);
+    color: var(--slate);
+  }
+  .note :global(.ng) {
+    flex: none;
+    width: 14px;
+  }
+
+  @media (max-width: 1100px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .proof-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 1000px) {
+    .op-grid,
+    .proof-head,
+    .story-head,
+    .duo,
+    .next {
+      grid-template-columns: 1fr;
+    }
+    .duo.flip .duo-text {
+      order: 0;
+    }
+    .surfaces {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .steps,
+    .proof-list {
+      grid-template-columns: 1fr;
+    }
+    .stage {
+      padding-inline: 12px;
+    }
+    .story::before {
+      left: 2.1em;
+    }
+    .story li {
+      grid-template-columns: 4.2em minmax(0, 1fr);
+    }
+  }
+</style>
