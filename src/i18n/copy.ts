@@ -25,7 +25,7 @@ const en = {
   },
   header: { cta: "Contact us" },
   nav: [
-    { href: "#work", label: "Work" },
+    { href: "work/", label: "Work" },
     { href: "#process", label: "How we work" },
     { href: "#build", label: "Services" },
   ],
@@ -44,6 +44,22 @@ const en = {
     end: "Built for both.",
   },
   work: workEn,
+  workIndex: {
+    path: "/en/work/",
+    meta: {
+      title: "Work — QI SI",
+      description: "Products QI SI has designed, built and shipped: a consumer app, a fragrance brand’s site and shop, a court booking system and a scrap-car operations system.",
+    },
+    chapter: "Work",
+    title: "Built, shipped, |and used every day.",
+    intro: "Every product here is live. We built each one end to end, and we kept shipping after launch, based on what the people using it ran into.",
+    filterLabel: "Show",
+    all: "All",
+    tags: { app: "Mobile app", web: "Website", line: "LINE", admin: "Admin" },
+    cta: "Read the case study",
+    homeAll: "See all work",
+    back: "All work",
+  },
   process: {
     chapter: "How we work",
     title: "One deep, one bright.",
@@ -135,7 +151,7 @@ const zh: Copy = {
   },
   header: { cta: "聯絡我們" },
   nav: [
-    { href: "#work", label: "案例" },
+    { href: "work/", label: "案例" },
     { href: "#process", label: "工作方式" },
     { href: "#build", label: "服務" },
   ],
@@ -152,6 +168,22 @@ const zh: Copy = {
     end: "兩邊都要顧到。",
   },
   work: workZh,
+  workIndex: {
+    path: "/work/",
+    meta: {
+      title: "案例｜奇斯科技 QI SI",
+      description: "奇斯科技設計、開發並上線的產品：消費者 App、香氛品牌官網與購物系統、羽球場預約系統，以及報廢車收購管理系統。",
+    },
+    chapter: "案例",
+    title: "做出來、上線了，|每天都有人在用。",
+    intro: "這裡的每一個產品都已經上線。從頭到尾由我們打造，上線之後也依照使用者實際遇到的狀況，持續更新。",
+    filterLabel: "篩選",
+    all: "全部",
+    tags: { app: "手機 App", web: "網站", line: "LINE", admin: "管理後台" },
+    cta: "看完整案例",
+    homeAll: "看全部案例",
+    back: "所有案例",
+  },
   process: {
     chapter: "工作方式",
     title: "一深一亮。",

@@ -2,6 +2,9 @@
 // Every claim traces to the project repositories (counts taken in October 2026):
 // - court: WaWaEMu/court_booking_system @ 27ac39e — docs/PROPOSAL.md, docs/PRODUCT.md, PROGRESS.md, routes/, app/, tests/
 // - scrap: WaWaEMu/scrap_car_system @ 1ceafb2 — docs/PROPOSAL.md, docs/PRODUCT.md, PROGRESS.md, routes/, app/, tests/
+// - shop: WaWaEMu/wawa_house @ 599b2ef (counts taken November 2026) — docs/PRODUCT.md, PROGRESS.md, routes/, tests/,
+//   resources/js (LIFF pages, AiCopyDialog.vue), docs/assets/line-flex (card wording). Screens captured from the app running
+//   locally with sample products and orders; the shop name is replaced with sample text, product photos are drawn placeholders.
 // Clients stay anonymous: no venue, company, person or LINE account names. Screens were captured from the real
 // apps running locally with sample data; the venue name in the court screens is replaced with sample text.
 // LINE illustrations reuse the apps' own wording (AdminNotificationService, LineRichMenuRole). The scrap-car LINE screen
@@ -9,7 +12,7 @@
 
 import type { Lang } from "./copy";
 
-export type CaseSlug = "court-booking" | "scrap-cars";
+export type CaseSlug = "fragrance-shop" | "court-booking" | "scrap-cars";
 
 type Pair = { k: string; v: string };
 export type CourtVisual = {
@@ -29,6 +32,14 @@ export type ScrapVisual = {
   stages: string[];
   elig: { title: string; states: string[]; plate: string };
   formula: { profit: string; resale: string; purchase: string; plate: string; driver: string };
+};
+export type ShopVisual = {
+  kind: "shop";
+  sampleNote: string;
+  illustration: string;
+  serp: { site: string; url: string; title: string; desc: string; rich: string[] };
+  order: { title: string; steps: string[]; rows: [string, string][]; button: string };
+  ai: { head: string; draft: string; ask: string; revised: string; apply: string; note: string };
 };
 export interface Case {
   slug: CaseSlug;
@@ -61,7 +72,7 @@ export interface Case {
   proof: { n: string; label: string }[];
   proofNote: string;
   note: string;
-  visual: CourtVisual | ScrapVisual;
+  visual: CourtVisual | ScrapVisual | ShopVisual;
   alts: Record<string, string>;
 }
 
@@ -668,7 +679,326 @@ const scrapZh: Case = {
   },
 };
 
+// Shop illustrations reuse the app's own wording (Chinese UI): the customer order card
+// (docs/assets/line-flex/customer-placed-transfer.json) and the AI copy dialog (AiCopyDialog.vue). Shared by both languages.
+const SHOP_VISUAL = {
+  serp: {
+    site: "香氛選物",
+    url: "https://example.com › products",
+    title: "玫瑰淡香水｜SCENT SHOP",
+    desc: "清新玫瑰揉合白麝香，溫柔不甜膩，適合上班日和約會。",
+    rich: ["NT$1,280", "有現貨"],
+  },
+  order: {
+    title: "訂單成立，請完成匯款",
+    steps: ["訂單成立", "付款完成", "已出貨"],
+    rows: [
+      ["應付金額", "NT$ 1,746"],
+      ["匯款期限", "2026/11/18 23:59"],
+      ["訂單編號", "W2611016001"],
+    ] as [string, string][],
+    button: "查看訂單／回報匯款",
+  },
+  ai: {
+    head: "AI 幫我寫：玫瑰淡香水",
+    draft: "清新玫瑰揉合白麝香，溫柔不甜膩，適合上班日和約會。",
+    ask: "簡介改成偏送禮的感覺",
+    revised: "想送喜歡玫瑰的人？清新玫瑰揉合白麝香，溫柔不甜膩。",
+    apply: "套用這版",
+    note: "套用後仍要按「儲存」",
+  },
+};
+
+const shopEn: Case = {
+  slug: "fragrance-shop",
+  path: "/en/work/fragrance-shop/",
+  meta: {
+    title: "Fragrance brand site and shop case study — QI SI",
+    description:
+      "How QI SI built a fragrance brand’s own website and shop: a storefront search engines can read, LINE membership and staff pages, and an admin where AI drafts the product copy.",
+  },
+  card: {
+    kind: "Brand site and shop · Web + LINE",
+    lede: "A fragrance brand’s own storefront, with members and order updates in LINE, and an admin where AI drafts the product copy.",
+  },
+  chapter: "Case study",
+  name: "Fragrance shop",
+  nameAlt: "香氛品牌官網",
+  tagline: "A brand’s own home, where customers find it and buy.",
+  status: "Live since October 2026",
+  summary:
+    "A Taiwanese brand selling perfume, home fragrance and beauty products had mostly sold through large shopping platforms. It wanted a home of its own: a site people can find on Google, and customers who stay in touch through LINE. We built the storefront and checkout, LINE membership, and a back office the owner and staff run themselves, and we have kept shipping changes since launch.",
+  facts: [
+    { k: "We built", v: "Storefront and checkout, LINE Official Account with member and staff pages, admin, backend" },
+    { k: "Used by", v: "Shoppers, the owner and staff" },
+    { k: "Release", v: "Live since October 2026, still shipping" },
+    { k: "Sells", v: "Perfume, home fragrance, beauty" },
+  ],
+  stageCaption:
+    "Real screens from the system (Chinese UI): the catalogue and a product page on a phone. Products, photos and prices are sample data; the shop name is replaced.",
+  beforeTitle: "What changed for the |brand",
+  beforeLabel: "Before",
+  afterLabel: "Now",
+  before: [
+    {
+      was: "Customers met the brand on large shopping platforms. It had no site of its own that search could find.",
+      now: "Its own storefront, rendered on the server, with structured data and a share preview on every product page.",
+    },
+    {
+      was: "Bank transfers were arranged in plain-text chat, which the owner worried could look like a scam.",
+      now: "Customers get a branded LINE card at each step: order placed, payment received, shipped.",
+    },
+    {
+      was: "Hundreds of products were waiting for copy, written one by one.",
+      now: "AI drafts it from the name, category and photos. Staff ask for changes and apply only what they approve.",
+    },
+    {
+      was: "Every order was followed by hand: wait for the transfer, check the bank, then ship.",
+      now: "Orders sort themselves into to ship, awaiting payment and shipped. Unpaid orders cancel when they expire, and staff confirm and ship in batches from LINE.",
+    },
+  ],
+  featuresTitle: "How it |works",
+  features: [
+    {
+      id: "seo",
+      title: "A site search engines can read",
+      body: "Product pages are rendered on the server, so search engines see the full content, with product and FAQ structured data, a sitemap, and share previews that use each product’s own photo. Categories nest, from perfume down to woody or floral, and a journal of fragrance articles links to the products it mentions.",
+    },
+    {
+      id: "checkout",
+      title: "Members through LINE",
+      body: "Adding to the cart needs no account. At checkout, customers sign in with LINE in one tap, and the address they type is saved for next time. From then on, the order, the payment and the shipment each arrive as a LINE card. Sold-out items take restock sign-ups, and a cart left alone for three hours gets one reminder.",
+    },
+    {
+      id: "staff",
+      title: "Staff run the shop from LINE",
+      body: "Staff who link their LINE see a menu of their own: overview, to ship, payment checks and questions waiting for a reply. They confirm bank transfers one at a time or several at once, and can undo a mistake. Once a day, one card lists the transfers due within 24 hours, instead of a message per order.",
+    },
+    {
+      id: "ai",
+      title: "AI writes the first draft",
+      body: "On the product form, AI drafts the summary, the description and each variant’s text, following a style guide the owner keeps. Staff ask for changes in plain words, and AI edits only what they point to. If it can’t confirm a perfume’s notes, it says so instead of guessing. Nothing is saved until staff apply the draft and press save.",
+    },
+    {
+      id: "admin",
+      title: "Everything else, in one back office",
+      body: "Orders, products with variants, stock and sale prices, promotions, gift offers, vouchers, refunds, sales reports and staff accounts. Settings pages preview the storefront as you type, so the owner sees the result before saving.",
+    },
+  ],
+  listenTitle: "Shaped by the people |using it",
+  listenIntro: "The owner and staff used each release for real, and what they ran into decided what we changed next.",
+  heardLabel: "What came up",
+  changedLabel: "What we changed",
+  listen: [
+    {
+      heard: "Signing in meant visiting the member area first, which the owner found backwards.",
+      changed: "“Sign in with LINE” moved onto the checkout page, and the first address typed goes into an address book.",
+    },
+    {
+      heard: "Every round of edits rewrote the whole text, and the AI copy grew longer and drifted.",
+      changed: "Edits now touch only what staff mention, copy has a length limit, and AI asks instead of guessing perfume notes.",
+    },
+    {
+      heard: "Eight items in the admin menu felt cluttered.",
+      changed: "Related pages became tabs, and everything that comes in from LINE got a section of its own.",
+    },
+    {
+      heard: "A message for every transfer about to expire would flood the chat.",
+      changed: "One card a day lists every transfer due within 24 hours.",
+    },
+  ],
+  surfacesTitle: "What we |built",
+  surfaces: [
+    {
+      name: "Storefront and checkout",
+      tech: "Laravel · Blade",
+      body: "Catalogue, search, cart, checkout, events, a fragrance journal and order pages, rendered on the server for search.",
+    },
+    {
+      name: "LINE Official Account",
+      tech: "Messaging API · LINE Login · LIFF",
+      body: "Separate menus for customers and staff, a member area and five staff pages inside LINE, and a card at every step.",
+    },
+    {
+      name: "Admin",
+      tech: "Vue 3 · TypeScript · Inertia.js",
+      body: "Orders, products, LINE, Instagram, reports and settings, with live previews, for the owner and staff.",
+    },
+    {
+      name: "Backend",
+      tech: "Laravel 13 · PHP · ECPay · Claude API",
+      body: "Prices, stock and promotions worked out on the server, ECPay payments and invoices built in to switch on in stages, and AI copy that never saves itself.",
+    },
+  ],
+  proofTitle: "A small brand, |a complete shop",
+  proofIntro: "Selling online means money, stock and promises to customers. The rules underneath have to hold.",
+  proof: [
+    { n: "754", label: "automated tests in the backend" },
+    { n: "211", label: "routes behind the storefront, the admin and the LINE pages" },
+    { n: "5", label: "staff pages inside LINE: overview, shipping, payment checks, replies, restock" },
+    { n: "8", label: "scheduled jobs, including cancelling expired unpaid orders and the daily payment reminder" },
+  ],
+  proofNote: "Counted in the project repository in November 2026.",
+  note: "Laravel, Vue and LINE fit a brand whose customers already talk to it in LINE. The next product gets its own answer.",
+  visual: {
+    kind: "shop",
+    sampleNote: "Real interface, sample data.",
+    illustration: "Illustration using the system’s own wording (Chinese UI).",
+    ...SHOP_VISUAL,
+  },
+  alts: {
+    browser: "The storefront catalogue: a search box, category and tag filters, and perfume product cards with prices.",
+    phone: "A product page on a phone: photo, price, quantity, and add-to-cart and buy-now buttons.",
+    transfers: "The payment-check page inside LINE: bank-transfer orders with the amount, the last five digits of the transfer and the deadline.",
+    admin: "The admin order list on the awaiting-payment tab, with deadlines and buttons to confirm several transfers or notify customers.",
+  },
+};
+
+const shopZh: Case = {
+  slug: "fragrance-shop",
+  path: "/work/fragrance-shop/",
+  meta: {
+    title: "香氛品牌官網與購物系統案例｜奇斯科技 QI SI",
+    description: "奇斯科技為一個香氛品牌打造的官網與購物系統：Google 讀得懂的品牌官網、LINE 會員與管理員頁面，以及會用 AI 幫忙寫商品文案的管理後台。",
+  },
+  card: {
+    kind: "品牌官網與購物・網站＋LINE",
+    lede: "香氛品牌自己的官網與購物車，會員和訂單通知都在 LINE；後台還有 AI 幫忙寫商品文案。",
+  },
+  chapter: "案例",
+  name: "香氛品牌官網",
+  nameAlt: "Fragrance shop",
+  tagline: "品牌有了自己的家，|客人找得到、也買得到。",
+  status: "2026 年 10 月上線",
+  summary:
+    "這是為台灣一個販售香水、居家香氛與彩妝保養的品牌打造的官網。品牌原本主要透過大型購物平台銷售，想要有一個屬於自己的地方：在 Google 搜得到，客人也能透過 LINE 跟品牌保持聯繫。前台與結帳、LINE 會員，以及業主和員工自己就能操作的後台，都由我們打造，上線之後也持續更新。",
+  facts: [
+    { k: "我們打造", v: "品牌官網與結帳、LINE 官方帳號（會員與管理員頁面）、管理後台、後端" },
+    { k: "使用者", v: "消費者、業主與員工" },
+    { k: "版本", v: "2026 年 10 月上線，持續更新中" },
+    { k: "品類", v: "香水、居家香氛、彩妝保養" },
+  ],
+  stageCaption: "畫面取自系統實際介面：商品列表，以及手機上的商品頁。商品、照片與價格為示意資料，店名已替換。",
+  beforeTitle: "品牌的日常，|變了什麼",
+  beforeLabel: "以前",
+  afterLabel: "現在",
+  before: [
+    {
+      was: "客人都是在大型購物平台上認識品牌，品牌自己沒有一個搜尋得到的網站。",
+      now: "有了自己的官網，伺服器端渲染，每個商品頁都有結構化資料和分享預覽。",
+    },
+    {
+      was: "匯款靠聊天室的純文字對話往來，業主擔心被客人誤會是詐騙。",
+      now: "訂單成立、付款完成、已出貨，每一步客人都會收到有品牌感的 LINE 卡片。",
+    },
+    {
+      was: "上百個商品等著上架，文案只能一個一個手打。",
+      now: "AI 依名稱、分類和照片先寫草稿，員工打字要求修改，滿意了才套用。",
+    },
+    {
+      was: "每筆訂單都靠人工追：等客人匯款、對帳，再出貨。",
+      now: "訂單自動分成待出貨、待付款、已出貨；逾期沒付款自動取消，確認收款和出貨在 LINE 裡就能批次完成。",
+    },
+  ],
+  featuresTitle: "系統怎麼|運作",
+  features: [
+    {
+      id: "seo",
+      title: "Google 讀得懂的官網",
+      body: "商品頁由伺服器端渲染，搜尋引擎能讀到完整內容，還有商品與常見問題的結構化資料、sitemap，分享出去的預覽圖就是商品自己的照片。分類可以多層，從香水再分木質調、花香調；香氛專欄的文章會連回文中提到的商品。",
+    },
+    {
+      id: "checkout",
+      title: "用 LINE 就是會員",
+      body: "加入購物車不用登入。到了結帳頁，按一下就能用 LINE 登入，第一次填的收件資料會存起來，下次自動帶入。之後訂單成立、付款、出貨，都會用 LINE 卡片通知。售完的商品可以登記到貨通知，購物車放了三小時沒結帳，也會提醒一次。",
+    },
+    {
+      id: "staff",
+      title: "員工在 LINE 裡顧店",
+      body: "綁定 LINE 的員工會看到專屬的「管理」選單：總覽、待出貨、匯款確認、待回覆。銀行轉帳可以一筆一筆確認，也能一次勾選好幾筆，按錯了還能回溯。每天一張卡片列出 24 小時內到期的匯款，不會每筆訂單都跳一則通知。",
+    },
+    {
+      id: "ai",
+      title: "AI 先寫第一版",
+      body: "商品表單上按「AI 幫我寫」，AI 會照業主維護的風格指南，寫出簡介、完整介紹和每個款式的說明。員工直接打字要求修改，AI 只改提到的地方；查不到確定的香調，就老實說，不會亂猜。員工按下「套用這版」、再按儲存，才算數。",
+    },
+    {
+      id: "admin",
+      title: "其他的事，一個後台就夠",
+      body: "訂單、商品款式、庫存與特價、促銷活動、贈品、票券、退款、營收報表和員工帳號都在這裡。設定頁面邊打字邊預覽前台，存檔前就知道排版長什麼樣子。",
+    },
+  ],
+  listenTitle: "跟著使用的人，|一起長出來",
+  listenIntro: "業主和員工每一版都實際拿來用，他們遇到的狀況，決定了下一步要改什麼。",
+  heardLabel: "遇到的狀況",
+  changedLabel: "我們的調整",
+  listen: [
+    {
+      heard: "要先進會員中心才能登入，業主覺得不直覺。",
+      changed: "「用 LINE 登入」直接放在結帳頁，第一次填的地址存進收件地址簿。",
+    },
+    {
+      heard: "AI 每次修改都整篇重寫，越改越長、越寫越歪。",
+      changed: "改成只修改員工提到的地方、文案有字數上限，查不到香調就先問員工。",
+    },
+    {
+      heard: "後台選單有 8 個項目，太雜。",
+      changed: "有從屬關係的功能併成頁內分頁籤，LINE 送來的東西獨立成一區。",
+    },
+    {
+      heard: "每筆快到期的匯款都發一則提醒，訂單一多就會洗版。",
+      changed: "改成每天一張卡片，列出 24 小時內到期的所有匯款。",
+    },
+  ],
+  surfacesTitle: "我們|打造的部分",
+  surfaces: [
+    {
+      name: "品牌官網與結帳",
+      tech: "Laravel · Blade",
+      body: "商品型錄、搜尋、購物車、結帳、活動、香氛專欄與訂單頁，由伺服器端渲染，讓搜尋引擎讀得到。",
+    },
+    {
+      name: "LINE 官方帳號",
+      tech: "Messaging API · LINE Login · LIFF",
+      body: "客人與員工各一套圖文選單、LINE 裡的會員中心和五個管理員頁面，每一步都有卡片通知。",
+    },
+    {
+      name: "管理後台",
+      tech: "Vue 3 · TypeScript · Inertia.js",
+      body: "訂單、商品、LINE、IG、報表與設定，附即時預覽，業主和員工自己就能操作。",
+    },
+    {
+      name: "後端服務",
+      tech: "Laravel 13 · PHP · 綠界 ECPay · Claude API",
+      body: "價格、庫存和促銷一律由伺服器計算；綠界金流與電子發票已串好、分階段開放；AI 寫的文案絕不自動存檔。",
+    },
+  ],
+  proofTitle: "品牌不大，|購物系統一樣完整",
+  proofIntro: "在網路上賣東西，牽涉到錢、庫存和對客人的承諾，底下的規則必須站得住。",
+  proof: [
+    { n: "754", label: "個後端自動化測試" },
+    { n: "211", label: "條路由，撐起官網、後台與 LINE 頁面" },
+    { n: "5", label: "個 LINE 管理員頁面：總覽、出貨、匯款確認、待回覆、待補貨" },
+    { n: "8", label: "個排程工作，包括取消逾期未付款的訂單，以及每天的匯款到期提醒" },
+  ],
+  proofNote: "數字為 2026 年 11 月於專案程式庫中實際統計。",
+  note: "對一個客人本來就用 LINE 聯絡的品牌來說，Laravel、Vue 加上 LINE 是最適合的組合。下一個產品，會有屬於它的答案。",
+  visual: {
+    kind: "shop",
+    sampleNote: "實際介面，資料為示意。",
+    illustration: "示意圖，文字取自系統實際用語。",
+    ...SHOP_VISUAL,
+  },
+  alts: {
+    browser: "官網的商品列表：搜尋框、分類與標籤篩選，以及標示價格的香水商品卡片。",
+    phone: "手機上的商品頁：商品照片、價格、數量，以及加入購物車與直接購買按鈕。",
+    transfers: "LINE 裡的匯款確認頁：每筆銀行轉帳訂單的金額、帳號末五碼與匯款期限。",
+    admin: "後台訂單的待付款分頁：列出匯款期限，可以一次確認多筆收款或通知客人。",
+  },
+};
+
 export const cases: Record<CaseSlug, Record<Lang, Case>> = {
+  "fragrance-shop": { en: shopEn, zh: shopZh },
   "court-booking": { en: courtEn, zh: courtZh },
   "scrap-cars": { en: scrapEn, zh: scrapZh },
 };

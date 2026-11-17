@@ -1,0 +1,316 @@
+---
+// Work index (/work/, /en/work/): every project as one row, with a filter by what we built.
+// The filter is progressive: without JS every row shows.
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Chapter from "./Chapter.astro";
+import Contact from "./Contact.astro";
+import Effects from "./Effects.astro";
+import { md } from "../i18n/md";
+import { copy, type Lang } from "../i18n/copy";
+import { workItems, type WorkTag } from "../i18n/workList";
+import { workThumbs } from "../assets/workThumbs";
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = copy[lang];
+const x = t.workIndex;
+const paths = { zh: copy.zh.workIndex.path, en: copy.en.workIndex.path };
+const items = workItems(lang);
+const tagOrder: WorkTag[] = ["app", "web", "line", "admin"];
+const used = tagOrder.filter((g) => items.some((i) => i.tags.includes(g)));
+const alt = lang === "zh" ? "en" : "zh-Hant-TW";
+---
+
+<Base t={t} lang={lang} title={x.meta.title} description={x.meta.description} paths={paths}>
+  <a class="skip" href="#main">{t.a11y.skip}</a>
+  <Header t={t} lang={lang} paths={paths} />
+  <main id="main" class="wi">
+    <div class="wrap">
+      <div class="wi-head">
+        <Chapter label={x.chapter} />
+        <h1 class="wi-title keep" set:html={md(x.title)} />
+        <p class="t-lede muted">{x.intro}</p>
+      </div>
+
+      <div class="filter" role="group" aria-label={x.filterLabel} data-filter hidden>
+        <button type="button" aria-pressed="true" data-tag="">{x.all} <span class="n">{items.length}</span></button>
+        {
+          used.map((g) => (
+            <button type="button" aria-pressed="false" data-tag={g}>
+              {x.tags[g]} <span class="n">{items.filter((i) => i.tags.includes(g)).length}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <ol class="rows" aria-live="polite">
+        {
+          items.map((i, n) => (
+            <li data-tags={i.tags.join(" ")} data-reveal>
+              <a class="row" href={i.path} data-spotlight>
+                <div class="thumb" aria-hidden="true">
+                  <Image
+                    src={workThumbs[i.id]}
+                    widths={[480, 720, 960, 1280]}
+                    sizes="(min-width: 1000px) 700px, 92vw"
+                    alt=""
+                    loading={n < 2 ? "eager" : "lazy"}
+                  />
+                  <span class="frame" />
+                </div>
+                <div class="text">
+                  <p class="kind">{i.kind}</p>
+                  <h2 class="name">
+                    {i.name} <span class="alt" lang={alt}>{i.nameAlt}</span>
+                  </h2>
+                  <p class="muted">{i.lede}</p>
+                  <ul class="tags">
+                    {i.tags.map((g) => (
+                      <li>{x.tags[g]}</li>
+                    ))}
+                  </ul>
+                  <p class="status">
+                    <span class="dot" aria-hidden="true" />
+                    {i.status}
+                  </p>
+                  <span class="go">
+                    {x.cta} <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </main>
+  <Contact t={t} lang={lang} paths={paths} />
+  <Effects />
+</Base>
+
+<script>
+  import "../scripts/site";
+  const bar = document.querySelector<HTMLElement>("[data-filter]");
+  if (bar) {
+    bar.hidden = false;
+    const rows = [...document.querySelectorAll<HTMLElement>(".rows > li")];
+    bar.addEventListener("click", (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button");
+      if (!b) return;
+      const tag = b.dataset.tag ?? "";
+      bar.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      rows.forEach((r) => (r.hidden = !!tag && !(r.dataset.tags ?? "").split(" ").includes(tag)));
+    });
+  }
+</script>
+
+<style>
+  .wi {
+    background: var(--cream);
+    padding-block: clamp(40px, 5vw, 72px) clamp(64px, 8vw, 120px);
+  }
+  .wi-head {
+    display: grid;
+    gap: clamp(16px, 2vw, 24px);
+    max-width: 920px;
+  }
+  .wi-title {
+    font-weight: 900;
+    font-size: clamp(2.4rem, 1.2rem + 4.4vw, 5.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  :global(:root[data-lang="zh"]) .wi-title {
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+  }
+  .wi-title :global(em) {
+    font-style: normal;
+    color: var(--orange-text);
+  }
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  .filter[hidden] {
+    display: none;
+  }
+  .filter button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--navy);
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .filter button:hover {
+    border-color: var(--navy);
+  }
+  .filter button[aria-pressed="true"] {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .filter .n {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+  .rows {
+    display: grid;
+    gap: clamp(16px, 2vw, 24px);
+    margin-top: clamp(20px, 2.4vw, 32px);
+  }
+  .rows > li[hidden] {
+    display: none;
+  }
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    border-radius: calc(var(--radius) * 1.2);
+    background: var(--white);
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      transform 0.3s var(--ease),
+      box-shadow 0.3s var(--ease);
+  }
+  .row:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 50px -36px #1b285088;
+  }
+  .thumb {
+    position: relative;
+    container-type: size;
+    min-height: 300px;
+    overflow: hidden;
+    background: var(--mist);
+    padding: clamp(20px, 2.4vw, 36px) clamp(20px, 2.4vw, 36px) 0;
+  }
+  .thumb :global(img) {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 18px 30px -20px #1b285066;
+    transition: transform 0.6s var(--ease);
+  }
+  .row:hover .thumb :global(img) {
+    transform: translateY(calc(-100% + 100cqh - clamp(20px, 2.4vw, 36px)));
+    transition-duration: 2.4s;
+  }
+  .frame {
+    --c: 22px;
+    position: absolute;
+    inset: 22px;
+    z-index: 2;
+    border: 2px solid var(--orange);
+    border-radius: 6px;
+    mask: conic-gradient(at var(--c) var(--c), #0000 75%, #000 0) 0 0 / calc(100% - var(--c)) calc(100% - var(--c));
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      inset 0.45s var(--ease),
+      opacity 0.3s var(--ease);
+  }
+  .row:hover .frame,
+  .row:focus-visible .frame {
+    inset: 10px;
+    opacity: 1;
+  }
+  .text {
+    display: grid;
+    gap: 12px;
+    align-content: center;
+    padding: clamp(24px, 3vw, 48px);
+  }
+  .kind {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--orange-text);
+  }
+  .name {
+    font-weight: 900;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .name .alt {
+    display: block;
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    color: var(--slate);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tags li {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--mist);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: var(--slate);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 4px #f46a2a33;
+  }
+  .go {
+    margin-top: 4px;
+    font-weight: 700;
+  }
+  .go span {
+    display: inline-block;
+    transition: transform 0.2s var(--ease);
+  }
+  .row:hover .go span {
+    transform: translateX(4px);
+  }
+  @media (max-width: 900px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .thumb {
+      min-height: 0;
+      aspect-ratio: 16 / 8;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .row,
+    .thumb :global(img) {
+      transition: none;
+    }
+    .row:hover .thumb :global(img) {
+      transform: none;
+    }
+  }
+</style>

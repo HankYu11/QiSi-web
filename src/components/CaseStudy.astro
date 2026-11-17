@@ -14,6 +14,10 @@ import scrapVehicles from "../assets/scrap/vehicles.png";
 import scrapSchedule from "../assets/scrap/schedule.png";
 import scrapProgress from "../assets/scrap/admin-progress.png";
 import scrapLine from "../assets/scrap/line-chat.jpg";
+import shopStorefront from "../assets/shop/storefront.png";
+import shopProduct from "../assets/shop/product-mobile.png";
+import shopTransfers from "../assets/shop/liff-transfers.png";
+import shopAdmin from "../assets/shop/admin-transfers.png";
 
 interface Props {
   t: Copy;
@@ -24,13 +28,14 @@ const { t, lang, c } = Astro.props;
 const v = c.visual;
 const wide = [720, 1080, 1440];
 const wideSizes = "(min-width: 1360px) 760px, (min-width: 900px) 56vw, 92vw";
-const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
+const stageBrowser = { "court-booking": courtSchedule, "scrap-cars": scrapVehicles, "fragrance-shop": shopStorefront }[c.slug];
+const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragrance-shop": shopProduct }[c.slug];
 ---
 
 <article class="case" aria-labelledby="case-title">
   <!-- Opening -->
   <div class="wrap opening">
-    <a class="back" href={t.path}>← {t.work.back}</a>
+    <a class="back" href={t.workIndex.path}>← {t.workIndex.back}</a>
     <Chapter label={c.chapter} />
     <div class="title-row">
       <h1 id="case-title" class="title">
@@ -65,17 +70,9 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
           <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
           <Image src={stageBrowser} widths={wide} sizes="(min-width: 1100px) 860px, 92vw" alt={c.alts.browser} />
         </div>
-        {
-          v.kind === "court" ? (
-            <div class="phone sc-phone tall">
-              <Image src={courtGrid} widths={[300, 450, 600]} sizes="(min-width: 1100px) 260px, 40vw" alt={c.alts.phone} />
-            </div>
-          ) : (
-            <div class="phone sc-phone">
-              <Image src={scrapLine} widths={[300, 450, 600]} sizes="(min-width: 1100px) 260px, 40vw" alt={c.alts.phone} />
-            </div>
-          )
-        }
+        <div class={`phone sc-phone${v.kind === "scrap" ? "" : " tall"}${v.kind === "shop" ? " fit" : ""}`}>
+          <Image src={stagePhone} widths={[300, 450, 600]} sizes="(min-width: 1100px) 260px, 40vw" alt={c.alts.phone} />
+        </div>
       </div>
       <figcaption class="muted">{c.stageCaption}</figcaption>
     </figure>
@@ -199,6 +196,84 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
                   <div class="browser small">
                     <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
                     <Image src={courtRequests} widths={wide} sizes={wideSizes} alt={c.alts.admin} />
+                  </div>
+                  <figcaption>{v.sampleNote}</figcaption>
+                </figure>
+              )}
+              {v.kind === "shop" && f.id === "seo" && (
+                <figure class="fig">
+                  <div class="panel serp" aria-hidden="true">
+                    <p class="sp-site">
+                      <span class="sp-fav" />
+                      <span>
+                        {v.serp.site}
+                        <br />
+                        <small>{v.serp.url}</small>
+                      </span>
+                    </p>
+                    <p class="sp-title">{v.serp.title}</p>
+                    <p class="sp-desc">{v.serp.desc}</p>
+                    <p class="sp-rich">
+                      {v.serp.rich.map((r) => (
+                        <span>{r}</span>
+                      ))}
+                    </p>
+                  </div>
+                  <figcaption>{v.illustration}</figcaption>
+                </figure>
+              )}
+              {v.kind === "shop" && f.id === "checkout" && (
+                <figure class="fig">
+                  <div class="flex-card shop-card" aria-hidden="true">
+                    <p class="fx-head">{v.order.title}</p>
+                    <ol class="fx-steps">
+                      {v.order.steps.map((st, n) => (
+                        <li class={n === 0 ? "on" : undefined}>{st}</li>
+                      ))}
+                    </ol>
+                    <dl class="fx-body">
+                      {v.order.rows.map(([k, val]) => (
+                        <div>
+                          <dt>{k}</dt>
+                          <dd>{val}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <div class="fx-foot">
+                      <span class="fx-btn yes">{v.order.button}</span>
+                    </div>
+                  </div>
+                  <figcaption>{v.illustration}</figcaption>
+                </figure>
+              )}
+              {v.kind === "shop" && f.id === "staff" && (
+                <figure class="fig">
+                  <div class="phone crop">
+                    <Image src={shopTransfers} widths={[390, 780]} sizes="300px" alt={c.alts.transfers} />
+                  </div>
+                  <figcaption>{v.sampleNote}</figcaption>
+                </figure>
+              )}
+              {v.kind === "shop" && f.id === "ai" && (
+                <figure class="fig">
+                  <div class="panel chat" aria-hidden="true">
+                    <p class="sn-k">{v.ai.head}</p>
+                    <p class="bubble ai">{v.ai.draft}</p>
+                    <p class="bubble me">{v.ai.ask}</p>
+                    <p class="bubble ai">{v.ai.revised}</p>
+                    <p class="chat-foot">
+                      <span class="fx-btn yes">{v.ai.apply}</span>
+                      <small>{v.ai.note}</small>
+                    </p>
+                  </div>
+                  <figcaption>{v.illustration}</figcaption>
+                </figure>
+              )}
+              {v.kind === "shop" && f.id === "admin" && (
+                <figure class="fig">
+                  <div class="browser small">
+                    <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+                    <Image src={shopAdmin} widths={wide} sizes={wideSizes} alt={c.alts.admin} />
                   </div>
                   <figcaption>{v.sampleNote}</figcaption>
                 </figure>
@@ -523,6 +598,11 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
   .sc-phone.tall {
     height: 100%;
   }
+  /* a full-height phone sized by the screen's own ratio, so only the bottom is cropped, never the sides */
+  .sc-phone.tall.fit {
+    width: auto;
+    aspect-ratio: 390 / 780;
+  }
   .sc-phone.tall :global(img) {
     height: 100%;
     object-fit: cover;
@@ -739,6 +819,115 @@ const stageBrowser = c.slug === "court-booking" ? courtSchedule : scrapVehicles;
     border-color: #fedb00;
     background: #fedb00;
     color: #1f2937;
+  }
+  /* shop: colours follow the shop's own LINE cards and admin, not the QI SI palette */
+  .shop-card .fx-head {
+    background: #6f2a3b;
+    color: var(--white);
+  }
+  .shop-card .fx-btn.yes {
+    flex: 1;
+    text-align: center;
+    border-color: #d75b4e;
+    background: #d75b4e;
+    color: var(--white);
+  }
+  .fx-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 16px 16px 4px;
+    font-size: 0.72rem;
+    color: #6b7280;
+    text-align: center;
+  }
+  .fx-steps li {
+    padding-top: 10px;
+    border-top: 4px solid #eadfd8;
+  }
+  .fx-steps li.on {
+    border-color: #d75b4e;
+    color: #1f2937;
+    font-weight: 700;
+  }
+  .serp {
+    display: grid;
+    gap: 6px;
+    font-family: Arial, var(--font, sans-serif);
+  }
+  .sp-site {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #202124;
+  }
+  .sp-site small {
+    color: #4d5156;
+  }
+  .sp-fav {
+    width: 26px;
+    height: 26px;
+    flex: none;
+    border-radius: 50%;
+    background: #f3dede;
+  }
+  .sp-title {
+    margin-top: 4px;
+    font-size: 1.15rem;
+    color: #1a0dab;
+  }
+  .sp-desc {
+    font-size: 0.85rem;
+    color: #4d5156;
+  }
+  .sp-rich {
+    display: flex;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #4d5156;
+  }
+  .sp-rich span + span::before {
+    content: "·";
+    margin-right: 8px;
+  }
+  .chat {
+    display: grid;
+    gap: 10px;
+  }
+  .bubble {
+    max-width: 88%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .bubble.ai {
+    justify-self: start;
+    background: #f6ece6;
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.me {
+    justify-self: end;
+    background: #d75b4e;
+    color: var(--white);
+    border-bottom-right-radius: 4px;
+  }
+  .chat-foot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .chat-foot .fx-btn.yes {
+    border-color: #d75b4e;
+    background: #d75b4e;
+    color: var(--white);
+  }
+  .chat-foot small {
+    font-size: 0.78rem;
+    color: var(--slate);
   }
   .panel {
     width: min(100%, 460px);

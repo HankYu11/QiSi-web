@@ -27,9 +27,9 @@ const meta = c ? c.meta : t.work.meta;
     {c ? <CaseStudy t={t} lang={lang} c={c} /> : <Work t={t} lang={lang} />}
     <nav class="next" aria-label={moreWork[lang].title}>
       <div class="wrap">
-        <CaseCards t={t} lang={lang} exclude={slug ?? "freshtogo"} heading={moreWork[lang].title} />
+        <CaseCards t={t} lang={lang} exclude={slug ?? "freshtogo"} heading={moreWork[lang].title} limit={2} />
         <div class="next-in">
-          <a class="btn btn-line" href={t.path}>← {t.work.back}</a>
+          <a class="btn btn-line" href={t.workIndex.path}>{t.workIndex.homeAll} →</a>
           <a class="btn btn-navy" href={`${t.path}#process`}>{t.work.nextHow} →</a>
         </div>
       </div>
