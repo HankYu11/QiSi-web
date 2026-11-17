@@ -1,0 +1,279 @@
+---
+// 旋轉教練's result screen, redrawn in HTML from a real screenshot (app 0.13.24) so it can follow the app's redesigns.
+// Everything scales with the frame's width (container query units). The left half stands in for the camera view.
+import type { Lab } from "../i18n/lab";
+interface Props {
+  hud: Lab["hud"];
+  label?: string;
+}
+const { hud, label } = Astro.props;
+const max = Math.max(...hud.split.map(([, n]) => n));
+---
+
+<div class="sh" role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : "true"}>
+  <div class="scr">
+    <svg class="cam" viewBox="0 0 500 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="sh-glow" cx="50%" cy="40%" r="70%">
+          <stop offset="0" stop-color="#1d2a35" />
+          <stop offset="1" stop-color="#05080b" />
+        </radialGradient>
+      </defs>
+      <rect width="500" height="450" fill="url(#sh-glow)"></rect>
+      <path d="M-10 330 L520 300" stroke="#2c4250" stroke-width="3"></path>
+      <path d="M250 304 L250 270" stroke="#2c4250" stroke-width="3"></path>
+      <path class="arc" d="M60 230 Q 170 120 300 292 Q 360 230 470 250" fill="none" stroke="#5ff2ff" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round"></path>
+      <circle cx="60" cy="230" r="6" fill="#e9f6f8" opacity=".35"></circle>
+      <circle cx="140" cy="168" r="6" fill="#e9f6f8" opacity=".55"></circle>
+      <circle cx="220" cy="190" r="6" fill="#e9f6f8" opacity=".75"></circle>
+      <circle class="b" cx="300" cy="292" r="7" fill="#fff"></circle>
+    </svg>
+    <p class="st"><i></i>{hud.status}</p>
+    <div class="col">
+      <p class="meta">{hud.meta}</p>
+      <div class="read">
+        <svg class="ball" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" fill="none" stroke="#5ff2ff" stroke-width="1.6" stroke-dasharray="4 4" opacity=".6"></circle>
+          <circle cx="50" cy="50" r="37" fill="#eef3f4"></circle>
+          <path d="M14 45 A37 37 0 0 0 20 70 L 24 60 Z" fill="#2147c7" opacity=".9"></path>
+          <circle cx="62" cy="31" r="8" fill="#1f9a3a"></circle>
+          <ellipse cx="54" cy="83" rx="10" ry="4" fill="#b3121d"></ellipse>
+          <path d="M57 22 L47 78" stroke="#5ff2ff" stroke-width="2.4"></path>
+          <path d="M47 78 l-4 -8 l8 1 z" fill="#5ff2ff"></path>
+        </svg>
+        <div class="num">
+          <p><b>{hud.rpm}</b><small>{hud.unit}</small></p>
+          <span class="bar"><span></span></span>
+          <span class="from">{hud.scaleFrom}</span>
+        </div>
+      </div>
+      <p class="type">{hud.type}</p>
+      <p class="sub">{hud.sub}</p>
+      <p class="u">{hud.unitSplit}</p>
+      <ul class="split">
+        {
+          hud.split.map(([k, n]) => (
+            <li>
+              <span class="k">{k}</span>
+              <span class="tr">
+                <span style={`width:${(n / max) * 100}%`} />
+              </span>
+              <span class="n">{n}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="go">{hud.button}</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sh {
+    container-type: inline-size;
+    width: 100%;
+    padding: 1.6%;
+    border-radius: clamp(18px, 3vw, 40px);
+    background: #0d1220;
+    box-shadow: 0 40px 80px -30px #000c;
+  }
+  .scr {
+    --u: 1cqw;
+    position: relative;
+    aspect-ratio: 20 / 9;
+    border-radius: calc(4.6 * var(--u));
+    overflow: hidden;
+    background: linear-gradient(90deg, #05080b 0 50%, #07111a 100%);
+    color: #5ff2ff;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    letter-spacing: 0.12em;
+  }
+  .cam {
+    position: absolute;
+    inset: 0 50% 0 0;
+    width: 50%;
+    height: 100%;
+  }
+  .st {
+    position: absolute;
+    left: 4.4%;
+    top: 5.5%;
+    display: flex;
+    align-items: center;
+    gap: calc(1 * var(--u));
+    font-size: calc(1.6 * var(--u));
+    font-weight: 700;
+  }
+  .st i {
+    width: calc(1.4 * var(--u));
+    height: calc(1.4 * var(--u));
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .col {
+    position: absolute;
+    left: 56%;
+    right: 4%;
+    top: 6%;
+    bottom: 7%;
+    display: flex;
+    flex-direction: column;
+  }
+  .meta,
+  .u,
+  .from,
+  .k {
+    font-size: calc(1.15 * var(--u));
+    white-space: nowrap;
+    color: #4fb9c4;
+  }
+  .read {
+    display: flex;
+    align-items: center;
+    gap: calc(2 * var(--u));
+    margin-top: calc(0.8 * var(--u));
+  }
+  .ball {
+    width: calc(10.5 * var(--u));
+    flex: none;
+  }
+  .num {
+    flex: 1;
+    display: grid;
+    gap: calc(0.5 * var(--u));
+  }
+  .num p {
+    display: flex;
+    align-items: baseline;
+    gap: calc(0.8 * var(--u));
+    line-height: 1;
+  }
+  .num b {
+    font-family: var(--font);
+    font-weight: 400;
+    font-size: calc(7.6 * var(--u));
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 calc(2 * var(--u)) #5ff2ff55;
+  }
+  .num small {
+    font-family: var(--font);
+    font-size: calc(2 * var(--u));
+    letter-spacing: 0;
+  }
+  .bar {
+    display: block;
+    height: calc(0.7 * var(--u));
+    background: #12303a;
+  }
+  .bar span {
+    display: block;
+    width: 72%;
+    height: 100%;
+    background: #5ff2ff;
+  }
+  .type {
+    margin-top: calc(1.6 * var(--u));
+    font-family: var(--font);
+    font-weight: 900;
+    font-size: calc(3.1 * var(--u));
+    letter-spacing: 0.08em;
+    color: #f2fbfc;
+  }
+  .sub {
+    font-size: calc(1.5 * var(--u));
+    margin-top: calc(0.6 * var(--u));
+  }
+  .u {
+    align-self: flex-end;
+    margin-top: calc(0.8 * var(--u));
+  }
+  .split {
+    display: grid;
+    gap: calc(0.6 * var(--u));
+    margin-top: calc(0.6 * var(--u));
+  }
+  .split li {
+    display: grid;
+    grid-template-columns: calc(9.5 * var(--u)) 1fr calc(3 * var(--u));
+    align-items: center;
+    gap: calc(1.4 * var(--u));
+  }
+  .tr {
+    height: calc(0.8 * var(--u));
+    background: #12303a;
+  }
+  .tr span {
+    display: block;
+    height: 100%;
+    background: #5ff2ff;
+  }
+  .n {
+    text-align: right;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: calc(1.7 * var(--u));
+    color: #f2fbfc;
+  }
+  .go {
+    align-self: flex-end;
+    margin-top: auto;
+    display: grid;
+    place-items: center;
+    width: calc(14 * var(--u));
+    height: calc(3.8 * var(--u));
+    background: #5ff2ff;
+    clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+    font-weight: 700;
+    font-size: calc(1.6 * var(--u));
+    letter-spacing: 0.4em;
+    color: #5ff2ff;
+    position: relative;
+  }
+  .go::before {
+    content: "";
+    position: absolute;
+    inset: calc(0.25 * var(--u));
+    background: #0e2a33;
+    clip-path: inherit;
+  }
+  .go {
+    isolation: isolate;
+  }
+  .go::before {
+    z-index: -1;
+  }
+  /* on a narrow screen the camera half goes and the result column fills the phone, twice the size */
+  @container (max-width: 480px) {
+    .scr {
+      --u: 2.05cqw;
+      aspect-ratio: 10 / 10.2;
+      background: #07111a;
+    }
+    .cam,
+    .st {
+      display: none;
+    }
+    .col {
+      left: 7%;
+      right: 7%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .arc {
+      animation: sh-dash 3s linear infinite;
+    }
+    .b {
+      animation: sh-pulse 1.6s ease-in-out infinite;
+    }
+  }
+  @keyframes sh-dash {
+    to {
+      stroke-dashoffset: -66;
+    }
+  }
+  @keyframes sh-pulse {
+    50% {
+      opacity: 0.4;
+    }
+  }
+</style>

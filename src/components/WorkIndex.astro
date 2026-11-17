@@ -8,7 +8,9 @@ import Contact from "./Contact.astro";
 import Effects from "./Effects.astro";
 import { md } from "../i18n/md";
 import { copy, type Lang } from "../i18n/copy";
-import { workItems } from "../i18n/workList";
+import SpinHud from "./SpinHud.astro";
+import { workItems, labItems } from "../i18n/workList";
+import { labs } from "../i18n/lab";
 import { workThumbs } from "../assets/workThumbs";
 interface Props {
   lang: Lang;
@@ -18,6 +20,7 @@ const t = copy[lang];
 const x = t.workIndex;
 const paths = { zh: copy.zh.workIndex.path, en: copy.en.workIndex.path };
 const items = workItems(lang);
+const lab = labItems(lang);
 const alt = lang === "zh" ? "en" : "zh-Hant-TW";
 const num = (n: number) => String(n + 1).padStart(2, "0");
 ---
@@ -42,6 +45,21 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
                     <span class="jn" aria-hidden="true">{num(n)}</span>
                     <span class="jt">{i.name}</span>
                     <span class="jk">{i.kind}</span>
+                  </a>
+                </li>
+              ))
+            }
+            {
+              lab.map((i) => (
+                <li class="j-lab">
+                  <a href={`#${i.id}`}>
+                    <span class="jn" aria-hidden="true">
+                      ◦
+                    </span>
+                    <span class="jt">{i.name}</span>
+                    <span class="jk">
+                      {x.labTitle}・{i.kind}
+                    </span>
                   </a>
                 </li>
               ))
@@ -87,6 +105,40 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
           ))
         }
       </ol>
+
+      <section class="lab" aria-labelledby="lab-title">
+        <div class="lab-head">
+          <h2 id="lab-title" class="t-h2">{x.labTitle}</h2>
+          <p class="t-lede muted">{x.labIntro}</p>
+        </div>
+        <ol class="rows">
+          {
+            lab.map((i) => (
+              <li id={i.id} class="lab-item" data-reveal>
+                <a class="row" href={i.path} data-spotlight>
+                  <div class="thumb hud" aria-hidden="true">
+                    <SpinHud hud={labs[i.id as keyof typeof labs][lang].hud} />
+                  </div>
+                  <div class="text">
+                    <p class="kind">{i.kind}</p>
+                    <h3 class="name">
+                      {i.name} <span class="alt" lang={alt}>{i.nameAlt}</span>
+                    </h3>
+                    <p class="muted">{i.lede}</p>
+                    <p class="status">
+                      <span class="dot lab-dot" aria-hidden="true" />
+                      {i.status}
+                    </p>
+                    <span class="go">
+                      {x.cta} <span aria-hidden="true">→</span>
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
     </div>
   </main>
   <Contact t={t} lang={lang} paths={paths} />
@@ -208,6 +260,35 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
   .flip .thumb {
     order: 2;
   }
+  .lab {
+    margin-top: clamp(72px, 9vw, 128px);
+    padding-top: clamp(40px, 5vw, 64px);
+    border-top: 1px solid var(--line);
+  }
+  .lab-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(16px, 4vw, 64px);
+    align-items: end;
+  }
+  .thumb.hud {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: clamp(24px, 3vw, 44px);
+    background: var(--navy);
+  }
+  .lab-item .row:hover .thumb :global(img) {
+    transform: none;
+  }
+  .lab-dot {
+    background: transparent;
+    border: 2px solid var(--orange);
+    box-shadow: none;
+  }
+  .j-lab .jn {
+    color: var(--slate);
+  }
   .rows {
     display: grid;
     gap: clamp(16px, 2vw, 24px);
@@ -318,6 +399,9 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
     transform: translateX(4px);
   }
   @media (max-width: 900px) {
+    .lab-head {
+      grid-template-columns: 1fr;
+    }
     .wi-top {
       grid-template-columns: 1fr;
     }
