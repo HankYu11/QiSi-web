@@ -1,0 +1,10 @@
+---
+// Drop-in for astro:assets <Image>: the same props, served as <picture> with AVIF first and WebP as the fallback.
+// The <picture> is display: contents, so the <img> keeps its place in the layout and every existing
+// `.x :global(img)` rule still applies.
+import { Picture } from "astro:assets";
+import type { ComponentProps } from "astro/types";
+type Props = Omit<ComponentProps<typeof Picture>, "formats" | "fallbackFormat" | "pictureAttributes">;
+---
+
+<Picture {...(Astro.props as ComponentProps<typeof Picture>)} formats={["avif", "webp"]} fallbackFormat="webp" pictureAttributes={{ style: "display: contents" }} />

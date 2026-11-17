@@ -35,6 +35,8 @@ const en = {
       "QI SI is a product studio in Taipei, building apps, websites and SaaS for you and the people you serve. Fast, because AI is built into how we work. Solid, because we answer for every line we ship.",
     ctaPrimary: "Start a project",
     ctaSecondary: "See our work",
+    pause: "Pause the background animation",
+    play: "Play the background animation",
   },
   // Pinned, scroll-driven statement under the hero. {…} and […] mark the two phrases that stay
   // on screen when the rest of the sentence scatters: what the client asks for, and what their users need.
@@ -161,6 +163,8 @@ const zh: Copy = {
       "奇斯科技是台北的產品工作室，為你、也為你要服務的人，打造 App、網站與 SaaS 產品。AI 讓我們快，親自把關讓成品穩，從草圖到上線之後全程負責。",
     ctaPrimary: "聊聊你的專案",
     ctaSecondary: "看看案例",
+    pause: "暫停背景動畫",
+    play: "播放背景動畫",
   },
   statement: {
     label: "我們相信",
