@@ -1,7 +1,7 @@
 // Every project, in the order the work index shows them: FreshToGo first, then the case studies newest first.
 import { copy, type Lang } from "./copy";
 import { cases, caseSlugs, moreWork } from "./cases";
-import { labs } from "./lab";
+import { labs, type Lab } from "./lab";
 
 export type WorkItem = {
   id: string;
@@ -25,9 +25,9 @@ export function workItems(lang: Lang): WorkItem[] {
 }
 
 // Our own products still in testing: listed apart from the live work, never in the cross-link cards.
-export function labItems(lang: Lang): WorkItem[] {
+export function labItems(lang: Lang): (WorkItem & { hud: Lab["hud"] })[] {
   return Object.values(labs).map((x) => {
     const c = x[lang];
-    return { id: c.slug, path: c.path, kind: c.card.kind, name: c.name, nameAlt: c.nameAlt, lede: c.card.lede, status: c.status };
+    return { id: c.slug, path: c.path, kind: c.card.kind, name: c.name, nameAlt: c.nameAlt, lede: c.card.lede, status: c.status, hud: c.hud };
   });
 }

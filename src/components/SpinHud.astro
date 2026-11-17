@@ -8,18 +8,21 @@ interface Props {
 }
 const { hud, label } = Astro.props;
 const max = Math.max(...hud.split.map(([, n]) => n));
+// a unique id per instance, so two HUDs on one page don't share a gradient id
+const gid = `sh-glow-${Math.random().toString(36).slice(2, 8)}`;
+const fill = Math.min(100, (Number(hud.rpm) / hud.scaleMax) * 100);
 ---
 
 <div class="sh" role={label ? "img" : undefined} aria-label={label} aria-hidden={label ? undefined : "true"}>
   <div class="scr">
     <svg class="cam" viewBox="0 0 500 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
-        <radialGradient id="sh-glow" cx="50%" cy="40%" r="70%">
+        <radialGradient id={gid} cx="50%" cy="40%" r="70%">
           <stop offset="0" stop-color="#1d2a35" />
           <stop offset="1" stop-color="#05080b" />
         </radialGradient>
       </defs>
-      <rect width="500" height="450" fill="url(#sh-glow)"></rect>
+      <rect width="500" height="450" fill={`url(#${gid})`}></rect>
       <path d="M-10 330 L520 300" stroke="#2c4250" stroke-width="3"></path>
       <path d="M250 304 L250 270" stroke="#2c4250" stroke-width="3"></path>
       <path class="arc" d="M60 230 Q 170 120 300 292 Q 360 230 470 250" fill="none" stroke="#5ff2ff" stroke-width="2" stroke-dasharray="2 9" stroke-linecap="round"></path>
@@ -43,7 +46,7 @@ const max = Math.max(...hud.split.map(([, n]) => n));
         </svg>
         <div class="num">
           <p><b>{hud.rpm}</b><small>{hud.unit}</small></p>
-          <span class="bar"><span></span></span>
+          <span class="bar"><span style={`width:${fill}%`}></span></span>
           <span class="from">{hud.scaleFrom}</span>
         </div>
       </div>
@@ -167,7 +170,6 @@ const max = Math.max(...hud.split.map(([, n]) => n));
   }
   .bar span {
     display: block;
-    width: 72%;
     height: 100%;
     background: #5ff2ff;
   }
@@ -229,6 +231,7 @@ const max = Math.max(...hud.split.map(([, n]) => n));
     letter-spacing: 0.4em;
     color: #5ff2ff;
     position: relative;
+    isolation: isolate;
   }
   .go::before {
     content: "";
@@ -236,11 +239,6 @@ const max = Math.max(...hud.split.map(([, n]) => n));
     inset: calc(0.25 * var(--u));
     background: #0e2a33;
     clip-path: inherit;
-  }
-  .go {
-    isolation: isolate;
-  }
-  .go::before {
     z-index: -1;
   }
   /* on a narrow screen the camera half goes and the result column fills the phone, twice the size */

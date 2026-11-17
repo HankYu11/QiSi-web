@@ -10,7 +10,6 @@ import { md } from "../i18n/md";
 import { copy, type Lang } from "../i18n/copy";
 import SpinHud from "./SpinHud.astro";
 import { workItems, labItems } from "../i18n/workList";
-import { labs } from "../i18n/lab";
 import { workThumbs } from "../assets/workThumbs";
 interface Props {
   lang: Lang;
@@ -113,7 +112,7 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
               <li id={i.id} class="lab-item" data-reveal>
                 <a class="row" href={i.path} data-spotlight>
                   <div class="thumb hud" aria-hidden="true">
-                    <SpinHud hud={labs[i.id as keyof typeof labs][lang].hud} />
+                    <SpinHud hud={i.hud} />
                   </div>
                   <div class="text">
                     <p class="lab-pill">
@@ -302,9 +301,6 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
     background: var(--mist);
     color: var(--navy);
     white-space: nowrap;
-  }
-  .lab-item .row:hover .thumb :global(img) {
-    transform: none;
   }
   .rows {
     display: grid;
