@@ -63,7 +63,7 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
         </nav>
       </div>
 
-      <ol class="rows">
+      <ol role="list" class="rows">
         {
           items.map((i, n) => (
             <li id={i.id} class={n === 0 ? "lead" : n % 2 === 0 ? "flip" : undefined} data-reveal>
@@ -75,6 +75,7 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
                     sizes={n === 0 ? "(min-width: 1000px) 760px, 92vw" : "(min-width: 1000px) 700px, 92vw"}
                     alt=""
                     loading={n < 2 ? "eager" : "lazy"}
+                    fetchpriority={n === 0 ? "high" : undefined}
                   />
                   <span class="frame" />
                 </div>
@@ -106,7 +107,7 @@ const num = (n: number) => String(n + 1).padStart(2, "0");
           <h2 id="lab-title" class="t-h2">{x.labTitle}</h2>
           <p class="t-lede muted">{x.labIntro}</p>
         </div>
-        <ol class="rows">
+        <ol role="list" class="rows">
           {
             lab.map((i) => (
               <li id={i.id} class="lab-item" data-reveal>

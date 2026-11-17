@@ -57,11 +57,22 @@
     });
     // failsafe: never leave content hidden if the observer doesn't report (or when printing)
     const sweep = () =>
-      document.querySelectorAll<HTMLElement>(".fx-reveal:not(.fx-in), .fx-words:not(.fx-in)").forEach((el) => {
-        if (el.getBoundingClientRect().top < innerHeight) el.classList.add("fx-in");
-      });
+    {
+      const els = [...document.querySelectorAll<HTMLElement>(".fx-reveal:not(.fx-in), .fx-words:not(.fx-in)")];
+      const due = els.filter((el) => el.getBoundingClientRect().top < innerHeight);
+      due.forEach((el) => el.classList.add("fx-in"));
+    }
     setTimeout(sweep, 2500);
-    addEventListener("scroll", () => setTimeout(sweep, 1200), { passive: true });
+    // one pending sweep at a time, not one timer per scroll event
+    let sweepTimer = 0;
+    addEventListener(
+      "scroll",
+      () => {
+        clearTimeout(sweepTimer);
+        sweepTimer = setTimeout(sweep, 1200);
+      },
+      { passive: true },
+    );
     addEventListener("beforeprint", revealAll);
   }
 
@@ -72,10 +83,13 @@
     let queued = false;
     const scrub = () => {
       queued = false;
-      scrubbed.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > innerHeight + 200) return;
-        const p = Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight + r.height)));
+      // measure every element first, then write, so the writes never force a fresh layout mid-loop
+      const h = innerHeight;
+      const rects = scrubbed.map((el) => el.getBoundingClientRect());
+      scrubbed.forEach((el, i) => {
+        const r = rects[i];
+        if (r.bottom < -200 || r.top > h + 200) return;
+        const p = Math.max(0, Math.min(1, (h - r.top) / (h + r.height)));
         el.style.setProperty("--p", p.toFixed(4));
       });
     };

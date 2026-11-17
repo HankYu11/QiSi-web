@@ -23,7 +23,7 @@ const items = workItems(lang)
 
 <div class="cc">
   {heading && <h2 class="cc-title t-h2">{heading}</h2>}
-  <ul class={`cc-list n${items.length}`} data-scroll>
+  <ul role="list" class={`cc-list n${items.length}`} data-scroll>
     {
       items.map((i) => (
         <li>
