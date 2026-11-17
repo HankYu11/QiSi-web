@@ -1,0 +1,205 @@
+/* Styles shared by the case-study pages. Each page's article carries a marker class
+   (cp-case: CaseStudy.astro, cp-lab: SpinCoach.astro, cp-ftg: Work.astro), and each rule lists only the
+   pages that use it, so a page never picks up another page's rule. `:is(.cp-…) .x` has the same specificity
+   as the component-scoped `.x` it replaces; this sheet is loaded before the components' own styles. */
+
+:is(.cp-case, .cp-ftg) .back {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: clamp(20px, 3vw, 40px);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--slate);
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .back:hover {
+  color: var(--navy);
+}
+:is(.cp-case, .cp-ftg) .title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px 40px;
+  margin-top: clamp(16px, 2vw, 24px);
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 28px;
+}
+:is(.cp-case, .cp-lab) .name {
+  font-weight: 900;
+  font-size: clamp(2.8rem, 1.4rem + 5vw, 6.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+:is(.cp-case, .cp-lab) .name:lang(zh-Hant-TW) {
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+:is(.cp-case, .cp-lab) .alt {
+  font-weight: 700;
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
+  color: var(--slate);
+}
+:is(.cp-case, .cp-ftg) .op-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 5vw, 80px);
+  margin-top: clamp(28px, 3.5vw, 48px);
+  align-items: start;
+}
+:is(.cp-case, .cp-lab) .op-main {
+  display: grid;
+  gap: 20px;
+}
+:is(.cp-case, .cp-lab) .tagline {
+  font-weight: 900;
+  font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  max-width: 15em;
+}
+:root[data-lang="zh"] :is(.cp-case, .cp-ftg) .tagline {
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .facts {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .facts div {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  gap: 16px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .facts dt {
+  font-weight: 700;
+  color: var(--slate);
+  font-size: 0.92rem;
+}
+:is(.cp-case, .cp-ftg) .browser {
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 40px 80px -40px #0008;
+}
+:is(.cp-case, .cp-ftg) .browser .bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  background: #eef1f6;
+}
+:is(.cp-case, .cp-ftg) .browser .bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #cdd3df;
+}
+:is(.cp-case, .cp-ftg) .browser .bar span {
+  margin-left: 12px;
+  width: 34%;
+  height: 14px;
+  border-radius: 99px;
+  background: var(--white);
+}
+:is(.cp-case, .cp-ftg) .browser img {
+  width: 100%;
+  display: block;
+}
+:is(.cp-case, .cp-ftg) .browser.small {
+  box-shadow: 0 24px 48px -30px #1b285066;
+  border: 1px solid var(--line);
+}
+:is(.cp-case, .cp-ftg) .phone img {
+  border-radius: 26px;
+  width: 100%;
+  display: block;
+}
+:is(.cp-case, .cp-ftg) .showcase {
+  margin-top: clamp(32px, 4vw, 56px);
+  border-radius: calc(var(--radius) * 1.6);
+  padding: clamp(24px, 4vw, 64px) clamp(16px, 4vw, 64px) clamp(20px, 2.4vw, 32px);
+  overflow: hidden;
+}
+:is(.cp-case, .cp-ftg) .showcase figcaption {
+  margin-top: clamp(24px, 3vw, 40px);
+  font-size: 0.88rem;
+}
+:is(.cp-case, .cp-lab) .tile {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: clamp(22px, 2.4vw, 32px);
+  border-radius: calc(var(--radius) * 1.2);
+  background: var(--white);
+}
+:is(.cp-case, .cp-lab) .tech {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--orange-text);
+}
+:is(.cp-case, .cp-lab) .proof-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 64px);
+  align-items: end;
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .proof-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+  margin-top: clamp(36px, 4vw, 56px);
+  padding-top: clamp(28px, 3vw, 40px);
+  border-top: 1px solid var(--line-navy);
+}
+:is(.cp-case, .cp-lab, .cp-ftg) .proof-list li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+:is(.cp-case, .cp-ftg) .pn {
+  font-weight: 900;
+  font-size: clamp(2.6rem, 1.6rem + 2.8vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+}
+:is(.cp-case, .cp-ftg) .pl {
+  color: var(--on-navy-2);
+  font-size: 0.98rem;
+}
+:is(.cp-case, .cp-ftg) .proof-note {
+  margin-top: clamp(24px, 3vw, 40px);
+  font-size: 0.85rem;
+}
+:is(.cp-case, .cp-ftg) .note {
+  margin-top: 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--slate);
+  font-size: 0.95rem;
+}
+:is(.cp-case, .cp-ftg) .note .ng {
+  width: 12px;
+  height: auto;
+  flex: none;
+  margin-top: 0.45em;
+}
+
+@media (max-width: 1000px) {
+  :is(.cp-case, .cp-ftg) .proof-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}

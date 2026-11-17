@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Chapter from "./Chapter.astro";
+import "../styles/case-page.css";
 import Grain from "./Grain.astro";
 import { md } from "../i18n/md";
 import type { Copy, Lang } from "../i18n/copy";
@@ -25,7 +26,7 @@ const w = t.work;
 const cardW = [320, 480, 640];
 ---
 
-<article class="work" aria-labelledby="work-title">
+<article class="work cp-ftg" aria-labelledby="work-title">
   <!-- Opening -->
   <div class="wrap opening">
     <a class="back" href={t.workIndex.path}>← {t.workIndex.back}</a>
@@ -343,40 +344,6 @@ const cardW = [320, 480, 640];
     background: var(--cream);
     padding-top: clamp(32px, 4vw, 56px);
   }
-  .back {
-    display: flex;
-    width: fit-content;
-    align-items: center;
-    min-height: 44px;
-    margin-bottom: clamp(20px, 3vw, 40px);
-    font-weight: 700;
-    text-decoration: none;
-    color: var(--slate);
-  }
-  .back:hover {
-    color: var(--navy);
-  }
-  .op-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: clamp(32px, 5vw, 80px);
-    margin-top: clamp(28px, 3.5vw, 48px);
-    align-items: start;
-  }
-  .title-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20px 40px;
-    margin-top: clamp(16px, 2vw, 24px);
-  }
-  .title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 28px;
-  }
   .title-row .stores {
     padding-bottom: 10px;
   }
@@ -401,10 +368,6 @@ const cardW = [320, 480, 640];
     line-height: 1.22;
     letter-spacing: -0.015em;
     max-width: 14em;
-  }
-  :root[data-lang="zh"] .tagline {
-    line-height: 1.4;
-    letter-spacing: 0.01em;
   }
   .stores {
     display: flex;
@@ -459,65 +422,11 @@ const cardW = [320, 480, 640];
     background: var(--orange);
     box-shadow: 0 0 0 4px #f46a2a33;
   }
-  .facts {
-    display: grid;
-    border-top: 1px solid var(--line);
-  }
-  .facts div {
-    display: grid;
-    grid-template-columns: 7.5em 1fr;
-    gap: 16px;
-    padding-block: 12px;
-    border-bottom: 1px solid var(--line);
-  }
-  .facts dt {
-    font-weight: 700;
-    color: var(--slate);
-    font-size: 0.92rem;
-  }
 
-  /* ---- showcase ---- */
-  .showcase {
-    margin-top: clamp(32px, 4vw, 56px);
-    border-radius: calc(var(--radius) * 1.6);
-    padding: clamp(24px, 4vw, 64px) clamp(16px, 4vw, 64px) clamp(20px, 2.4vw, 32px);
-    overflow: hidden;
-  }
   .sc-stage {
     position: relative;
     aspect-ratio: 16 / 9;
     max-width: 100%;
-  }
-  .browser {
-    border-radius: 14px;
-    overflow: hidden;
-    background: var(--white);
-    box-shadow: 0 40px 80px -40px #0008;
-  }
-  .browser .bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    height: 30px;
-    padding: 0 12px;
-    background: #eef1f6;
-  }
-  .browser .bar i {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #cdd3df;
-  }
-  .browser .bar span {
-    margin-left: 12px;
-    width: 34%;
-    height: 14px;
-    border-radius: 99px;
-    background: var(--white);
-  }
-  .browser :global(img) {
-    width: 100%;
-    display: block;
   }
   .sc-browser {
     position: absolute;
@@ -530,11 +439,6 @@ const cardW = [320, 480, 640];
     padding: 9px;
     background: #10162b;
     box-shadow: 0 40px 80px -30px #000a;
-  }
-  .phone :global(img) {
-    border-radius: 26px;
-    width: 100%;
-    display: block;
   }
   .sc-phone {
     position: absolute;
@@ -600,10 +504,6 @@ const cardW = [320, 480, 640];
     to {
       transform: translateY(-40px);
     }
-  }
-  .showcase figcaption {
-    margin-top: clamp(24px, 3vw, 40px);
-    font-size: 0.88rem;
   }
 
   /* ---- flow ---- */
@@ -1172,10 +1072,6 @@ const cardW = [320, 480, 640];
     font-size: 13px;
     font-weight: 400;
   }
-  .browser.small {
-    box-shadow: 0 24px 48px -30px #1b285066;
-    border: 1px solid var(--line);
-  }
   .tag {
     padding: 8px 14px;
     font-size: 0.82rem;
@@ -1204,61 +1100,15 @@ const cardW = [320, 480, 640];
     gap: clamp(20px, 4vw, 64px);
     align-items: end;
   }
-  .proof-list {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(20px, 3vw, 40px);
-    margin-top: clamp(36px, 4vw, 56px);
-    padding-top: clamp(28px, 3vw, 40px);
-    border-top: 1px solid var(--line-navy);
-  }
-  .proof-list li {
-    display: grid;
-    align-content: start;
-    gap: 10px;
-  }
-  .pn {
-    font-weight: 900;
-    font-size: clamp(2.6rem, 1.6rem + 2.8vw, 4.4rem);
-    line-height: 1;
-    letter-spacing: -0.03em;
-    color: var(--orange);
-    font-variant-numeric: tabular-nums;
-  }
-  .pl {
-    color: var(--on-navy-2);
-    font-size: 0.98rem;
-  }
-  .proof-note {
-    margin-top: clamp(24px, 3vw, 40px);
-    font-size: 0.85rem;
-  }
   @media (max-width: 1000px) {
     .proof-head {
       grid-template-columns: 1fr;
-    }
-    .proof-list {
-      grid-template-columns: 1fr 1fr;
     }
   }
   @media (max-width: 520px) {
     .proof-list {
       grid-template-columns: 1fr;
     }
-  }
-  .note {
-    margin-top: 28px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    color: var(--slate);
-    font-size: 0.95rem;
-  }
-  .note :global(.ng) {
-    width: 12px;
-    height: auto;
-    flex: none;
-    margin-top: 0.45em;
   }
 
   @media (max-width: 700px) {
