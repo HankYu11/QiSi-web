@@ -100,7 +100,7 @@ const en = {
     { n: "1.1 s", label: "median time from the serve to the answer (14 clear serves)" },
     { n: "5%", label: "within this of a frame-by-frame count, on 4 real serves" },
     { n: "18 / 18", label: "real serves recorded across three sessions; none of the clips the app skipped held a serve" },
-    { n: "16 s → 1.1 s", label: "slowest answer in the first version, against the median now" },
+    { n: "16 s", label: "the slowest wait in the first version, down to a 1.1 s median now" },
   ],
   proofNote:
     "Measured in November 2026 on one Pixel 8, at home, serving against a wall with no table. 14 of the 18 serves read clearly; making more of them readable is the work in progress.",
@@ -217,7 +217,7 @@ const zh: typeof en = {
     { n: "1.1 秒", label: "從發球到說出結果的中位數（14 顆讀得清楚的發球）" },
     { n: "5%", label: "轉速與逐格人工計數相差不到 5%（4 顆真實發球）" },
     { n: "18 / 18", label: "三次測試的 18 顆真實發球都錄到了；App 略過的片段裡沒有一顆是發球" },
-    { n: "16 秒 → 1.1 秒", label: "第一版最慢要等 16 秒，現在的中位數是 1.1 秒" },
+    { n: "16 秒", label: "第一版最慢的等待時間，現在的中位數已縮短到 1.1 秒" },
   ],
   proofNote: "2026 年 11 月用一支 Pixel 8 在家中對牆發球測得，沒有球桌。18 顆發球中 14 顆讀得清楚，讓更多發球讀得出來，是我們正在做的事。",
   storyTitle: "手機教會我們的事",
