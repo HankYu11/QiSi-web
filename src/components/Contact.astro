@@ -25,9 +25,10 @@ const addr = t.address.split(/(?<=區)/);
     <p class="t-lede muted c-body">{c.body}</p>
     <div class="mail">
       <a class="mail-link" href={`mailto:${EMAIL}`}><span>{user}</span><span class="at">@</span><wbr />{domain}</a>
-      <button class="btn btn-line copy" type="button" data-copy={EMAIL} data-done={c.copied} aria-label={c.copyLabel}>
-        <span class="copy-txt" aria-live="polite">{c.copy}</span>
+      <button class="btn btn-line copy" type="button" data-copy={EMAIL} data-done={c.copied}>
+        <span class="copy-txt">{c.copy}</span>
       </button>
+      <span class="sr-only" role="status" data-copy-status></span>
     </div>
     <address class="addr">
       <span class="addr-k">{c.addressLabel}</span>
@@ -43,7 +44,7 @@ const addr = t.address.split(/(?<=區)/);
       <p>{f.legal}</p>
       <p class="muted">{addr.map((a) => <span class="keep">{a}</span>)}</p>
     </div>
-    <ul class="f-links">
+    <ul role="list" class="f-links">
       <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
       <li><a href={paths.zh} lang="zh-Hant-TW" aria-current={lang === "zh" ? "true" : undefined} data-set-lang="zh">中文</a></li>
       <li><a href={paths.en} lang="en" aria-current={lang === "en" ? "true" : undefined} data-set-lang="en">English</a></li>
@@ -55,12 +56,19 @@ const addr = t.address.split(/(?<=區)/);
 <script>
   document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
     const label = btn.querySelector(".copy-txt")!;
+    const status = btn.parentElement!.querySelector("[data-copy-status]")!;
     const orig = label.textContent;
+    let timer = 0;
     btn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(btn.dataset.copy!);
         label.textContent = btn.dataset.done!;
-        setTimeout(() => (label.textContent = orig), 2200);
+        status.textContent = btn.dataset.done!;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          label.textContent = orig;
+          status.textContent = "";
+        }, 2200);
       } catch {
         const link = document.querySelector(".mail-link");
         if (link) getSelection()?.selectAllChildren(link);

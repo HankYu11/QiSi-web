@@ -78,7 +78,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-
       <div class="sc-stage" data-tilt>
         <div class="browser sc-browser">
           <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
-          <Image src={stageBrowser} widths={wide} sizes="(min-width: 1100px) 860px, 92vw" alt={c.alts.browser} />
+          <Image src={stageBrowser} widths={wide} sizes="(min-width: 1100px) 860px, 92vw" alt={c.alts.browser} loading="eager" fetchpriority="high" />
         </div>
         <div class={`phone sc-phone${v.kind === "scrap" ? "" : " tall"}${v.kind === "shop" ? " fit" : ""}`}>
           <Image src={stagePhone} widths={[300, 450, 600]} sizes="(min-width: 1100px) 260px, 40vw" alt={c.alts.phone} />
@@ -91,7 +91,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-
   <!-- Before / now -->
   <section class="wrap before" aria-labelledby="before-title">
     <h2 id="before-title" class="t-h2" set:html={md(c.beforeTitle)} />
-    <ol class="bn-list">
+    <ol role="list" class="bn-list">
       {
         c.before.map((b) => (
           <li class="bn" data-reveal>
@@ -116,7 +116,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-
   <!-- Features -->
   <section class="wrap features" aria-labelledby="features-title">
     <h2 id="features-title" class="t-h2" set:html={md(c.featuresTitle)} />
-    <ol class="feat-list">
+    <ol role="list" class="feat-list">
       {
         c.features.map((f, i) => (
           <li class={`feat feat-${f.id}`}>
@@ -370,7 +370,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-
         <h2 id="listen-title" class="t-h2" set:html={md(c.listenTitle)} />
         <p class="t-lede muted">{c.listenIntro}</p>
       </div>
-      <ul class="listen">
+      <ul role="list" class="listen">
         {
           c.listen.map((l) => (
             <li data-spotlight>
@@ -405,7 +405,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-
           <h2 class="t-h2" set:html={md(c.proofTitle)} />
           <p class="muted" data-words>{c.proofIntro}</p>
         </div>
-        <ul class="proof-list">
+        <ul role="list" class="proof-list">
           {
             c.proof.map((p) => (
               <li>

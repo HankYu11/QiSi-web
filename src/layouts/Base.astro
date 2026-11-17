@@ -76,6 +76,9 @@ const abs = (p: string) => (site ? new URL(p, site).href : p);
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
+    <!-- fetch a page as soon as the visitor shows intent to open it (hover or press); prefetch only, so the
+         language redirect below still runs on arrival -->
+    <script type="speculationrules" is:inline set:html={JSON.stringify({ prefetch: [{ where: { href_matches: "/*" }, eagerness: "moderate" }] })} />
     {
       lang === "zh" && alternates && (
         <script is:inline>

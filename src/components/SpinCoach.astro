@@ -59,7 +59,7 @@ const { t, lang, c } = Astro.props;
 
   <section class="wrap steps-wrap" aria-labelledby="steps-title">
     <h2 id="steps-title" class="t-h2" set:html={md(c.stepsTitle)} />
-    <ol class="steps">
+    <ol role="list" class="steps">
       {
         c.steps.map((s, i) => (
           <li data-reveal>
@@ -140,7 +140,7 @@ const { t, lang, c } = Astro.props;
         <h2 class="t-h2">{c.proofTitle}</h2>
         <p class="muted">{c.proofIntro}</p>
       </div>
-      <ul class="proof-list">
+      <ul role="list" class="proof-list">
         {
           c.proof.map((p) => (
             <li>
@@ -159,7 +159,7 @@ const { t, lang, c } = Astro.props;
       <h2 id="story-title" class="t-h2">{c.storyTitle}</h2>
       <p class="t-lede muted">{c.storyIntro}</p>
     </div>
-    <ol class="story">
+    <ol role="list" class="story">
       {
         c.story.map((s) => (
           <li data-reveal>

@@ -30,7 +30,7 @@ const ghost = Array(4).fill(`${w.name} ${w.nameAlt}`).join(" · ");
           <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{w.nameAlt}</span>
         </h2>
         <p class="lede muted">{w.teaser.lede}</p>
-        <ul class="built">{built.map((b) => <li>{b}</li>)}</ul>
+        <ul role="list" class="built">{built.map((b) => <li>{b}</li>)}</ul>
         <span class="btn btn-orange go" id="teaser-cta">{w.teaser.cta} <span aria-hidden="true">→</span></span>
       </div>
       <div class="art-wrap">
