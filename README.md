@@ -3,9 +3,9 @@
 Company website, live at **https://qisi.handyla.co**. Static site built with [Astro](https://astro.build): no framework JS, a few KB of vanilla scripts, CSS inlined per page.
 
 - `/` — Traditional Chinese (zh-TW), the default · `/en/` — English
-- `/work/` · `/en/work/` — work index: every project, filterable by what we built
+- `/work/` · `/en/work/` — work index: every project, FreshToGo first
 - `/work/freshtogo/` · `/en/work/freshtogo/` — FreshToGo case study
-- `/work/fragrance-shop/` · `/en/work/fragrance-shop/` — fragrance brand site and shop case study
+- `/work/wawa-house/` · `/en/work/wawa-house/` — WAWA HOUSE (fragrance shop) site and shop case study
 - `/work/court-booking/` · `/en/work/court-booking/` — badminton court booking case study
 - `/work/scrap-cars/` · `/en/work/scrap-cars/` — scrap-car operations case study
 
@@ -23,8 +23,8 @@ Canonical, hreflang, og:url and `sitemap.xml` use `https://qisi.handyla.co` (set
 
 - `src/i18n/copy.ts` — home and contact copy, both languages, same shape. `*word*` renders as emphasis, `|` as a manual heading break.
 - `src/i18n/work.ts` — FreshToGo case-study copy and facts.
-- `src/i18n/cases.ts` — fragrance-shop, court-booking and scrap-car case-study copy and facts (both languages), plus the cross-link labels. Sources are listed at the top of the file; clients stay anonymous.
-- `src/i18n/workList.ts` — the project list (order and filter tags) used by the work index and the cross-link cards; `src/assets/workThumbs.ts` — one screen per project for those cards. To add a project: add its copy to `cases.ts`, its tags to `workList.ts`, its thumb to `workThumbs.ts`, a visual branch in `CaseStudy.astro`, the two page files and a sitemap entry.
+- `src/i18n/cases.ts` — wawa-house, court-booking and scrap-car case-study copy and facts (both languages), plus the cross-link labels. Sources are listed at the top of the file; clients stay anonymous.
+- `src/i18n/workList.ts` — the project list (order and filter tags) used by the work index and the cross-link cards; `src/assets/workThumbs.ts` — one screen per project for those cards. To add a project: add its copy to `cases.ts`, its thumb to `workThumbs.ts`, a visual branch in `CaseStudy.astro`, the two page files and a sitemap entry.
 - `src/components/` — one component per section. `Home.astro` and `CasePage.astro` assemble the two page types (`CasePage` renders `Work.astro` for FreshToGo and `CaseStudy.astro` for the other cases; `CaseCards.astro` links between them); `Effects.astro` is the site-wide motion layer (all of it off under `prefers-reduced-motion`).
 - `src/assets/brand/` — official logo files from the CIS; `src/assets/ftg/` — FreshToGo screenshots and cards; `src/assets/court/`, `src/assets/scrap/`, `src/assets/shop/` — screens captured from the systems running locally with sample data (venue and shop names replaced, phone numbers masked; the shop's product photos are drawn placeholders).
 - `integrations/zh-breaks.mjs` — adds `<wbr>` between Chinese words at build time so lines never break mid-word. Add phrases that must stay together to its `KEEP` list.

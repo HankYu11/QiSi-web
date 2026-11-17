@@ -22,7 +22,7 @@ const items = workItems(lang)
 ---
 
 <div class="cc">
-  {heading && <h2 class="cc-title t-h3">{heading}</h2>}
+  {heading && <h2 class="cc-title t-h2">{heading}</h2>}
   <ul class={`cc-list n${items.length}`} data-scroll>
     {
       items.map((i) => (
@@ -61,7 +61,7 @@ const items = workItems(lang)
     margin-top: clamp(24px, 3vw, 36px);
   }
   .cc-title {
-    margin-bottom: 20px;
+    margin-bottom: clamp(24px, 3vw, 40px);
   }
   .cc-list {
     display: grid;

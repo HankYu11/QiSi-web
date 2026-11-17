@@ -6,7 +6,7 @@ import shopThumb from "./shop/storefront.png";
 
 export const workThumbs: Record<string, ImageMetadata> = {
   freshtogo: ftgThumb,
-  "fragrance-shop": shopThumb,
+  "wawa-house": shopThumb,
   "court-booking": courtThumb,
   "scrap-cars": scrapThumb,
 };

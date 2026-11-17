@@ -28,8 +28,8 @@ const { t, lang, c } = Astro.props;
 const v = c.visual;
 const wide = [720, 1080, 1440];
 const wideSizes = "(min-width: 1360px) 760px, (min-width: 900px) 56vw, 92vw";
-const stageBrowser = { "court-booking": courtSchedule, "scrap-cars": scrapVehicles, "fragrance-shop": shopStorefront }[c.slug];
-const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragrance-shop": shopProduct }[c.slug];
+const stageBrowser = { "court-booking": courtSchedule, "scrap-cars": scrapVehicles, "wawa-house": shopStorefront }[c.slug];
+const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "wawa-house": shopProduct }[c.slug];
 ---
 
 <article class="case" aria-labelledby="case-title">
@@ -42,7 +42,16 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
         <span class="name" lang={lang === "zh" ? "zh-Hant-TW" : "en"}>{c.name}</span>
         <span class="alt" lang={lang === "zh" ? "en" : "zh-Hant-TW"}>{c.nameAlt}</span>
       </h1>
-      <p class="status"><span class="dot" aria-hidden="true"></span>{c.status}</p>
+      <div class="title-side">
+        <p class="status"><span class="dot" aria-hidden="true"></span>{c.status}</p>
+        {
+          c.site && (
+            <a class="site-link" href={c.site.href} rel="noopener" target="_blank">
+              {c.site.label} <span aria-hidden="true">↗</span>
+            </a>
+          )
+        }
+      </div>
     </div>
     <div class="op-grid">
       <div class="op-main">
@@ -459,6 +468,28 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
     font-size: clamp(1.2rem, 1rem + 1vw, 1.8rem);
     color: var(--slate);
   }
+  .title-side {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-bottom: 10px;
+  }
+  .title-side .status {
+    margin-bottom: 0;
+  }
+  .site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--navy);
+  }
+  .site-link:hover {
+    color: var(--orange-text);
+  }
   .status {
     display: inline-flex;
     min-height: 44px;
@@ -601,7 +632,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   /* a full-height phone sized by the screen's own ratio, so only the bottom is cropped, never the sides */
   .sc-phone.tall.fit {
     width: auto;
-    aspect-ratio: 390 / 780;
+    aspect-ratio: 780 / 1420;
   }
   .sc-phone.tall :global(img) {
     height: 100%;
@@ -714,14 +745,14 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   }
   .feat-list {
     display: grid;
-    gap: clamp(56px, 7vw, 112px);
+    gap: clamp(48px, 5vw, 72px);
     margin-top: clamp(40px, 5vw, 72px);
   }
   .feat {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: clamp(28px, 5vw, 80px);
-    align-items: center;
+    align-items: start;
   }
   .feat:nth-child(even) .feat-text {
     order: 2;
@@ -729,6 +760,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   .feat-text {
     display: grid;
     gap: 12px;
+    padding-top: clamp(0px, 2vw, 32px);
     align-content: start;
     max-width: 30em;
   }
@@ -828,8 +860,8 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   .shop-card .fx-btn.yes {
     flex: 1;
     text-align: center;
-    border-color: #d75b4e;
-    background: #d75b4e;
+    border-color: #b9443a;
+    background: #b9443a;
     color: var(--white);
   }
   .fx-steps {
@@ -910,7 +942,7 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   }
   .bubble.me {
     justify-self: end;
-    background: #d75b4e;
+    background: #b9443a;
     color: var(--white);
     border-bottom-right-radius: 4px;
   }
@@ -921,8 +953,8 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
     margin-top: 6px;
   }
   .chat-foot .fx-btn.yes {
-    border-color: #d75b4e;
-    background: #d75b4e;
+    border-color: #b9443a;
+    background: #b9443a;
     color: var(--white);
   }
   .chat-foot small {
@@ -1190,6 +1222,10 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
   .surfaces.n3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  /* four tiles read better as 2×2: four columns squeeze zh terms mid-word */
+  .surfaces.n4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .tile {
     position: relative;
     overflow: hidden;
@@ -1206,13 +1242,13 @@ const stagePhone = { "court-booking": courtGrid, "scrap-cars": scrapLine, "fragr
     color: var(--orange-text);
   }
   .proof {
-    margin-top: 16px;
+    margin-top: clamp(48px, 6vw, 80px);
     border-radius: calc(var(--radius) * 1.2);
     padding: clamp(28px, 4vw, 64px);
   }
   .proof-head {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     gap: clamp(20px, 4vw, 64px);
     align-items: end;
   }

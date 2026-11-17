@@ -1,6 +1,5 @@
 ---
-// Work index (/work/, /en/work/): every project as one row, with a filter by what we built.
-// The filter is progressive: without JS every row shows.
+// Work index (/work/, /en/work/): FreshToGo as a navy lead, then the case studies as an alternating list.
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Header from "./Header.astro";
@@ -9,7 +8,7 @@ import Contact from "./Contact.astro";
 import Effects from "./Effects.astro";
 import { md } from "../i18n/md";
 import { copy, type Lang } from "../i18n/copy";
-import { workItems, type WorkTag } from "../i18n/workList";
+import { workItems } from "../i18n/workList";
 import { workThumbs } from "../assets/workThumbs";
 interface Props {
   lang: Lang;
@@ -19,9 +18,8 @@ const t = copy[lang];
 const x = t.workIndex;
 const paths = { zh: copy.zh.workIndex.path, en: copy.en.workIndex.path };
 const items = workItems(lang);
-const tagOrder: WorkTag[] = ["app", "web", "line", "admin"];
-const used = tagOrder.filter((g) => items.some((i) => i.tags.includes(g)));
 const alt = lang === "zh" ? "en" : "zh-Hant-TW";
+const num = (n: number) => String(n + 1).padStart(2, "0");
 ---
 
 <Base t={t} lang={lang} title={x.meta.title} description={x.meta.description} paths={paths}>
@@ -29,54 +27,58 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
   <Header t={t} lang={lang} paths={paths} />
   <main id="main" class="wi">
     <div class="wrap">
-      <div class="wi-head">
-        <Chapter label={x.chapter} />
-        <h1 class="wi-title keep" set:html={md(x.title)} />
-        <p class="t-lede muted">{x.intro}</p>
+      <div class="wi-top">
+        <div class="wi-head">
+          <Chapter label={x.chapter} />
+          <h1 class="wi-title keep" set:html={md(x.title)} />
+          <p class="t-lede muted">{x.intro}</p>
+        </div>
+        <nav class="jump" aria-label={x.jump}>
+          <ol>
+            {
+              items.map((i, n) => (
+                <li>
+                  <a href={`#${i.id}`}>
+                    <span class="jn" aria-hidden="true">{num(n)}</span>
+                    <span class="jt">{i.name}</span>
+                    <span class="jk">{i.kind}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
       </div>
 
-      <div class="filter" role="group" aria-label={x.filterLabel} data-filter hidden>
-        <button type="button" aria-pressed="true" data-tag="">{x.all} <span class="n">{items.length}</span></button>
-        {
-          used.map((g) => (
-            <button type="button" aria-pressed="false" data-tag={g}>
-              {x.tags[g]} <span class="n">{items.filter((i) => i.tags.includes(g)).length}</span>
-            </button>
-          ))
-        }
-      </div>
-
-      <ol class="rows" aria-live="polite">
+      <ol class="rows">
         {
           items.map((i, n) => (
-            <li data-tags={i.tags.join(" ")} data-reveal>
-              <a class="row" href={i.path} data-spotlight>
+            <li id={i.id} class={n === 0 ? "lead" : n % 2 === 0 ? "flip" : undefined} data-reveal>
+              <a class={`row${n === 0 ? " on-navy" : ""}`} href={i.path} data-spotlight>
                 <div class="thumb" aria-hidden="true">
                   <Image
                     src={workThumbs[i.id]}
-                    widths={[480, 720, 960, 1280]}
-                    sizes="(min-width: 1000px) 700px, 92vw"
+                    widths={[480, 720, 960, 1280, 1600]}
+                    sizes={n === 0 ? "(min-width: 1000px) 760px, 92vw" : "(min-width: 1000px) 700px, 92vw"}
                     alt=""
                     loading={n < 2 ? "eager" : "lazy"}
                   />
                   <span class="frame" />
                 </div>
                 <div class="text">
-                  <p class="kind">{i.kind}</p>
+                  <p class="kind">
+                    <span class="rn" aria-hidden="true">{num(n)}</span>
+                    {i.kind}
+                  </p>
                   <h2 class="name">
                     {i.name} <span class="alt" lang={alt}>{i.nameAlt}</span>
                   </h2>
                   <p class="muted">{i.lede}</p>
-                  <ul class="tags">
-                    {i.tags.map((g) => (
-                      <li>{x.tags[g]}</li>
-                    ))}
-                  </ul>
                   <p class="status">
                     <span class="dot" aria-hidden="true" />
                     {i.status}
                   </p>
-                  <span class="go">
+                  <span class={`go${n === 0 ? " btn btn-orange" : ""}`}>
                     {x.cta} <span aria-hidden="true">→</span>
                   </span>
                 </div>
@@ -93,18 +95,6 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
 
 <script>
   import "../scripts/site";
-  const bar = document.querySelector<HTMLElement>("[data-filter]");
-  if (bar) {
-    bar.hidden = false;
-    const rows = [...document.querySelectorAll<HTMLElement>(".rows > li")];
-    bar.addEventListener("click", (e) => {
-      const b = (e.target as HTMLElement).closest<HTMLButtonElement>("button");
-      if (!b) return;
-      const tag = b.dataset.tag ?? "";
-      bar.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-      rows.forEach((r) => (r.hidden = !!tag && !(r.dataset.tags ?? "").split(" ").includes(tag)));
-    });
-  }
 </script>
 
 <style>
@@ -131,53 +121,97 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
     font-style: normal;
     color: var(--orange-text);
   }
-  .filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: clamp(32px, 4vw, 56px);
+  .wi-top {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: end;
   }
-  .filter[hidden] {
-    display: none;
+  .jump ol {
+    border-top: 1px solid var(--line);
   }
-  .filter button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .jump a {
+    display: grid;
+    grid-template-columns: 2.4em minmax(0, 1fr);
+    gap: 2px 8px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
     min-height: 44px;
-    padding: 8px 18px;
-    border: 1.5px solid var(--line);
-    border-radius: 999px;
-    background: var(--white);
-    color: var(--navy);
-    font: inherit;
+  }
+  .jump a:hover .jt {
+    color: var(--orange-text);
+  }
+  .jn,
+  .rn {
     font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition:
-      background 0.2s,
-      border-color 0.2s,
-      color 0.2s;
+    font-variant-numeric: tabular-nums;
+    color: var(--orange-text);
   }
-  .filter button:hover {
-    border-color: var(--navy);
+  /* on cream the text orange falls just short of 4.5:1, so the index numbers use navy there */
+  .jn {
+    color: var(--navy);
   }
-  .filter button[aria-pressed="true"] {
+  .jt {
+    font-weight: 700;
+  }
+  .jk {
+    grid-column: 2;
+    font-size: 0.82rem;
+    color: var(--slate);
+  }
+  .rn {
+    margin-right: 10px;
+  }
+  /* lead: FreshToGo, the one product in the stores, on navy and taller */
+  .lead .row {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
     background: var(--navy);
-    border-color: var(--navy);
-    color: var(--white);
   }
-  .filter .n {
-    font-size: 0.8rem;
-    opacity: 0.7;
+  .lead .thumb {
+    min-height: 420px;
+    background: var(--navy-2);
+  }
+  /* the lead screen fills its panel; it has no pan */
+  .lead .thumb :global(img) {
+    position: absolute;
+    inset: clamp(20px, 2.4vw, 36px) clamp(20px, 2.4vw, 36px) 0;
+    width: calc(100% - 2 * clamp(20px, 2.4vw, 36px));
+    height: calc(100% - clamp(20px, 2.4vw, 36px));
+    object-fit: cover;
+    object-position: top left;
+  }
+  .lead .row:hover .thumb :global(img) {
+    transform: none;
+  }
+  .lead .kind,
+  .lead .rn {
+    color: var(--orange);
+  }
+  .lead .name {
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3.4rem);
+  }
+  .lead .name .alt {
+    color: var(--on-navy-2);
+  }
+  .lead .status {
+    color: var(--on-navy-2);
+  }
+  .lead .go {
+    justify-self: start;
+    margin-top: 8px;
+  }
+  /* the rest alternate sides */
+  .flip .row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .flip .thumb {
+    order: 2;
   }
   .rows {
     display: grid;
     gap: clamp(16px, 2vw, 24px);
     margin-top: clamp(20px, 2.4vw, 32px);
-  }
-  .rows > li[hidden] {
-    display: none;
   }
   .row {
     position: relative;
@@ -246,7 +280,7 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
   }
   .name {
     font-weight: 900;
-    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.5rem);
+    font-size: clamp(1.8rem, 1.2rem + 1.8vw, 3rem);
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
@@ -257,18 +291,6 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
     font-size: 0.95rem;
     letter-spacing: 0;
     color: var(--slate);
-  }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .tags li {
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--mist);
-    font-size: 0.8rem;
-    font-weight: 700;
   }
   .status {
     display: flex;
@@ -296,8 +318,24 @@ const alt = lang === "zh" ? "en" : "zh-Hant-TW";
     transform: translateX(4px);
   }
   @media (max-width: 900px) {
-    .row {
+    .wi-top {
       grid-template-columns: 1fr;
+    }
+    .row,
+    .lead .row,
+    .flip .row {
+      grid-template-columns: 1fr;
+    }
+    .flip .thumb {
+      order: 0;
+    }
+    .lead .thumb {
+      min-height: 0;
+    }
+    .lead .thumb :global(img) {
+      position: static;
+      width: 100%;
+      height: auto;
     }
     .thumb {
       min-height: 0;
